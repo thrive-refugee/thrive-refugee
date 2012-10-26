@@ -10,6 +10,8 @@ class ESLStudent(models.Model):
     City = models.CharField(max_length=20)
     State = models.CharField(max_length=2)
     Zip = models.CharField(max_length=10)
+    Phones = models.CharField(max_length=50)
+    
     
     def __unicode__(self):
         return self.FirstName

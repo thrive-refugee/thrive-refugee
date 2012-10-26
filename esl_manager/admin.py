@@ -8,10 +8,11 @@ class AttendedInline(admin.TabularInline):
 class ESLStudentAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Name',               {'fields': ['FirstName', 'LastName']}),
-        ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip'], 'classes': ['collapse']}),
+        ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip']}),
+        ('Phones',               {'fields': ['Phones']}),
     ]
     inlines = [AttendedInline]
-    list_display = ('FirstName', 'LastName', 'StreetAddress')
+    list_display = ('FirstName', 'LastName', 'StreetAddress', 'Phones')
     list_filter = ['FirstName', 'LastName']
     search_fields = ['FirstName', 'LastName']
     
