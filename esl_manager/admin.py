@@ -1,4 +1,4 @@
-from polls.models import ESLStudent,  Attended
+from esl_manager.models import ESLStudent,  Attended
 from django.contrib import admin
 
 class AttendedInline(admin.TabularInline):

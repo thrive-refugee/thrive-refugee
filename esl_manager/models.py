@@ -15,8 +15,8 @@ class ESLStudent(models.Model):
         return self.FirstName
 
 class Addended(models.Model):
-    poll = models.ForeignKey(ESLStudent)
-    attend_date = models.DateTimeField('date published')
+    esl_tudent = models.ForeignKey(ESLStudent)
+    attend_date = models.DateTimeField('attend_date')
 
     def __unicode__(self):
         return self.attend_date
