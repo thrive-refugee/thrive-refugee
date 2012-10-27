@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
+from django.utils.safestring import mark_safe
 
 from .models import Volunteer, Case, Individual
 
@@ -57,11 +58,19 @@ admin.site.register(Case, CaseAdmin)
 
 class IndividualAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
-    list_display = Individual._meta.get_all_field_names()
-    list_display_links = list_display
+    list_display = ('case_link', 'name', 'relation', 'date_of_birth', )
+    def case_link(self, obj):
+        case = obj.case
+        return '<a href="../../%s/%s/%d">%s</a>' % (
+            case._meta.app_label, case._meta.module_name, case.id, unicode(case))
+    case_link.allow_tags = True
+    case_link.short_description = 'Case'
+
+    list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
     search_fields = [f for f in Individual._meta.get_all_field_names()
                      if f != 'case']  # can't search on foriegn keys
+
 
     # individual stuff
     #filter_horizontal = ('volunteers',)

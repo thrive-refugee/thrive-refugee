@@ -53,7 +53,7 @@ class Individual(models.Model):
     relation = models.CharField(max_length=100, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     medicaid = models.CharField(max_length=2000, blank=True)
-    ssn = models.CharField(max_length=2000, blank=True)
+    ssn = models.CharField('SSN', max_length=2000, blank=True)
 
     def __unicode__(self):
         return '%s %s %s' % (self.name, self.relation, self.date_of_birth)
