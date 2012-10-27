@@ -3,8 +3,11 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
 from django.db.models.fields.related import RelatedField
+from django.core.exceptions import FieldError
 
-from .models import Volunteer, Case, Individual, CaseDetail, Assessment
+
+from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote
+
 
 
 admin.site.disable_action('delete_selected')
@@ -53,7 +56,12 @@ class VolunteerFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value():
-            return queryset.filter(volunteers=self.value())
+            try:
+                # for Cases (many-to-many)
+                return queryset.filter(volunteers=self.value())
+            except FieldError:
+                # for one-to-many where its singular
+                return queryset.filter(volunteer=self.value())
         else:
             return queryset
 
@@ -71,6 +79,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
     search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
+    ordering = ('-active', 'name',)
 
     # individual stuff
     inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin,)
@@ -91,13 +100,23 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
     search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
-
-
-    # individual stuff
-    #filter_horizontal = ('volunteers',)
+    ordering = ('name',)
 
 admin.site.register(Individual, IndividualAdmin)
 
 admin.site.register(Assessment)
 
 
+class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
+    # list view stuff
+    list_display = ('case', 'volunteer', 'date', 'description_trunc', 'minutes')
+    def description_trunc(self, obj):
+        return truncatechars(obj.description, 30)
+    description_trunc.short_description = 'Description'
+    list_display_links = list_display
+    list_filter = ('case', VolunteerFilter, 'date', 'minutes')
+    date_hierarchy = 'date'
+    search_fields = ('description',)
+    ordering = ('-date',)
+
+admin.site.register(ActivityNote, ActivityNoteAdmin)
