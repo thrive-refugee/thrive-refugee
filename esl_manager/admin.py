@@ -11,7 +11,7 @@ class AssesmentInline(admin.TabularInline):
 
 class ESLStudentAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Name',               {'fields': ['FirstName', 'LastName']}),
+        ('Name',               {'fields': ['FirstName', 'LastName',  'Active']}),
         ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip']}),
         ('Phones',               {'fields': ['Phones']}),
     ]

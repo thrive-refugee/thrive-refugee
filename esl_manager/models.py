@@ -11,7 +11,7 @@ class ESLStudent(models.Model):
     State = models.CharField(max_length=2)
     Zip = models.CharField(max_length=10)
     Phones = models.CharField(max_length=50)
-    
+    Active = models.BooleanField()
     
     def __unicode__(self):
         return self.FirstName
