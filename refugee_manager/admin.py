@@ -42,6 +42,21 @@ class CaseDetailInlineAdmin(admin.TabularInline):
     can_delete = False
     extra = 0
 
+class VolunteerFilter(admin.SimpleListFilter):
+    title = 'Volunteer'
+    parameter_name = 'volunteer'
+    def lookups(self, request, model_admin):
+        return [
+            (v.id, '%s %s' % (v.user.first_name, v.user.last_name))
+            for v in Volunteer.objects.order_by('user__first_name').all()
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(volunteers=self.value())
+        else:
+            return queryset
+
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = ('active', 'name', 'start', 'end', 'arrival', 'origin', 'language', 'family_members')
@@ -51,7 +66,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
                            truncatechars(', '.join(i.name for i in individuals), 50))
 
     list_display_links = list_display
-    list_filter = ('active', 'start', 'arrival', 'origin', 'language',)
+    list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
     search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
 
     # individual stuff
