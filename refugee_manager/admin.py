@@ -2,12 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Volunteer, Case
+from .models import Volunteer, Case, Individual
 
 
 # Define an inline admin descriptor for Volunteer model
 # which acts a bit like a singleton
-class VolunteerInlineAdmin(admin.StackedInline):
+class VolunteerInlineAdmin(admin.TabularInline):
     model = Volunteer
     can_delete = False
 
@@ -26,6 +26,11 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdminWithVolunteerInfo)
 
 
+class IndividualInlineAdmin(admin.TabularInline):
+    model = Individual
+    can_delete = False
+
+
 class CaseAdmin(admin.ModelAdmin):
     # list view stuff
     list_display = ('arrival', 'origin', 'employment',)
@@ -34,6 +39,22 @@ class CaseAdmin(admin.ModelAdmin):
     search_fields = Case._meta.get_all_field_names()
 
     # individual stuff
-    #filter_horizontal = ('volunteers',)
+    inlines = (IndividualInlineAdmin,)
 
 admin.site.register(Case, CaseAdmin)
+
+
+class IndividualAdmin(admin.ModelAdmin):
+    # list view stuff
+    list_display = Individual._meta.get_all_field_names()
+    list_display_links = list_display
+    list_filter = ('date_of_birth',)
+    search_fields = [f for f in Individual._meta.get_all_field_names()
+                     if f != 'case']  # can't search on foriegn keys
+
+    # individual stuff
+    #filter_horizontal = ('volunteers',)
+
+admin.site.register(Individual, IndividualAdmin)
+
+
