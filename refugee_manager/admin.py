@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.template.defaultfilters import truncatechars
 
 from .models import Volunteer, Case, Individual
 
@@ -38,7 +39,12 @@ class IndividualInlineAdmin(admin.TabularInline):
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
-    list_display = ('active', 'start', 'end', 'arrival', 'origin', 'language',)
+    list_display = ('active', 'name', 'start', 'end', 'arrival', 'origin', 'language', 'family_members')
+    def family_members(self, obj):
+        individuals = obj.individuals.all()
+        return '%s: %s' % (len(individuals),
+                           truncatechars(', '.join(i.name for i in individuals), 50))
+
     list_display_links = list_display
     list_filter = ('active', 'start', 'arrival', 'origin', 'language',)
     search_fields = Case._meta.get_all_field_names()

@@ -15,12 +15,18 @@ class Volunteer(models.Model):
         verbose_name_plural = 'Volunteer Info'
 
     def __unicode__(self):
-        return '%s %s (%s)' % (self.user.first_name, self.user.last_name, self.user.username)
+        if self.user.is_active:
+            inactive = ''
+        else:
+            inactive = 'INACTIVE - '
+        return '%s %s (%s%s)' % (self.user.first_name, self.user.last_name,
+                                 inactive, self.user.username)
 
 
 class Case(models.Model):
     volunteers = models.ManyToManyField(Volunteer)
 
+    name = models.CharField(max_length=2000)
     start = models.DateField(default=date.today)
     end = models.DateField(null=True, blank=True)
     active = models.BooleanField(default=True)
@@ -34,14 +40,20 @@ class Case(models.Model):
     school = models.CharField(max_length=2000, blank=True)
     doctor = models.CharField(max_length=2000, blank=True)
 
+    def __unicode__(self):
+        if self.active:
+            return self.name
+        else:
+            return '%s (closed)' % self.name
+
 
 class Individual(models.Model):
-    case = models.ForeignKey(Case)
+    case = models.ForeignKey(Case, related_name='individuals')
     name = models.CharField(max_length=2000)
-    relation = models.CharField(max_length=100)
+    relation = models.CharField(max_length=100, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     medicaid = models.CharField(max_length=2000, blank=True)
     ssn = models.CharField(max_length=2000, blank=True)
 
     def __unicode__(self):
-        return '%s %s' % (self.name, self.date_of_birth)
+        return '%s %s %s' % (self.name, self.relation, self.date_of_birth)
