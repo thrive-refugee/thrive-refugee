@@ -80,5 +80,5 @@ class CaseDetail(models.Model):
 
 class ActivityNotes(models.Model):
     date = models.DateField(auto_now=True)
-    description = models.CharField(max_length=2000, blank=True)
-    minutes = models.IntegerField("Time spent in minutes")
+    description = models.CharField(max_length=2000)
+    minutes = models.IntegerField("Time spent in minutes", blank=True)
