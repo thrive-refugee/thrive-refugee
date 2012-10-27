@@ -57,3 +57,15 @@ class Individual(models.Model):
 
     def __unicode__(self):
         return '%s %s %s' % (self.name, self.relation, self.date_of_birth)
+
+
+class CaseDetail(models.Model):
+    case = models.ForeignKey(Case, related_name='notes')
+    text = models.TextField(max_length=10000)
+
+    def __unicode__(self):
+        return 'Additional Detail'
+
+    class Meta:
+        verbose_name = 'Case Detail'
+        verbose_name_plural = 'Additional Case Details'

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
 from django.utils.safestring import mark_safe
 
-from .models import Volunteer, Case, Individual
+from .models import Volunteer, Case, Individual, CaseDetail
 
 
 admin.site.disable_action('delete_selected')
@@ -37,6 +37,10 @@ class IndividualInlineAdmin(admin.TabularInline):
     model = Individual
     can_delete = False
 
+class CaseDetailInlineAdmin(admin.TabularInline):
+    model = CaseDetail
+    can_delete = False
+    extra = 0
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
@@ -51,7 +55,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
     search_fields = Case._meta.get_all_field_names()
 
     # individual stuff
-    inlines = (IndividualInlineAdmin,)
+    inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin,)
 
 admin.site.register(Case, CaseAdmin)
 
