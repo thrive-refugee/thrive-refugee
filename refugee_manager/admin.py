@@ -5,6 +5,11 @@ from django.contrib.auth.models import User
 from .models import Volunteer, Case, Individual
 
 
+admin.site.disable_action('delete_selected')
+class DeleteNotAllowedModelAdmin(admin.ModelAdmin):
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 # Define an inline admin descriptor for Volunteer model
 # which acts a bit like a singleton
 class VolunteerInlineAdmin(admin.TabularInline):
@@ -31,7 +36,7 @@ class IndividualInlineAdmin(admin.TabularInline):
     can_delete = False
 
 
-class CaseAdmin(admin.ModelAdmin):
+class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = ('arrival', 'origin', 'employment',)
     list_display_links = list_display
@@ -44,7 +49,7 @@ class CaseAdmin(admin.ModelAdmin):
 admin.site.register(Case, CaseAdmin)
 
 
-class IndividualAdmin(admin.ModelAdmin):
+class IndividualAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = Individual._meta.get_all_field_names()
     list_display_links = list_display
