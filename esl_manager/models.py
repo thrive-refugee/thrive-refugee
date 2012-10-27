@@ -20,14 +20,8 @@ class Attended(models.Model):
     esl_tudent = models.ForeignKey(ESLStudent)
     attend_date = models.DateField('Attended')
 
-    def __unicode__(self):
-        return self.attend_date
-
 
 class Assesment(models.Model):
     esl_tudent = models.ForeignKey(ESLStudent)
     taken_date = models.DateField('Taken')
     Score = models.IntegerField()
-
-    def __unicode__(self):
-        return self.taken_date
