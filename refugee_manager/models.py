@@ -79,10 +79,10 @@ class CaseDetail(models.Model):
         verbose_name_plural = 'Additional Case Details'
 
 
-class ActivityNotes(models.Model):
+class ActivityNote(models.Model):
     case = models.ForeignKey(Case, related_name="activity")
     volunteer = models.ForeignKey(Volunteer, related_name='activity')
 
-    date = models.DateField(auto_now=True)
+    date = models.DateField(default=date.today)
     description = models.CharField(max_length=2000)
-    minutes = models.IntegerField("Time spent in minutes", blank=True)
+    minutes = models.IntegerField("Time spent in minutes", null=True, blank=True)
