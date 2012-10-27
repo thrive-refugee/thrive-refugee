@@ -25,10 +25,15 @@ class UserAdminWithVolunteerInfo(UserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdminWithVolunteerInfo)
 
+
 class CaseAdmin(admin.ModelAdmin):
+    # list view stuff
     list_display = ('arrival', 'origin', 'employment',)
     list_display_links = list_display
     list_filter = ('arrival', 'origin',)
     search_fields = Case._meta.get_all_field_names()
+
+    # individual stuff
+    #filter_horizontal = ('volunteers',)
 
 admin.site.register(Case, CaseAdmin)

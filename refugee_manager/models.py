@@ -11,8 +11,13 @@ class Volunteer(models.Model):
         verbose_name = 'Volunteer Info'
         verbose_name_plural = 'Volunteer Info'
 
+    def __unicode__(self):
+        return '%s %s (%s)' % (self.user.first_name, self.user.last_name, self.user.username)
+
 
 class Case(models.Model):
+    volunteers = models.ManyToManyField(Volunteer)
+
     arrival = models.DateField()
     employment = models.CharField(max_length=2000, blank=True)
     english_classes = models.CharField(max_length=2000, blank=True)
