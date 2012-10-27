@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
 from django.db.models.fields.related import RelatedField
 
-from .models import Volunteer, Case, Individual, CaseDetail
+from .models import Volunteer, Case, Individual, CaseDetail, Assessment
 
 
 admin.site.disable_action('delete_selected')
@@ -97,5 +97,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     #filter_horizontal = ('volunteers',)
 
 admin.site.register(Individual, IndividualAdmin)
+
+admin.site.register(Assessment)
 
 
