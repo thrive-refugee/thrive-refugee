@@ -86,3 +86,32 @@ class ActivityNotes(models.Model):
     date = models.DateField(auto_now=True)
     description = models.CharField(max_length=2000)
     minutes = models.IntegerField("Time spent in minutes", blank=True)
+
+
+class Assessment(models.Models):
+    LANGUAGE_CHOICES =(
+(1, "No English"),
+(2, "Few phrases such as yes and thank you"),
+(3, "Can answer a few questions"),
+(4, "Able to have some basic skills- knows some nouns and verbs"),
+(5, "Able to have basic conversation in some concrete areas"),
+(6, "Able to have more than basic conversation- knows various tenses, etc."),
+(7, "Able to have in depth conversations around daily events"),
+(8, "Able to have discussions around abstract concepts"),
+(9, "Fluent other than some technical terms"),
+(10, "Fluent, including in specialty areas")
+        )
+    language_skills = models.IntegerField("Language Skills (highest level adult)", blank=True, 
+        choices = LANGUAGE_CHOICES)
+    employment = models.IntegerField(blank=True)
+    finances = models.IntegerField(blank=True)  #family
+    transportation = models.IntegerField(blank=True)  #family
+    housing = models.IntegerField(blank=True)  #family
+    access_to_services = models.IntegerField(blank=True)  #family
+    education_or_training = models.IntegerField(blank=True) #School/ Education/ Job Training (parents)
+    support_of_children = models.IntegerField(blank=True) #parents
+    mental_health = models.IntegerField(blank=True)  #all family members
+    social_support = models.IntegerField(blank=True)
+
+    case_summary = models.TextField(max_length=10000, blank = True)
+    goals models.TextField(max_length=10000, blank = True) #School/ Education/ Job Training (parents)
