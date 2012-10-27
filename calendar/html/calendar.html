@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<link rel='stylesheet' type='text/css' href='../libs/fullcalendar/fullcalendar.css' />
+<link rel='stylesheet' type='text/css' href='../libs/fullcalendar/fullcalendar.print.css' media='print' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
+<script type='text/javascript' src='../libs/jQuery/jquery-1.8.1.min.js'></script>
+<script type='text/javascript' src='../libs/jQuery/jquery-ui-1.9.1.custom.min.js'></script>
+<script type='text/javascript' src='../libs/fullcalendar/fullcalendar.min.js'></script>
+<script type='text/javascript' src='../js/calendar.js'></script>
+<script type='text/javascript' src='../libs/jscolor/jscolor.js'></script>
+
+<!-- Local CSS Styles -->
+<style type='text/css'>
+body {
+	margin-top: 40px;
+	text-align: center;
+	font-size: 14px;
+	font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+}
+
+.hideTableBorder { 
+	border: none;
+}
+
+#calendar {
+	width: 900px;
+	margin: 0 auto;
+}
+
+#accordion {
+	padding-bottom: 2.5em;
+}
+
+td{
+	text-align: left;	
+}
+
+td:first-child{
+	text-align: right;
+}
+</style>
+
+</head>
+<body>
+
+<div id='accordion'>
+	<h3>Event Infomation</h3>
+	<table id='calendarEventInfomation' class='hideTableBorder'>
+		<tr><td>Name:</td><td><input id='contactName'></input></td></tr>
+		<tr><td>Phone Number:</td><td><input id='contactPhone'></input></td></tr>
+		<tr><td>Address:</td><td><input id='contactAddress'></input></td></tr>
+		<tr><td>E-mail:</td><td><input id='contactEmail'></input></td></tr>
+		<tr><td>Notes:</td></tr>
+		<tr><td><textarea id='contactNotes'></textarea></td></tr>
+		<tr>
+			<td><button id='updateEventButton' onclick='appendCalendarEvent()'>Update Event</button></td>
+			<td><button id='deleteEventButton' onclick='deleteCalendarEvent()'>Delete Event</button></td>
+		</tr>
+	</table>
+	
+	<h3>Event Controls</h3>
+	<table id='calendarEventControls' class='hideTableBorder'>
+		<tr><td>Title:</td><td><input id='eventTitle'></input></tr>
+		<tr><td>Start Date:</td><td><input id='eventStartDate' class='date' title=''></input></tr>
+		<tr><td>End Date:</td><td><input id='eventEndDate' class='date' title=''></input></tr>
+		<tr><td>URL:</td><td><input id='eventURL'></input></tr>
+		<tr><td>All Day:</td><td><input type='checkbox' id='eventIsAllDay'></tr>
+		<tr><td>Color:</td><td><input id='eventColor' class='color'></input></tr>
+		<tr><td>Background Color:</td><td><input id='eventBackgroundColor' class='color'></input></tr>
+		<tr><td>Text Color:</td><td><input id='eventTextColor' class='color'></input></tr>
+		<tr>
+			<td><button id='updateEventButton' onclick='appendCalendarEvent()'>Update Event</button></td>
+		<td><button id='deleteEventButton' onclick='deleteCalendarEvent()'>Delete Event</button></td>
+		</tr>
+	</table>
+</div>
+
+<div id='calendar'></div>
+</body>
+<script>
+calendarLoad();
+</script>
+<script>
+$(function() {
+	$('#accordion').accordion(
+		{ 
+			active: false, 
+			collapsible: true, 
+			heightStyle: "content"
+		});
+});
+</script>
+<script>
+$(function() {
+	$('.date').datepicker();
+});
+</script>
+<script>
+    $('.date').tooltip({
+		content: "Use this date format if you would like to add an exact time:\nWed Oct 24 2012 16:00:00 GMT-0400 (EDT)",
+		of: $(this),
+		at: 'rigt',
+		my: 'top'	
+	});
+</script>
+</html>
