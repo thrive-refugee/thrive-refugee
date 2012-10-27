@@ -94,6 +94,20 @@ class ActivityNote(models.Model):
         return '%s %s' % (self.case.name, self.date)
 
 
+class Event(models.Model):
+    case = models.ForeignKey(Case, related_name="event")
+    volunteer = models.ForeignKey(Volunteer, related_name='event')
+
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    allDay = models.BooleanField();
+    title = models.CharField(max_length=80)
+    description = models.CharField(max_length=200)
+    
+    def __unicode__(self):
+        return '%s %s' % (self.case.name, self.start)
+
+
 class Assessment(models.Model):
     case = models.ForeignKey(Case, related_name='assessment')
 

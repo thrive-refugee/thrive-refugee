@@ -6,7 +6,7 @@ from django.db.models.fields.related import RelatedField
 from django.core.exceptions import FieldError
 
 
-from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote
+from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote, Event
 
 
 
@@ -120,3 +120,17 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     ordering = ('-date',)
 
 admin.site.register(ActivityNote, ActivityNoteAdmin)
+
+class EventAdmin(admin.ModelAdmin):
+    # list view stuff
+    list_display = ('case', 'volunteer', 'start', 'end', 'title_trunc')
+    def title_trunc(self, obj):
+        return truncatechars(obj.title, 30)
+    title_trunc.short_description = 'Title'
+    list_display_links = list_display
+    list_filter = ('case', VolunteerFilter, 'start')
+    date_hierarchy = 'start'
+    search_fields = ('description',)
+    ordering = ('-start',)
+
+admin.site.register(Event, EventAdmin)
