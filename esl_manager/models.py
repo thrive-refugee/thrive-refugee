@@ -10,9 +10,13 @@ class ESLStudent(models.Model):
     City = models.CharField(max_length=20)
     State = models.CharField(max_length=2)
     Zip = models.CharField(max_length=10)
-    Phones = models.CharField(max_length=50)
+    Phones = models.CharField(max_length=50, blank=True)
     Active = models.BooleanField()
     
+    class Meta:
+        verbose_name = 'ESL Student'
+        verbose_name_plural = 'ESL Students'
+
     def __unicode__(self):
         return self.FirstName
 
