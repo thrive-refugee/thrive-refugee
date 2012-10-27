@@ -38,9 +38,9 @@ class IndividualInlineAdmin(admin.TabularInline):
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
-    list_display = ('arrival', 'origin', 'employment',)
+    list_display = ('active', 'start', 'end', 'arrival', 'origin', 'language',)
     list_display_links = list_display
-    list_filter = ('arrival', 'origin',)
+    list_filter = ('active', 'start', 'arrival', 'origin', 'language',)
     search_fields = Case._meta.get_all_field_names()
 
     # individual stuff
@@ -53,7 +53,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = Individual._meta.get_all_field_names()
     list_display_links = list_display
-    list_filter = ('date_of_birth',)
+    list_filter = ('case', 'date_of_birth', 'case__active')
     search_fields = [f for f in Individual._meta.get_all_field_names()
                      if f != 'case']  # can't search on foriegn keys
 

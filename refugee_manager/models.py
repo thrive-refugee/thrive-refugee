@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import date
+
 
 # https://docs.djangoproject.com/en/dev/topics/auth/#storing-additional-information-about-users
 class Volunteer(models.Model):
@@ -19,10 +21,14 @@ class Volunteer(models.Model):
 class Case(models.Model):
     volunteers = models.ManyToManyField(Volunteer)
 
-    arrival = models.DateField()
+    start = models.DateField(default=date.today)
+    end = models.DateField(null=True, blank=True)
+    active = models.BooleanField(default=True)
+    arrival = models.DateField(null=True, blank=True)
     employment = models.CharField(max_length=2000, blank=True)
     english_classes = models.CharField(max_length=2000, blank=True)
     origin = models.CharField(max_length=2000, blank=True)
+    language = models.CharField(max_length=2000, blank=True)
     green_card = models.CharField(max_length=2000, blank=True)
     dhs_worker = models.CharField(max_length=2000, blank=True)
     school = models.CharField(max_length=2000, blank=True)
@@ -32,7 +38,8 @@ class Case(models.Model):
 class Individual(models.Model):
     case = models.ForeignKey(Case)
     name = models.CharField(max_length=2000)
-    date_of_birth = models.DateField(blank=True)
+    relation = models.CharField(max_length=100)
+    date_of_birth = models.DateField(null=True, blank=True)
     medicaid = models.CharField(max_length=2000, blank=True)
     ssn = models.CharField(max_length=2000, blank=True)
 
