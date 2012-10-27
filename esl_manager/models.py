@@ -14,7 +14,7 @@ class ESLStudent(models.Model):
     def __unicode__(self):
         return self.FirstName
 
-class Addended(models.Model):
+class Attended(models.Model):
     esl_tudent = models.ForeignKey(ESLStudent)
     attend_date = models.DateTimeField('attend_date')
 
