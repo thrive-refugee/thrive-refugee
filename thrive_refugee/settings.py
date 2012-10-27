@@ -105,10 +105,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'esl_manager', 
+    'esl_manager',
+    'refugee_manager',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+AUTH_PROFILE_MODULE = 'refugee_manager.VolunteerInfo'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
