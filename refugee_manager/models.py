@@ -77,3 +77,8 @@ class CaseDetail(models.Model):
     class Meta:
         verbose_name = 'Case Detail'
         verbose_name_plural = 'Additional Case Details'
+
+class ActivityNotes(models.Model):
+    date = models.DateField(auto_now=True)
+    description = models.CharField(max_length=2000, blank=True)
+    minutes = models.IntegerField("Time spent in minutes")
