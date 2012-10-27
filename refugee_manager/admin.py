@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
-from django.utils.safestring import mark_safe
+from django.db.models.fields.related import RelatedField
 
 from .models import Volunteer, Case, Individual, CaseDetail
 
@@ -52,7 +52,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
 
     list_display_links = list_display
     list_filter = ('active', 'start', 'arrival', 'origin', 'language',)
-    search_fields = Case._meta.get_all_field_names()
+    search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
 
     # individual stuff
     inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin,)
@@ -72,8 +72,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
 
     list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
-    search_fields = [f for f in Individual._meta.get_all_field_names()
-                     if f != 'case']  # can't search on foriegn keys
+    search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
 
 
     # individual stuff
