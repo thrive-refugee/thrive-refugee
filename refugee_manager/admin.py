@@ -59,7 +59,10 @@ class VolunteerFilter(admin.SimpleListFilter):
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
-    list_display = ('active', 'name', 'start', 'end', 'arrival', 'origin', 'language', 'family_members')
+    list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
+    def volunteers_list(self, obj):
+        return ', '.join(v.user.first_name + ' ' + v.user.last_name for v in obj.volunteers.all())
+    volunteers_list.short_description = 'Volunteers'
     def family_members(self, obj):
         individuals = obj.individuals.all()
         return '%s: %s' % (len(individuals),
