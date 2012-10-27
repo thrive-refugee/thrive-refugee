@@ -31,6 +31,9 @@ class Case(models.Model):
     end = models.DateField(null=True, blank=True)
     active = models.BooleanField(default=True)
     arrival = models.DateField(null=True, blank=True)
+    address = models.TextField(max_length=10000, blank=True)
+    phone = models.CharField(max_length=2000, blank=True)
+    goals = models.TextField(max_length=10000, blank=True)
     employment = models.CharField(max_length=2000, blank=True)
     english_classes = models.CharField(max_length=2000, blank=True)
     origin = models.CharField(max_length=2000, blank=True)
@@ -39,6 +42,11 @@ class Case(models.Model):
     dhs_worker = models.CharField(max_length=2000, blank=True)
     school = models.CharField(max_length=2000, blank=True)
     doctor = models.CharField(max_length=2000, blank=True)
+    other1 = models.CharField('Other', max_length=2000, blank=True)
+    other2 = models.CharField('Other', max_length=2000, blank=True)
+    other3 = models.CharField('Other', max_length=2000, blank=True)
+    other4 = models.CharField('Other', max_length=2000, blank=True)
+    other5 = models.CharField('Other', max_length=2000, blank=True)
 
     def __unicode__(self):
         if self.active:
