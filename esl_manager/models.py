@@ -11,8 +11,8 @@ class ESLStudent(models.Model):
     State = models.CharField(max_length=2)
     Zip = models.CharField(max_length=10)
     Phones = models.CharField(max_length=50, blank=True)
-    Active = models.BooleanField()
-    
+    Active = models.BooleanField(default=True)
+
     class Meta:
         verbose_name = 'ESL Student'
         verbose_name_plural = 'ESL Students'
