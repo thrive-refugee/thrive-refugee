@@ -111,6 +111,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     description_trunc.short_description = 'Description'
     list_display_links = list_display
     list_filter = ('case', VolunteerFilter, 'date', 'minutes')
+    date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
 

@@ -86,3 +86,6 @@ class ActivityNote(models.Model):
     date = models.DateField(default=date.today)
     description = models.CharField(max_length=2000)
     minutes = models.IntegerField("Time spent in minutes", null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s %s' % (self.case.name, self.date)
