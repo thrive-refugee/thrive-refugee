@@ -6,5 +6,4 @@ class VolunteerInfo(models.Model):
     user = models.OneToOneField(User)
 
     phone = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
 
