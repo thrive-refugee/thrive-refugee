@@ -11,3 +11,13 @@ class Volunteer(models.Model):
         verbose_name = 'Volunteer Info'
         verbose_name_plural = 'Volunteer Info'
 
+
+class Case(models.Model):
+    arrival = models.DateField()
+    employment = models.CharField(max_length=2000, blank=True)
+    english_classes = models.CharField(max_length=2000, blank=True)
+    origin = models.CharField(max_length=2000, blank=True)
+    green_card = models.CharField(max_length=2000, blank=True)
+    dhs_worker = models.CharField(max_length=2000, blank=True)
+    school = models.CharField(max_length=2000, blank=True)
+    doctor = models.CharField(max_length=2000, blank=True)

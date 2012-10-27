@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Volunteer
+from .models import Volunteer, Case
 
 
 # Define an inline admin descriptor for Volunteer model
@@ -24,3 +24,11 @@ class UserAdminWithVolunteerInfo(UserAdmin):
 # Re-register UserAdmin
 admin.site.unregister(User)
 admin.site.register(User, UserAdminWithVolunteerInfo)
+
+class CaseAdmin(admin.ModelAdmin):
+    list_display = ('arrival', 'origin', 'employment',)
+    list_display_links = list_display
+    list_filter = ('arrival', 'origin',)
+    search_fields = Case._meta.get_all_field_names()
+
+admin.site.register(Case, CaseAdmin)
