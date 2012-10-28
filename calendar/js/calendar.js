@@ -13,31 +13,7 @@ function calendarLoad(){
 				right: 'month,basicWeek,basicDay'
 			},
 			editable: false,
-			events: [
-				{
-					id: 0000,
-					title: 'Bit Diddler Activity Work',
-					start: new Date(y, m, d-3, 16, 0),
-					color: '#5CFF87',
-					allDay: true,
-					contactName: 'Bit Diddler',
-					contactPhone: '000-000-0000',
-					contactAddress: 'Somewhere St.',
-					contactEmail: 'bit@gmail.com',
-					contactNotes: 'Bit Diddler is the man.'
-					
-				}, {
-					id: 0001,
-					title: 'Bob Activity Work',
-					start: new Date(y, m, d+4, 16, 0),
-					allDay: true,
-					contactName: 'Bob',
-					contactPhone: '111-111-1111',
-					contactAddress: 'Somewhere St.',
-					contactEmail: 'bob@gmail.com',
-					contactNotes: 'Has trouble with females.'
-				}
-			],
+			events: $.getJSON('/refugee_manager/events'),
     		eventClick: function(event, element) {
 				<!-- Event Infomation Fields -->
 				$('#contactName').val(event.contactName);
@@ -53,9 +29,31 @@ function calendarLoad(){
 				$('#eventEndDate').val(event.end);
 				$('#eventURL').val(event.url);
 				$('#eventIsAllDay').val( (isAllDay) );
-				$('#eventColor').val( (event.color.charAt(0) != '#') ?  ('#' + event.color) : event.color);
-				$('#eventBackgroundColor').val( (event.color.charAt(0) != '#') ?  ('#' + event.backgroundColor) : event.backgroundColor);
-				$('#eventTextColor').val('#' + event.textColor);	
+				var color = $('#eventColor').val();
+				var backgroundColor = $('#eventBackgroundColor').val();
+				var textColor = $('#eventTextColor').val();
+				
+				if(color == null || color == ""){
+					color = '#FFFFFF';
+				} else if(color.charAt(0) != '#') {
+					color = '#' + color;
+				}
+
+				if(backgroundColor == null || backgroundColor == ""){
+					backgroundColor = '#FFFFFF';
+				} else if(backgroundColor.charAt(0) != '#') {
+					backgroundColor = '#' + backgroundColor;
+				}
+
+				if(textColor == null || textColor == ""){
+					textColor = '#FFFFFF';
+				} else if(textColor.charAt(0) != '#') {
+					textColor = '#' + textColor;
+				}
+
+				$('#eventColor').val(color);
+				$('#eventBackgroundColor').val(backgroundColor);
+				$('#eventTextColor').val(textColor);	
    			}
 		});
 	});
@@ -66,46 +64,12 @@ function calendarLoad(){
 
 
 function appendCalendarEvent(){
-	// TODO: Validation!
+	// TODO: Validation
+	var eventObject = EventObject();
 	
-	function EventObject(eventId, eventTitle, eventStartDate, eventEndDate, eventURL, eventIsAllDay, eventColor, eventTextColor, contactName, contactAddress, contactPhone, contactEmail, contactNotes){
-		this.eventId = eventId;
-		this.eventTitle = eventTitle;
-		this.eventStartDate = eventStartDate;
-		this.eventEndDate = eventEndDate;
-		this.eventURL = eventURL;
-		this.eventIsAllDay = eventIsAllDay;
-		this.eventColor = eventColor;
-		this.eventTextColor = eventTextColor;
-		this.contactName = contactName;
-		this.contactAddress = contactAddress;
-		this.contactPhone = contactPhone;
-		this.contactEmail = contactEmail;
-		this.contactNotes = contactNotes;
-		this.CRUD_CONTROL = "APPEND";
-	}
-
-	var JSONEvent = EventObject(
-		$('#eventId').val(),
-		$('#eventTitle').val(), 
-		$('#eventStartDate').val(), 
-		$('#eventEndDate').val(), 
-		$('#eventURL').val(), 
-		$('#eventIsAllDay').val(), 
-		$('#eventColor').val(), 
-		$('#eventBackgroundColor').val(),
-		$('#eventTextColor').val(), 
-		$('#contactName').val(),
-		$('#contactAddress').val(),
-		$('#contactPhone').val(),
-		$('#contactEmail').val(),
-		$('#contactNotes').text()
-	)	
-
-	// Ajax call, unsure if post or put
 	$.ajax({
 		url: '',
-		data: Object.toJSON(JSONEvent),
+		data: eventObject.toJSON(),
 		type: 'POST',
 		dataType: 'json',
 		cache: false,
@@ -121,46 +85,14 @@ function appendCalendarEvent(){
 // TODO: Full page refresh!
 }
 
-function deleteEvent(){
-	function EventObject(eventId, eventTitle, eventStartDate, eventEndDate, eventURL, eventIsAllDay, eventColor, eventTextColor, contactName, contactAddress, contactPhone, contactEmail, contactNotes){
-		this.eventId = eventId;
-		this.eventTitle = eventTitle;
-		this.eventStartDate = eventStartDate;
-		this.eventEndDate = eventEndDate;
-		this.eventURL = eventURL;
-		this.eventIsAllDay = eventIsAllDay;
-		this.eventColor = eventColor;
-		this.eventTextColor = eventTextColor;
-		this.contactName = contactName;
-		this.contactAddress = contactAddress;
-		this.contactPhone = contactPhone;
-		this.contactEmail = contactEmail;
-		this.contactNotes = contactNotes;
-		this.CRUD_CONTROL = "DELETE";
-	}
-
-	var JSONEvent = EventObject(
-		$('#eventId').val(),
-		$('#eventTitle').val(), 
-		$('#eventStartDate').val(), 
-		$('#eventEndDate').val(), 
-		$('#eventURL').val(), 
-		$('#eventIsAllDay').val(), 
-		$('#eventColor').val(), 
-		$('#eventBackgroundColor').val(),
-		$('#eventTextColor').val(), 
-		$('#contactName').val(),
-		$('#contactAddress').val(),
-		$('#contactPhone').val(),
-		$('#contactEmail').val(),
-		$('#contactNotes').text()
-	)	
-
+function deleteCalendarEvent(){
+	var eventObject = EventObject();
+	
 	// Ajax call, unsure if post or put
 	$.ajax({
-		url: '',
-		data: Object.toJSON(JSONEvent),
-		type: 'POST',
+		url: '/refugee_manager/events',
+		data: eventObject.toJSON(),
+		type: 'DELETE',
 		dataType: 'json',
 		cache: false,
 		success: function(){
@@ -170,5 +102,28 @@ function deleteEvent(){
 			alert("Failure!\nCalendar event wasn't deleted, please try again.");
 		}
 	});
+}
 
+function EventObject(){
+	var that = {};
+	that.eventId = ($('#eventId').val() == null) ? "" : $('#eventId').val();
+	that.eventTitle = ($('#eventTitle').val() == null) ? "" : $('#eventTitle').val();
+	that.eventStartDate = ($('#eventStartDate').val() == null) ? "" : $('#eventStartDate').val();
+	that.eventEndDate = ($('#eventEndDate').val() == null) ? "" : $('#eventEndDate').val();
+	that.eventURL = ($('#eventURL').val() == null) ? "" : $('#eventURL').val();
+	that.eventIsAllDay = ($('#eventIsAllDay').val() == null) ? "" : $('#eventIsAllDay').val();
+	that.eventColor = ($('#eventColor').val() == null) ? "#FFFFFF" : $('#eventColor').val();
+	that.eventBackgroundColor = ($('#eventBackgroundColor').val() == null) ? "#FFFFFF" : $('#eventBackgroundColor').val();
+	that.eventTextColor = ($('#eventTextColor').val() == null) ? "#FFFFFF" : $('#eventTextColor').val();
+	that.contactName = ($('#contactName').val() == null) ? "" : $('#contactName').val();
+	that.contactAddress = ($('#contactAddress').val() == null) ? "" : $('#contactAddress').val();
+	that.contactPhone = ($('#contactPhone').val() == null) ? "" : $('#contactPhone').val();
+	that.contactEmail = ($('#contactEmail').val() == null) ? "" : $('#contactEmail').val();
+	that.contactNotes = ($('#contactNotes').text() == null) ? "" : $('#contactNotes').text();
+
+	// Lazy hack, would freeze when to convert object to json
+	that.toJSON = function(){
+		return "{id:" + that.eventId + ", title:"+that.eventTitle + ", start:" + that.eventStartDate + ", end:" + that.eventEndDate +", url: " + that.eventURL + ", allDay:" + that.eventIsAllDay + ", color:" + that.eventColor + ", backgroundColor:"+ that.eventBackgroundColor + ", textColor: " + that.eventTextColor + ", contactName:" + that.contactName + ", contactAddress:" + that.contactAddress + ", contactPhone: " + that.contactPhone + ", contactEmail: " + that.contactEmail + ", contactNotes: " + that.contactNotes +" }" };
+
+	return that;
 }

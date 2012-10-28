@@ -2,6 +2,8 @@
 
 from django.http import HttpResponse
 from django.core import serializers
+from django.views.generic import TemplateView
+from django.shortcuts import render
 
 from simple_rest import Resource
 
@@ -34,3 +36,9 @@ class Events(Resource):
         event = Event.objects.get(pk=event_id)
         event.delete()
         return HttpResponse(status=200)
+
+
+def showCalendar(request):
+    context = {}
+    return render(request, 'refugee_manager/calendar.html', context)
+

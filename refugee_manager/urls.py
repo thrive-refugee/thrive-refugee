@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from .views import Events
+from .views import Events,  showCalendar
 
 urlpatterns = patterns('',
     # Allow access to the events resource collection
@@ -8,4 +8,8 @@ urlpatterns = patterns('',
 
     # Allow access to a single event resource
     url(r'^events/(?P<event_id>[0-9]+)/?$', Events.as_view()),
+    
+    # calendar base page
+    url(r'^calendar/?$', showCalendar),
+
 )
