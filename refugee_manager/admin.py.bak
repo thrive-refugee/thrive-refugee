@@ -5,6 +5,7 @@ from django.template.defaultfilters import truncatechars
 from django.db.models.fields.related import RelatedField
 from django.core.exceptions import FieldError
 
+
 from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote, Event
 
 
@@ -68,27 +69,6 @@ class VolunteerFilter(admin.SimpleListFilter):
                 return queryset.filter(volunteer__user__username=self.value())
         else:
             return queryset
-
-class CaseFilter(admin.SimpleListFilter):
-    title = 'By case'
-    parameter_name = 'case'
-    def lookups(self, request, model_admin):
-        if request.user.is_superuser:
-            return [
-                (a.id, '%s' % (a.case))
-                for a in ActivityNote.objects.order_by('case').all()
-            ]
-        else:
-            return [
-                (a.id, '%s' % (a.case))
-                for a in ActivityNote.objects.order_by('case').filter(volunteer__user__exact=request.user)
-            ]
-
-    def queryset(self, request, queryset):
-        if request.user.is_superuser:
-            return queryset
-        return queryset.filter(volunteer__user__exact=request.user)
-
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
@@ -163,31 +143,9 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     list_display = ('case', 'volunteer', 'date', 'description_trunc', 'minutes')
     def description_trunc(self, obj):
         return truncatechars(obj.description, 30)
-
-    def queryset(self, request):
-        qs = super(ActivityNoteAdmin, self).queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(volunteer__user__exact=request.user)	
-		
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'case':
-            if request.user.is_superuser:
-                kwargs['queryset'] = Case.objects
-            else:
-                kwargs['queryset'] = Case.objects.filter(volunteers__user=request.user)
-        
-        if db_field.name == 'volunteer':
-            if request.user.is_superuser:
-                kwargs['queryset'] = Volunteer.objects
-            else:
-                kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
-        return super(ActivityNoteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-    
     description_trunc.short_description = 'Description'
     list_display_links = list_display
-    list_filter = (CaseFilter, VolunteerFilter, 'date', 'minutes')
+    list_filter = ('case', VolunteerFilter, 'date', 'minutes')
     date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
@@ -201,10 +159,29 @@ class EventAdmin(admin.ModelAdmin):
         return truncatechars(obj.title, 30)
     title_trunc.short_description = 'Title'
     list_display_links = list_display
-    list_filter = (CaseFilter, VolunteerFilter, 'start')
+    list_filter = ('case', VolunteerFilter, 'start')
     date_hierarchy = 'start'
     search_fields = ('description',)
     ordering = ('-start',)
-	
+
 admin.site.register(Event, EventAdmin)
-	
+
+class CaseFilter(admin.SimpleListFilter):
+    title = 'By case'
+    parameter_name = 'case'
+    def lookups(self, request, model_admin):
+        if request.user.is_superuser:
+            return [
+                (a.id, '%s' % (a.case))
+                for a in ActivityNote.objects.order_by('case').all()
+            ]
+        else:
+            return [
+                (a.id, '%s' % (a.case))
+                for a in ActivityNote.objects.order_by('case').filter(volunteer__user__exact=request.user)
+            ]
+
+    def queryset(self, request, queryset):
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(volunteer__user__exact=request.user)
