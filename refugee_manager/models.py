@@ -110,7 +110,7 @@ class Event(models.Model):
 
 class Assessment(models.Model):
     case = models.ForeignKey(Case, related_name='assessment')
-
+    date = models.DateField(default=date.today)
     LANGUAGE_CHOICES =(
         (0, "0 - Please Select"),
         (1, "1 - No English"),
@@ -275,3 +275,6 @@ class Assessment(models.Model):
 
     case_summary = models.TextField(max_length=10000, blank = True)
     goals = models.TextField(max_length=10000, blank = True) #School/ Education/ Job Training (parents)
+
+    def get_fields(self):
+        return [(field, field.value_to_string(self)) for field in Assessment._meta.fields]

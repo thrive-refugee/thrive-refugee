@@ -104,7 +104,34 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
 
 admin.site.register(Individual, IndividualAdmin)
 
-admin.site.register(Assessment)
+class AssesmentAdmin(admin.ModelAdmin):
+    list_display = ('case_link', 'date', 'calc_score')
+    def case_link(self, obj):
+        case = obj.case
+        return '<a href="../../%s/%s/%d">%s</a>' % (
+            obj._meta.app_label, obj._meta.module_name, obj.id, unicode(case))
+    case_link.allow_tags = True
+    case_link.short_description = 'Assessment'
+
+    def calc_score(self, obj):
+        total = 0.0
+        denom = 0.0
+        q = obj.get_fields()[3:]
+        # return unicode(q)
+        for value in q:
+            try:
+                value = int(value[1])
+                # return unicode(value)
+            except:
+                continue
+
+            total += value
+            denom += 10 if value != 0 else 0
+        if denom == 0: return u"0/0 , 0%"
+        return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total/denom)*100)
+    calc_score.allow_tags = True
+    calc_score.description = "Score"
+admin.site.register(Assessment, AssesmentAdmin)
 
 
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
