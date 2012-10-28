@@ -95,7 +95,10 @@ class ActivityNote(models.Model):
 
 
 class Assessment(models.Model):
+    case = models.ForeignKey(Case, related_name='assessment')
+
     LANGUAGE_CHOICES =(
+        (0, "0 - Please Select"),
         (1, "1 - No English"),
         (2, "2 - Few phrases such as yes and thank you"),
         (3, "3 - Can answer a few questions"),
@@ -107,10 +110,11 @@ class Assessment(models.Model):
         (9, "9 - Fluent other than some technical terms"),
         (10, "10 - Fluent, including in specialty areas")
     )    
-    language_skills = models.IntegerField("Language Skills (highest level adult)", blank=True, 
-        choices = LANGUAGE_CHOICES )
+    language_skills = models.IntegerField("Language Skills (highest level adult)", 
+        choices = LANGUAGE_CHOICES, default=0)
 
     EMPLOYMENT_CHOICES = (
+        (0, "0 - Please Select"),
         ( 1, "1- Has no current job or past experience, does not want work"),
         ( 2, "2- Desires employment but has no current or past work experience"),
         ( 3, "3- Desires employment but has no current job, has some past experience"),
@@ -122,9 +126,10 @@ class Assessment(models.Model):
         ( 9, "9- Has full time skilled position, is happy with pay and position"),
         ( 10, "10- Has full time professional or highly skilled position, is fulfilled with work")
     )
-    employment = models.IntegerField("Employment (wage earning parent)", choices=EMPLOYMENT_CHOICES, blank=True)
+    employment = models.IntegerField("Employment (wage earning parent)", choices=EMPLOYMENT_CHOICES, null=True, default=0)
 
     FINANCE_CHOICES = (
+        (0, "0 - Please Select"),
         (1, "1- Has no employment income or DHS assistance"),
         (2, "2- Has no employment, some DHS assistance but insufficient for rent"),
         (3, "3- Has no employment, some DHS assistance but insufficient for needs"),
@@ -136,9 +141,10 @@ class Assessment(models.Model):
         (9, "9- Has employment, able to go above basic needs without assistance"),
         (10, "10- Has employment and financially stable")
     )
-    finances = models.IntegerField("Finances (family)", choices=FINANCE_CHOICES, blank=True)  #family
+    finances = models.IntegerField("Finances (family)", choices=FINANCE_CHOICES, null=True, default=0)  #family
 
     TRANSPORTATION_CHOICES = (
+        (0, "0 - Please Select"),
         (1, "1- No transportation, no knowledge of bus line"),
         (2, "2- No transportation, has been introduced to bus line but unwilling or unable to use"),
         (3, "3- Minimal transportation, able to use bus line to few selected locations"),
@@ -150,9 +156,10 @@ class Assessment(models.Model):
         (9, "9- Has license but no car"),
         (10, "10- Has license and car, able to transport self and family independently")
     )
-    transportation = models.IntegerField("Transportation (family)", choices=TRANSPORTATION_CHOICES, blank=True)  #family
+    transportation = models.IntegerField("Transportation (family)", choices=TRANSPORTATION_CHOICES, null=True, default=0)  #family
 
     HOUSING_CHOICES =(
+        (0, "0 - Please Select"),
         (1, "1- Homeless"),
         (2, "2- Has temporary housing"),
         (3, "3- Has somewhat stable housing- month to month/ long term temporary, etc."),
@@ -164,9 +171,10 @@ class Assessment(models.Model):
         (9, "9- In own home, difficulties with size or mortgage"),
         (10, "10- In own home, appropriate size and monthly mortgage")
     )
-    housing = models.IntegerField("Housing (family)", choices=HOUSING_CHOICES, blank=True)  #family
+    housing = models.IntegerField("Housing (family)", choices=HOUSING_CHOICES, null=True, default=0)  #family
 
     ACCESS_CHOICES = (
+        (0, "0 - Please Select"),
         (1, "1- No access to service or health care"),
         (2, "2- Minimal access to emergency services (E.R.)"),
         (3, "3- Minimal access to services beyond E.R."),
@@ -178,9 +186,10 @@ class Assessment(models.Model):
         (9, "9- Able to research and access services on own to support family and meet most needs"),
         (10, "10- Has skills to access and research services and health care independently")
     )
-    access_to_services = models.IntegerField("Access to services and health care (family)", choices=ACCESS_CHOICES, blank=True)  #family
+    access_to_services = models.IntegerField("Access to services and health care (family)", choices=ACCESS_CHOICES, null=True, default=0)  #family
 
     EDUCATION_CHOICES = (
+        (0, "0 - Please Select"),
         (1, "1- No school or education in home country or here, no job training"),
         (2, "2- Primary school education, no job training"),
         (3, "3- Middle school education, no job training"),
@@ -192,9 +201,10 @@ class Assessment(models.Model):
         (9, "9- Advanced professional training or college degree"),
         (10, "10- Advanced professional training or advanced college degree")
     )
-    education_or_training = models.IntegerField("School/ Education/ Job Training (parents)", choices=EDUCATION_CHOICES, blank=True) #School/ Education/ Job Training (parents)
+    education_or_training = models.IntegerField("School/ Education/ Job Training (parents)", choices=EDUCATION_CHOICES, null=True, default=0) #School/ Education/ Job Training (parents)
 
     SUPPORT_CHILDREN_CHOICES = (
+        (0, "0 - Please Select"),
         (1, "1- In need of parenting training, CPS involved, children may be in danger"),
         (2, "2- In need of parenting training, CPS involved, children appear safe"),
         (3, "3- In need of parenting skills, CPS may be involved, but parents want to support children"),
@@ -206,9 +216,10 @@ class Assessment(models.Model):
         (9, "9- Parents able to support children in most areas with minimal support from others"),
         (10, "10- Parents able to fully support children at home and in school")
     )
-    support_of_children = models.IntegerField("Support of Children (parents)", choices=SUPPORT_CHILDREN_CHOICES, blank=True) #parents
+    support_of_children = models.IntegerField("Support of Children (parents)", choices=SUPPORT_CHILDREN_CHOICES, null=True, default=0) #parents
 
     MH_CHOICES = (
+        (0, "0 - Please Select"),
         (1, "1- Many family members have serious mental health difficulties, many need occasional hospitalization, not receiving needed mental health care"), 
         (2, "2- Many family members have serious mental health difficulties, many need occasional hospitalization, not receiving needed mental health care"), 
         (3, "3- One family member has serious mental health difficulties, and others may have minor difficulties, not receiving needed mental health care"), 
@@ -220,9 +231,10 @@ class Assessment(models.Model):
         (9, "9- Family members appear to be in good mental health but may occasionally have stress or acculturation difficulties"), 
         (10, "10- Family members all appear to be in excellent mental health")
     )
-    mental_health = models.IntegerField("Mental Health (all family members)", choices=MH_CHOICES, blank=True)  #all family members
+    mental_health = models.IntegerField("Mental Health (all family members)", choices=MH_CHOICES, null=True, default=0)  #all family members
 
     SOCIAL_CHOICES =(
+        (0, "0 - Please Select"),
         (1, "1- Has no social support, friends, etc."),
         (2, "2- Only has social support from one agency or program"),
         (3, "3- Has social support from family members in household"),
@@ -234,7 +246,7 @@ class Assessment(models.Model):
         (9, "9- Actively involved in the community"),
         (10, "10- Actively involved in the community and leads some activities")
     )
-    social_support = models.IntegerField("Social Support (family)", choices = SOCIAL_CHOICES, blank=True)
+    social_support = models.IntegerField("Social Support (family)", choices = SOCIAL_CHOICES, null=True, default=0)
 
     case_summary = models.TextField(max_length=10000, blank = True)
     goals = models.TextField(max_length=10000, blank = True) #School/ Education/ Job Training (parents)
