@@ -87,7 +87,7 @@ class ActivityNote(models.Model):
     volunteer = models.ForeignKey(Volunteer, related_name='activity')
 
     date = models.DateField(default=date.today)
-    description = models.CharField(max_length=2000)
+    description = models.TextField(max_length=10000)
     minutes = models.IntegerField("Time spent in minutes", null=True, blank=True)
 
     def __unicode__(self):
