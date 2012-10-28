@@ -1,5 +1,6 @@
 from esl_manager.models import ESLStudent,  Attended,  Assesment
 from django.contrib import admin
+import reversion
 
 class AttendedInline(admin.TabularInline):
     model = Attended
@@ -9,7 +10,7 @@ class AssesmentInline(admin.TabularInline):
     model = Assesment
     extra = 1
 
-class ESLStudentAdmin(admin.ModelAdmin):
+class ESLStudentAdmin(reversion.VersionAdmin):
     fieldsets = [
         ('Name',               {'fields': ['FirstName', 'LastName',  'Active']}),
         ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip']}),
