@@ -112,10 +112,10 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
             else:
                 kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
         return super(CaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-        
+
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
-    search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
+    search_fields = [f.name for f in Case._meta.local_fields if not isinstance(f, RelatedField)]
     ordering = ('-active', 'name',)
 
     # individual stuff
@@ -140,14 +140,14 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
                 kwargs['queryset'] = Case.objects.order_by('name')
             else:
                 kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
-        
+
         return super(IndividualAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-        
+
     def queryset(self, request):
         qs = super(IndividualAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)    
+        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
     list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
     search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
@@ -164,6 +164,21 @@ class AssesmentAdmin(admin.ModelAdmin):
     case_link.allow_tags = True
     case_link.short_description = 'Assessment'
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'case':
+            if request.user.is_superuser:
+                kwargs['queryset'] = Case.objects.order_by('name')
+            else:
+                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
+        
+        return super(AssesmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        
+    def queryset(self, request):
+        qs = super(AssesmentAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)    
+		
     def calc_score(self, obj):
         total = 0.0
         denom = 0.0
@@ -182,7 +197,8 @@ class AssesmentAdmin(admin.ModelAdmin):
         return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total/denom)*100)
     calc_score.allow_tags = True
     calc_score.description = "Score"
-admin.site.register(Assessment, AssesmentAdmin)
+    list_filter = ('date','case')
+    admin.site.register(Assessment, AssesmentAdmin)
 
 
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
@@ -195,15 +211,15 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
         qs = super(ActivityNoteAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs.order_by('case')
-        return qs.order_by('case').filter(volunteer__user__exact=request.user)    
-        
+        return qs.order_by('case').filter(volunteer__user__exact=request.user)
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'case':
             if request.user.is_superuser:
                 kwargs['queryset'] = Case.objects.order_by('name')
             else:
                 kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
-        
+
         if db_field.name == 'volunteer':
             if request.user.is_superuser:
                 kwargs['queryset'] = Volunteer.objects
@@ -211,10 +227,10 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
                 kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
         return super(ActivityNoteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    
+
     description_trunc.short_description = 'Description'
     list_display_links = list_display
-    list_filter = (CaseFilter, VolunteerFilter, 'date', 'minutes')
+    list_filter = (CaseFilter, VolunteerFilter, 'date')
     date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
@@ -227,14 +243,14 @@ class EventAdmin(admin.ModelAdmin):
     def title_trunc(self, obj):
         return truncatechars(obj.title, 30)
     title_trunc.short_description = 'Title'
-    
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'case':
             if request.user.is_superuser:
                 kwargs['queryset'] = Case.objects.order_by('name')
             else:
                 kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
-        
+
         if db_field.name == 'volunteer':
             if request.user.is_superuser:
                 kwargs['queryset'] = Volunteer.objects
@@ -247,12 +263,12 @@ class EventAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs.order_by('case')
         return qs.order_by('case').filter(volunteer__user__exact=request.user)
-    
+
     list_display_links = list_display
     list_filter = (CaseFilter, VolunteerFilter, 'start')
     date_hierarchy = 'start'
     search_fields = ('description',)
     ordering = ('-start',)
-    
+
 admin.site.register(Event, EventAdmin)
 

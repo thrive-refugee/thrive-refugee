@@ -106,7 +106,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'reversion',
+    #'reversion',
     'esl_manager',
     'refugee_manager',
     # Uncomment the next line to enable admin documentation:
