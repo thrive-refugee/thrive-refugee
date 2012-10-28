@@ -115,7 +115,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
 
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
-    search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
+    search_fields = [f.name for f in Case._meta.local_fields if not isinstance(f, RelatedField)]
     ordering = ('-active', 'name',)
 
     # individual stuff
