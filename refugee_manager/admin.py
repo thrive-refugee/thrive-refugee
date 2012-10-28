@@ -69,7 +69,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
     def volunteers_list(self, obj):
-        return ', '.join(v.user.first_name + ' ' + v.user.last_name for v in obj.volunteers.all())
+        return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name+v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all() )
     volunteers_list.short_description = 'Volunteers'
     def family_members(self, obj):
         individuals = obj.individuals.all()
