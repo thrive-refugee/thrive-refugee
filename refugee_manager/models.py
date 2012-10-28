@@ -127,6 +127,8 @@ class Assessment(models.Model):
     language_skills = models.IntegerField("Language Skills (highest level adult)", 
         choices = LANGUAGE_CHOICES, default=0)
 
+    language_skills_note = models.TextField('Notes', max_length=10000, blank=True)
+
     EMPLOYMENT_CHOICES = (
         (0, "0 - Please Select"),
         ( 1, "1- Has no current job or past experience, does not want work"),
@@ -141,6 +143,7 @@ class Assessment(models.Model):
         ( 10, "10- Has full time professional or highly skilled position, is fulfilled with work")
     )
     employment = models.IntegerField("Employment (wage earning parent)", choices=EMPLOYMENT_CHOICES, null=True, default=0)
+    employment_note = models.TextField('Notes', max_length=10000, blank=True)
 
     FINANCE_CHOICES = (
         (0, "0 - Please Select"),
@@ -156,6 +159,7 @@ class Assessment(models.Model):
         (10, "10- Has employment and financially stable")
     )
     finances = models.IntegerField("Finances (family)", choices=FINANCE_CHOICES, null=True, default=0)  #family
+    finances_note = models.TextField('Notes', max_length=10000, blank=True)
 
     TRANSPORTATION_CHOICES = (
         (0, "0 - Please Select"),
@@ -171,6 +175,7 @@ class Assessment(models.Model):
         (10, "10- Has license and car, able to transport self and family independently")
     )
     transportation = models.IntegerField("Transportation (family)", choices=TRANSPORTATION_CHOICES, null=True, default=0)  #family
+    transportation_note = models.TextField('Notes', max_length=10000, blank=True)
 
     HOUSING_CHOICES =(
         (0, "0 - Please Select"),
@@ -186,6 +191,7 @@ class Assessment(models.Model):
         (10, "10- In own home, appropriate size and monthly mortgage")
     )
     housing = models.IntegerField("Housing (family)", choices=HOUSING_CHOICES, null=True, default=0)  #family
+    housing_note = models.TextField('Notes', max_length=10000, blank=True)
 
     ACCESS_CHOICES = (
         (0, "0 - Please Select"),
@@ -201,6 +207,7 @@ class Assessment(models.Model):
         (10, "10- Has skills to access and research services and health care independently")
     )
     access_to_services = models.IntegerField("Access to services and health care (family)", choices=ACCESS_CHOICES, null=True, default=0)  #family
+    access_to_services_note = models.TextField('Notes', max_length=10000, blank=True)
 
     EDUCATION_CHOICES = (
         (0, "0 - Please Select"),
@@ -216,6 +223,7 @@ class Assessment(models.Model):
         (10, "10- Advanced professional training or advanced college degree")
     )
     education_or_training = models.IntegerField("School/ Education/ Job Training (parents)", choices=EDUCATION_CHOICES, null=True, default=0) #School/ Education/ Job Training (parents)
+    education_or_training_note = models.TextField('Notes', max_length=10000, blank=True)
 
     SUPPORT_CHILDREN_CHOICES = (
         (0, "0 - Please Select"),
@@ -231,6 +239,7 @@ class Assessment(models.Model):
         (10, "10- Parents able to fully support children at home and in school")
     )
     support_of_children = models.IntegerField("Support of Children (parents)", choices=SUPPORT_CHILDREN_CHOICES, null=True, default=0) #parents
+    support_of_children_note = models.TextField('Notes', max_length=10000, blank=True)
 
     MH_CHOICES = (
         (0, "0 - Please Select"),
@@ -246,6 +255,7 @@ class Assessment(models.Model):
         (10, "10- Family members all appear to be in excellent mental health")
     )
     mental_health = models.IntegerField("Mental Health (all family members)", choices=MH_CHOICES, null=True, default=0)  #all family members
+    mental_health_note = models.TextField('Notes', max_length=10000, blank=True)
 
     SOCIAL_CHOICES =(
         (0, "0 - Please Select"),
@@ -261,6 +271,7 @@ class Assessment(models.Model):
         (10, "10- Actively involved in the community and leads some activities")
     )
     social_support = models.IntegerField("Social Support (family)", choices = SOCIAL_CHOICES, null=True, default=0)
+    social_support_note = models.TextField('Notes', max_length=10000, blank=True)
 
     case_summary = models.TextField(max_length=10000, blank = True)
     goals = models.TextField(max_length=10000, blank = True) #School/ Education/ Job Training (parents)
