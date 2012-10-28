@@ -164,6 +164,21 @@ class AssesmentAdmin(admin.ModelAdmin):
     case_link.allow_tags = True
     case_link.short_description = 'Assessment'
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'case':
+            if request.user.is_superuser:
+                kwargs['queryset'] = Case.objects.order_by('name')
+            else:
+                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
+        
+        return super(AssesmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        
+    def queryset(self, request):
+        qs = super(AssesmentAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)    
+		
     def calc_score(self, obj):
         total = 0.0
         denom = 0.0
