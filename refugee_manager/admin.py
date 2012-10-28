@@ -197,7 +197,8 @@ class AssesmentAdmin(admin.ModelAdmin):
         return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total/denom)*100)
     calc_score.allow_tags = True
     calc_score.description = "Score"
-admin.site.register(Assessment, AssesmentAdmin)
+    list_filter = ('date','case')
+    admin.site.register(Assessment, AssesmentAdmin)
 
 
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
