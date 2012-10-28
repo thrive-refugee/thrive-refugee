@@ -70,24 +70,24 @@ class VolunteerFilter(admin.SimpleListFilter):
             return queryset
 
 class CaseFilter(admin.SimpleListFilter):
-    title = 'By case'
+    title = 'Case'
     parameter_name = 'case'
     def lookups(self, request, model_admin):
         if request.user.is_superuser:
             return [
-                (a.id, '%s' % (a.case))
-                for a in ActivityNote.objects.order_by('case').all()
+                (c.id, '%s' % (c.name))
+                for c in Case.objects.order_by('name').all()
             ]
         else:
             return [
-                (a.id, '%s' % (a.case))
-                for a in ActivityNote.objects.order_by('case').filter(volunteer__user__exact=request.user)
+                (c.id, '%s' % (c.name))
+                for c in Case.objects.order_by('name').filter(volunteers__user__exact=request.user)
             ]
 
     def queryset(self, request, queryset):
         if request.user.is_superuser:
             return queryset
-        return queryset.filter(volunteer__user__exact=request.user)
+        return queryset.order_by('name').filter(volunteer__user__exact=request.user)
 
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
@@ -104,7 +104,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
         qs = super(CaseAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(volunteers__user__exact=request.user)
+        return qs.order_by('name').filter(volunteers__user__exact=request.user)
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'volunteers':
             if request.user.is_superuser:
@@ -112,7 +112,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
             else:
                 kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
         return super(CaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
-		
+        
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
     search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
@@ -137,17 +137,17 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'case':
             if request.user.is_superuser:
-                kwargs['queryset'] = Case.objects
+                kwargs['queryset'] = Case.objects.order_by('name')
             else:
-                kwargs['queryset'] = Case.objects.filter(volunteers__user=request.user)
+                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
         
         return super(IndividualAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-		
+        
     def queryset(self, request):
         qs = super(IndividualAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(case__volunteers__user__exact=request.user)	
+        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)    
     list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
     search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
@@ -167,15 +167,15 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     def queryset(self, request):
         qs = super(ActivityNoteAdmin, self).queryset(request)
         if request.user.is_superuser:
-            return qs
-        return qs.filter(volunteer__user__exact=request.user)	
-		
+            return qs.order_by('case')
+        return qs.order_by('case').filter(volunteer__user__exact=request.user)    
+        
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'case':
             if request.user.is_superuser:
-                kwargs['queryset'] = Case.objects
+                kwargs['queryset'] = Case.objects.order_by('name')
             else:
-                kwargs['queryset'] = Case.objects.filter(volunteers__user=request.user)
+                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
         
         if db_field.name == 'volunteer':
             if request.user.is_superuser:
@@ -200,11 +200,32 @@ class EventAdmin(admin.ModelAdmin):
     def title_trunc(self, obj):
         return truncatechars(obj.title, 30)
     title_trunc.short_description = 'Title'
+    
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'case':
+            if request.user.is_superuser:
+                kwargs['queryset'] = Case.objects.order_by('name')
+            else:
+                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
+        
+        if db_field.name == 'volunteer':
+            if request.user.is_superuser:
+                kwargs['queryset'] = Volunteer.objects
+            else:
+                kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
+        return super(EventAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def queryset(self, request):
+        qs = super(EventAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs.order_by('case')
+        return qs.order_by('case').filter(volunteer__user__exact=request.user)
+    
     list_display_links = list_display
     list_filter = (CaseFilter, VolunteerFilter, 'start')
     date_hierarchy = 'start'
     search_fields = ('description',)
     ordering = ('-start',)
-	
+    
 admin.site.register(Event, EventAdmin)
-	
+    
