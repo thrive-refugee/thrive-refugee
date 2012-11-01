@@ -198,7 +198,8 @@ class AssesmentAdmin(admin.ModelAdmin):
     calc_score.allow_tags = True
     calc_score.description = "Score"
     list_filter = ('date','case')
-    admin.site.register(Assessment, AssesmentAdmin)
+
+admin.site.register(Assessment, AssesmentAdmin)
 
 
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
