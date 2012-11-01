@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
-from django.db.models.fields.related import RelatedField
+from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
 
 from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote, Event
@@ -115,7 +115,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
 
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
-    search_fields = [f.name for f in Case._meta.local_fields if not isinstance(f, RelatedField)]
+    search_fields = [f.name for f in Case._meta.local_fields if isinstance(f, (CharField,TextField))]
     ordering = ('-active', 'name',)
 
     # individual stuff
@@ -150,7 +150,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
     list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
-    search_fields = [f.name for f in Individual._meta.local_fields if not isinstance(f, RelatedField)]
+    search_fields = [f.name for f in Individual._meta.local_fields if isinstance(f, (CharField,TextField))]
     ordering = ('name',)
 
 admin.site.register(Individual, IndividualAdmin)
@@ -268,7 +268,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display_links = list_display
     list_filter = (CaseFilter, VolunteerFilter, 'start')
     date_hierarchy = 'start'
-    search_fields = ('description',)
+    search_fields = [f.name for f in Event._meta.local_fields if isinstance(f, (CharField,TextField))]
     ordering = ('-start',)
 
 admin.site.register(Event, EventAdmin)
