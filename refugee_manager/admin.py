@@ -87,7 +87,7 @@ class CaseFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         if request.user.is_superuser:
             return queryset
-        return queryset.order_by('name').filter(volunteer__user__exact=request.user)
+        return queryset.filter(volunteer__user__exact=request.user)
 
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
