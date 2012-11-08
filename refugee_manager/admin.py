@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
+from django.db.models import Sum
 from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
 
@@ -201,7 +203,12 @@ class AssesmentAdmin(admin.ModelAdmin):
 
 admin.site.register(Assessment, AssesmentAdmin)
 
-
+class MinuteTotallingChangeList(ChangeList):
+    def get_results(self, *args, **kwargs):
+        super(MinuteTotallingChangeList, self).get_results(*args, **kwargs)
+        q = self.result_list.aggregate(minutes_total=Sum('minutes'))
+        self.minutes_total = q['minutes_total']
+            
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = ('case', 'volunteer', 'date', 'description_trunc', 'minutes')
@@ -228,6 +235,9 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
                 kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
         return super(ActivityNoteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
+    change_list_template = 'refugee_manager/activitynote_admin_list.html'
+    def get_changelist(self, request):
+        return MinuteTotallingChangeList
 
     description_trunc.short_description = 'Description'
     list_display_links = list_display
