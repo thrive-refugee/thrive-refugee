@@ -8,6 +8,10 @@
     {% result_list cl %}
     {% if action_form and actions_on_bottom and cl.full_result_count %}{% admin_actions %}{% endif %}
     <div style="margin: 5px">
-        <strong>Total: {{ cl.minutes_total }} minutes</strong>
+        <strong>Total:
+        {% if cl.total_hours %}
+	    {{ cl.total_hours }} hours
+        {% endif %}
+        {{ cl.total_minutes }} minutes</strong>
     </div>
 {% endblock %}

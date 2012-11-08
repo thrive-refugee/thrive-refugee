@@ -208,7 +208,9 @@ class MinuteTotallingChangeList(ChangeList):
     def get_results(self, *args, **kwargs):
         super(MinuteTotallingChangeList, self).get_results(*args, **kwargs)
         q = self.result_list.aggregate(minutes_total=Sum('minutes'))
-        self.minutes_total = q['minutes_total']
+        total = q['minutes_total'] or 0
+        self.total_hours = total / 60
+        self.total_minutes = total % 60
             
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
