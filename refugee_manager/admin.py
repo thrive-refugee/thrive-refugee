@@ -77,19 +77,20 @@ class CaseFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         if request.user.is_superuser:
             return [
-                (c.id, '%s' % (c.name))
+                (str(c.id), '%s' % (c.name))
                 for c in Case.objects.order_by('name').all()
             ]
         else:
             return [
-                (c.id, '%s' % (c.name))
+                (str(c.id), '%s' % (c.name))
                 for c in Case.objects.order_by('name').filter(volunteers__user__exact=request.user)
             ]
 
     def queryset(self, request, queryset):
-        if request.user.is_superuser:
+        if self.value():
+            return queryset.filter(case=self.value())
+        else:
             return queryset
-        return queryset.filter(volunteer__user__exact=request.user)
 
 
 class CaseAdmin(DeleteNotAllowedModelAdmin):
