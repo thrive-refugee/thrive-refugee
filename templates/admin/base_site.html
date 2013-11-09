@@ -5,16 +5,17 @@
 {% block extrastyle %}
 <style>
 	#user-tools {
-		right: 20px;
+		right: 36px;
 	}
 	
 	#nav-global {
 		position: absolute;
 		top: 0;
 		right: 0;
-		padding: 1.2em 10px;
-		font-size: 11px;
-		text-align: right;
+		padding: 0.2em 10px;
+	}
+	#nav-global img {
+		vertical-align: top;
 	}
 </style>
 {% endblock %}
@@ -27,6 +28,6 @@
 
 {% block nav-global %}
 <div id="nav-global">
-	<a href="/calendar"><img src="{% static 'admin/img/icon_calendar.gif' %}" title="Calendar"></a>
+	<a href="/calendar"><img src="{% static 'admin/img/icon_calendar.gif' %}" title="Calendar" width="24px"></a>
 </div>
 {% endblock %}
