@@ -291,6 +291,7 @@ def create_event(
     event.add_occurrences(start_time, end_time, **rrule_params)
     return event
 
+
 def genslug():
     return ''.join(ICal_Calendar._random.choice(string.uppercase) for _ in range(32))
 

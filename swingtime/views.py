@@ -6,6 +6,7 @@ from django import http
 from django.db import models
 from django.template.context import RequestContext
 from django.shortcuts import get_object_or_404, render
+from django.conf import settings
 
 from swingtime.models import Event, Occurrence, ICal_Calendar
 from swingtime import utils, forms
@@ -342,10 +343,9 @@ class SwingtimeICalFeed(ICalFeed):
 
     http://django-ics.readthedocs.org/en/latest/usage.html
     """
-    product_id = '-//refugeesupportgr.com//Global//EN'
-    timezone = 'US/Detroit'
+    product_id = '-//refugeesupportgr.com//Everything//EN'
+    timezone = settings.TIME_ZONE
     title = 'Thrive: All Events'
-    description = 'All Thrive events'
     
     def __init__(self, request, slug):
         super(SwingtimeICalFeed, self).__init__()
@@ -361,6 +361,10 @@ class SwingtimeICalFeed(ICalFeed):
 
         if self.calendar.everything and not self.calendar.volunteer.user.is_superuser:
             raise ValueError("Not Superuser")
+        
+        if not self.calendar.everything:
+            self.title = 'Thrive: ' + self.calendar.volunteer.user.get_full_name()
+            self.product_id = '-//refugeesupportgr.com//User:{}//EN'.format(self.calendar.volunteer.user.id)
 
     def items(self):
         from django.db.models import Q
