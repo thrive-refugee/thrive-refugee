@@ -11,7 +11,10 @@
            title="Next Month">&rarr;</a>
     </h3>
     
-    <p>{% ical %}</p>
+    <p><a href="{% ical %}">Your Calendar</a></p>
+    {% if user.is_superuser %}
+    <p><a href="{% ical everything=1 %}">Everyone's Calendar</a></p>
+    {% endif %}
     
     {% if by_month %}
     <table>
