@@ -346,7 +346,9 @@ class SwingtimeICalFeed(ICalFeed):
     timezone = 'US/Detroit'
     title = 'Thrive: All Events'
     description = 'All Thrive events'
-
+    
+    # FIXME: caseless events
+    
     def __init__(self, request, slug):
         super(SwingtimeICalFeed, self).__init__()
         self.request = request
@@ -363,31 +365,40 @@ class SwingtimeICalFeed(ICalFeed):
             raise ValueError("Not Superuser")
 
     def items(self):
+        from django.db.models import Q
         if self.calendar.everything:
-            rv = Event.objects.all()
+            rv = Occurrence.objects.all()
         else:
-            rv = Event.objects.filter(case__volunteers=self.calendar.volunteer)
-
-        return rv.filter(end__gte=datetime.datetime.today()).order_by('-start')
+            rv = Occurrence.objects.filter(
+                Q(event__for_case__volunteers=self.calendar.volunteer)
+                | Q(event__for_case=None)
+                )
+        
+        return rv.filter(end_time__gte=datetime.today()).order_by('-start_time')
 
     def item_title(self, item):
-        return "{}: {}".format(item.case.name, item.title)
+        if item.event.for_case:
+            return "{}: {}".format(item.event.for_case.name, item.event.title)
+        else:
+            return item.event.title
 
     def item_description(self, item):
-        return item.description
+        return "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
 
     def item_start_datetime(self, item):
-        return item.start
+        return item.start_time
 
     def item_end_datetime(self, item):
-        return item.end
+        return item.end_time
 
     def item_link(self, item):
-        return self.request.build_absolute_uri("/admin/refugee_manager/event/{}".format(item.id))
-
+        return self.request.build_absolute_uri("/admin/swingtime/event/{}".format(item.event.id))
+    
     def item_guid(self, item):
-        return 'event:{}@refugeesupportgr.com'.format(item.id)
-
-
+        return 'swingtime:occurance:{}@refugeesupportgr.com'.format(item.id)
+    
+    def item_location(self, item):
+        return item.address
+    
 def ics_feed(*p, **kw):
     return SwingtimeICalFeed(*p, **kw)(*p, **kw)
