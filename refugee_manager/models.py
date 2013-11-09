@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -104,6 +107,15 @@ class Event(models.Model):
     def __unicode__(self):
         return '%s %s' % (self.case.name, self.start)
 
+def genslug():
+    return ''.join(Calendar._random.choice(string.uppercase) for _ in range(32))
+
+class Calendar(models.Model):
+    slug = models.CharField(max_length=32, primary_key=True, default=genslug)
+    volunteer = models.ForeignKey(Volunteer)
+    everything = models.BooleanField(default=False)
+    
+    _random = random.SystemRandom()
 
 class Assessment(models.Model):
     case = models.ForeignKey(Case, related_name='assessment')

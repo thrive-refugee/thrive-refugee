@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 
-from .views import Events, showCalendar, EventFeed
+from .views import Events,  showCalendar, ics_feed
+
 
 urlpatterns = patterns(
     '',
@@ -12,6 +13,6 @@ urlpatterns = patterns(
 
     # calendar base page
     url(r'^calendar/?$', showCalendar),
-    url(r'^ics/?$', EventFeed()),
+    url(r'^ics/(?P<slug>.*)$', ics_feed),
 
 )

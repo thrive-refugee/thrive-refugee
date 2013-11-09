@@ -6,3 +6,4 @@ thrive.db
 
 venv
 .cache
+*.komodoproject
