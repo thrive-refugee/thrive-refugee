@@ -13,16 +13,12 @@
     {% block extended_head %}{% endblock %}
 </head>
 <body>
-    <div class="container">
-        <h1>Swingtime Demo</h1>
-    </div>
     <div class="container" id="main">
         {% block navigation %}
-        <h2>The Karate Dojo</h2>
+        <h2>Thrive: A Refugee Support Program</h2>
         <p style="font-weight: bold; ">
             <a href="{% url "swingtime-today" %}">Daily View</a> &sect;
-            <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month %}">
-                Monthl View</a> &sect;
+            <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month %}"> Monthly View</a> &sect;
             <a href="{% url "swingtime-yearly-view" current_datetime.year %}">Yearly View</a> &sect;
             <a href="{% url "swingtime-events" %}">Event Listing</a>
         </p>
