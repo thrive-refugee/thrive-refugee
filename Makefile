@@ -153,10 +153,16 @@ load_data:
 	$(MANAGE) loaddata refugee_manager/fixtures/assessment.json
 	$(MANAGE) loaddata swingtime/fixtures/eventtype.json
 	$(MANAGE) loaddata swingtime/fixtures/event.json
+	$(MANAGE) loaddata employment_manager/fixtures/employmentclient.json
+	$(MANAGE) loaddata employment_manager/fixtures/job.json
+	$(MANAGE) loaddata employment_manager/fixtures/skill.json
+	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
+	$(MANAGE) loaddata employment_manager/fixtures/language.json
 
 .PHONY: dump_data
 dump_data:
-	$(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
+	# TODO: dumping and loading the auth data a second time causes IntegrityError
+	# $(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
 	$(MANAGE) dumpdata esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
 	$(MANAGE) dumpdata esl_manager.Attended > esl_manager/fixtures/attended.json
 	$(MANAGE) dumpdata esl_manager.Assesment > esl_manager/fixtures/assesment.json
@@ -168,6 +174,11 @@ dump_data:
 	$(MANAGE) dumpdata refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
 	$(MANAGE) dumpdata swingtime.EventType > swingtime/fixtures/eventtype.json
 	$(MANAGE) dumpdata swingtime.Event > swingtime/fixtures/event.json
+	$(MANAGE) dumpdata employment_manager.EmploymentClient > employment_manager/fixtures/employmentclient.json
+	$(MANAGE) dumpdata employment_manager.Job > employment_manager/fixtures/job.json
+	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skillcd .json
+	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
+	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
 
 .PHONY: delete_db
 delete_db:
@@ -178,10 +189,10 @@ delete_db:
 reset_db: delete_db syncdb load_data
 
 .PHONY: run
-run: develop $(DB)
+run: develop $(DB) syncdb
 	$(MANAGE) runserver
 
 .PHONY: launch
-launch: develop $(DB)
+launch: develop $(DB) syncdb
 	eval "sleep 1; $(OPEN) http://localhost:8000" &
 	$(MANAGE) runserver

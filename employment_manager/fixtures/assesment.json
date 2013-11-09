@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "employment_manager.assesment", "fields": {"TakenDate": "2013-11-09", "employment_client": 1, "Score": 90, "Name": "Test A"}}]

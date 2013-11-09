@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "employment_manager.job", "fields": {"StartDate": "2013-11-01", "EndDate": "2013-11-13", "Description": "", "Title": "Network Engineer", "employment_client": 1, "Company": "The Factory"}}]
