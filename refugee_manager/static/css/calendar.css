@@ -1,14 +1,14 @@
 body { font-size: 12px; background-color: #bba; padding: 1em 2em; }
 img { border: none; }
 .center { text-align : center; }
-.container { 
+.container {
     margin: 0 auto;
     padding: 1em;
     width: 950px;
     font-size: 1.2em;
     color: #222;
 }
-#main { 
+#main {
     padding: 1em 60px 60px 60px;
     border: 1px solid #999;
     background: #fff url(/media/img/karatedo.png) no-repeat left 10px;
@@ -68,3 +68,6 @@ form tfoot td { text-align: center; background-color: #566; }
     .evt-bbc-odd, .evt-bbc-even { background-color: #aaa; }
     .evt-prv-odd { background-color: #8a9; }
     .evt-prv-even { background-color: #acb; }
+.errorlist {
+    color: red;
+}
