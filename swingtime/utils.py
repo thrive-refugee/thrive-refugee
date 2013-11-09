@@ -227,7 +227,8 @@ def create_timeslot_table(
             proxy = timeslots[rowkey][colkey]
             cols[colkey] = proxy
             if not proxy.event_class and column_classes:
-                proxy.event_class = column_classes[colkey][proxy.event_type.abbr]()
+                if proxy.event_type is not None:
+                    proxy.event_class = column_classes[colkey][proxy.event_type.abbr]()
 
         table.append((rowkey, cols))
 

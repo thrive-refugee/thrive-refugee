@@ -68,7 +68,7 @@ class Event(models.Model):
     '''
     title = models.CharField(_('title'), max_length=32)
     description = models.CharField(_('description'), max_length=100)
-    event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
+    event_type = models.ForeignKey(EventType, verbose_name=_('event type'), null=True, blank=True)
     for_case = models.ForeignKey(Case, null=True, blank=True, db_index=True)
     
     objects = EventManager()
