@@ -10,11 +10,11 @@ from django.core.urlresolvers import reverse
 from simple_rest import Resource
 from django_ical.views import ICalFeed
 
-#from .models import Event, Calendar
+# from .models import Event, Calendar
 
 
 # @admin_required
-#class Events(Resource):
+# class Events(Resource):
 #
 #    def get(self, request, event_id=None, **kwargs):
 #        json_serializer = serializers.get_serializer('json')()
@@ -42,12 +42,12 @@ from django_ical.views import ICalFeed
 #        return HttpResponse(status=200)
 #
 #
-#def showCalendar(request):
+# def showCalendar(request):
 #    context = {}
 #    return render(request, 'refugee_manager/calendar.html', context)
 #
 #
-#class EventFeed(ICalFeed):
+# class EventFeed(ICalFeed):
 #    """
 #    A simple event calender
 #
@@ -57,7 +57,7 @@ from django_ical.views import ICalFeed
 #    timezone = 'US/Detroit'
 #    title = 'Thrive: All Events'
 #    description = 'All Thrive events'
-#    
+#
 #    def __init__(self, request, slug):
 #        super(EventFeed, self).__init__()
 #        self.request = request
@@ -69,16 +69,16 @@ from django_ical.views import ICalFeed
 #
 #        if not self.calendar.volunteer.user.is_active:
 #            raise ValueError("Inactive User")
-#        
+#
 #        if self.calendar.everything and not self.calendar.volunteer.user.is_superuser:
 #            raise ValueError("Not Superuser")
-#    
+#
 #    def items(self):
 #        if self.calendar.everything:
 #            rv = Event.objects.all()
 #        else:
 #            rv = Event.objects.filter(case__volunteers=self.calendar.volunteer)
-#        
+#
 #        return rv.filter(end__gte=datetime.datetime.today()).order_by('-start')
 #
 #    def item_title(self, item):
@@ -95,9 +95,10 @@ from django_ical.views import ICalFeed
 #
 #    def item_link(self, item):
 #        return self.request.build_absolute_uri("/admin/refugee_manager/event/{}".format(item.id))
-#    
+#
 #    def item_guid(self, item):
 #        return 'event:{}@refugeesupportgr.com'.format(item.id)
-    
+
+
 def ics_feed(*p, **kw):
     return EventFeed(*p, **kw)(*p, **kw)
