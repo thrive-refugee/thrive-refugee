@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-
+from django.core.urlresolvers import reverse
 
 from dateutil import rrule
 
@@ -303,16 +303,17 @@ class ICal_Calendar(models.Model):
     _random = random.SystemRandom()
     
     @classmethod
-    def genurl(cls, user, everything=False, protocol=None):
-        """ICal_Calendar.genurl(User) -> str
+    def genurl(cls, request, everything=False, protocol=None):
+        """ICal_Calendar.genurl(Request) -> str
         Find/create a calendar for the given user and return the URL to it.
         """
+        user = request.user
         if not user.is_superuser:
             everything = False
         v = user.volunteer
         cal, _ = ICal_Calendar.objects.get_or_create(volunteer=v, everything=everything)
         
-        url = reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug})
+        url = request.build_absolute_uri(reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug}))
         
         if protocol is not None:
             if url.startswith('http:'):
@@ -320,8 +321,8 @@ class ICal_Calendar(models.Model):
         return url
     
     @classmethod
-    def genwebcal(cls, user, everything=False):
-        return cls.genurl(user, everything, protocol='webcal')
+    def genwebcal(cls, request, everything=False):
+        return cls.genurl(request, everything, protocol='webcal')
 
 # Doesn't actually seem to be called?
 @receiver(post_save, sender=User)
