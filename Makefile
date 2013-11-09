@@ -17,7 +17,7 @@ else
 VERSION := python2.7
 BIN := $(VIRTUALENV)/bin
 LIB := $(VIRTUALENV)/lib/python2.7
-	ifeq ($(OS),Linux)
+	ifeq ($(shell uname),Linux)
 	OPEN := xdg-open
 	else
 	OPEN := open
