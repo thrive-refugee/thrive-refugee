@@ -68,7 +68,7 @@ class EventFeed(ICalFeed):
         return item.end
     
     def item_link(self, item):
-        return None
+        return ""
     
     def item_guid(self, item):
         return str(item.id) + '@refugeesupportgr.com'
