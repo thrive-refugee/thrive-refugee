@@ -17,10 +17,13 @@
         {% block navigation %}
         <h2>Thrive: A Refugee Support Program</h2>
         <p style="font-weight: bold; ">
-            <a href="{% url "swingtime-today" %}">Daily View</a> &sect;
-            <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month %}"> Monthly View</a> &sect;
-            <a href="{% url "swingtime-yearly-view" current_datetime.year %}">Yearly View</a> &sect;
-            <a href="{% url "swingtime-events" %}">Event Listing</a>
+            View:
+            <a href="{% url "swingtime-today" %}">Day</a>
+            <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month %}">Month</a>
+            <a href="{% url "swingtime-yearly-view" current_datetime.year %}">Year</a>
+            <a href="{% url "swingtime-events" %}">All</a>
+            &mdash;
+            <a href="{% url "swingtime-add-event" %}">Add Event</a>
         </p>
         <hr />
         {% endblock navigation %}
