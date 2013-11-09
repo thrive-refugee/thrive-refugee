@@ -112,7 +112,7 @@ class CaseAdminForm(forms.ModelForm):
             'language': forms.TextInput(attrs={'size': 60}),
             'green_card': forms.TextInput(attrs={'size': 60}),
             'dhs_worker': forms.TextInput(attrs={'size': 60}),
-            'school': forms.TextInput(attrs={'size': 60}),
+            'school': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
             'doctor': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
             'other1': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
             'other2': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
