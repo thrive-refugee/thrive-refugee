@@ -343,6 +343,10 @@ class SwingtimeICalFeed(ICalFeed):
 
     http://django-ics.readthedocs.org/en/latest/usage.html
     """
+    # Calendar user agents:
+    # * iOS/7.0.3 (11B511) dataaccessd/1.0
+    # * Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+
     product_id = '-//refugeesupportgr.com//Everything//EN'
     timezone = settings.TIME_ZONE
     title = 'Thrive: All Events'
@@ -386,9 +390,14 @@ class SwingtimeICalFeed(ICalFeed):
 
     def item_description(self, item):
         if item.notes.count():
-            return "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
+            rv = "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
         else:
-            return item.event.description
+            rv = item.event.description
+        
+        if 'google' in self.request.META.get('HTTP_USER_AGENT', '').lower():
+            rv += '\n\n' + self.item_link(item)
+        
+        return rv
 
     def item_start_datetime(self, item):
         return item.start_time
