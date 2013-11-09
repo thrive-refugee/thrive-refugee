@@ -1,3 +1,4 @@
+import random
 from datetime import datetime, date, timedelta
 
 from django.utils.translation import ugettext_lazy as _
@@ -9,7 +10,7 @@ from django.conf import settings
 
 from dateutil import rrule
 
-from refugee_manager.models import Case
+from refugee_manager.models import Case, Volunteer
 
 __all__ = (
     'Note',
@@ -282,3 +283,20 @@ def create_event(
     end_time = end_time or start_time + swingtime_settings.DEFAULT_OCCURRENCE_DURATION
     event.add_occurrences(start_time, end_time, **rrule_params)
     return event
+
+def genslug():
+    return ''.join(Calendar._random.choice(string.uppercase) for _ in range(32))
+
+class ICal_Calendar(models.Model):
+    slug = models.CharField(max_length=32, primary_key=True, default=genslug)
+    volunteer = models.ForeignKey(Volunteer)
+    everything = models.BooleanField(default=False)
+    
+    _random = random.SystemRandom()
+    
+    @classmethod
+    def genurl(cls, request, everything=False):
+        """ICal_Calendar.genurl(request) -> str
+        Find/create a calendar for the given user and return the URL to it.
+        """
+        # TODO

@@ -49,4 +49,6 @@ urlpatterns = patterns('',
         views.occurrence_view, 
         name='swingtime-occurrence'
     ),
+
+    url(r'^ics/(?P<slug>.*)$', views.ics_feed, name='swingtime-ical'),
 )

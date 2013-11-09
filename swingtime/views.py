@@ -7,7 +7,7 @@ from django.db import models
 from django.template.context import RequestContext
 from django.shortcuts import get_object_or_404, render
 
-from swingtime.models import Event, Occurrence
+from swingtime.models import Event, Occurrence, ICal_Calendar
 from swingtime import utils, forms
 from swingtime.conf import settings as swingtime_settings
 
@@ -332,3 +332,60 @@ def month_view(
 
     return render(request, template, data)
 
+
+from django_ical.views import ICalFeed
+
+class SwingtimeICalFeed(ICalFeed):
+    """
+    A simple event calender
+
+    http://django-ics.readthedocs.org/en/latest/usage.html
+    """
+    product_id = '-//refugeesupportgr.com//Global//EN'
+    timezone = 'US/Detroit'
+    title = 'Thrive: All Events'
+    description = 'All Thrive events'
+    
+    def __init__(self, request, slug):
+        super(SwingtimeICalFeed, self).__init__()
+        self.request = request
+        self.slug = slug
+        try:
+            self.calendar = ICal_Calendar.objects.get(slug=slug)
+        except ICal_Calendar.DoesNotExist:
+            raise http.Http404
+
+        if not self.calendar.volunteer.user.is_active:
+            raise ValueError("Inactive User")
+        
+        if self.calendar.everything and not self.calendar.volunteer.user.is_superuser:
+            raise ValueError("Not Superuser")
+    
+    def items(self):
+        if self.calendar.everything:
+            rv = Event.objects.all()
+        else:
+            rv = Event.objects.filter(case__volunteers=self.calendar.volunteer)
+        
+        return rv.filter(end__gte=datetime.datetime.today()).order_by('-start')
+
+    def item_title(self, item):
+        return "{}: {}".format(item.case.name, item.title)
+
+    def item_description(self, item):
+        return item.description
+
+    def item_start_datetime(self, item):
+        return item.start
+
+    def item_end_datetime(self, item):
+        return item.end
+
+    def item_link(self, item):
+        return self.request.build_absolute_uri("/admin/refugee_manager/event/{}".format(item.id))
+    
+    def item_guid(self, item):
+        return 'event:{}@refugeesupportgr.com'.format(item.id)
+    
+def ics_feed(*p, **kw):
+    return SwingtimeICalFeed(*p, **kw)(*p, **kw)
