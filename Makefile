@@ -176,6 +176,7 @@ dump_data:
 .PHONY: delete_db
 delete_db:
 	rm -f $(DB)
+	rm -f thrive_refugee/local_settings.py
 
 .PHONY: reset_db
 reset_db: delete_db syncdb load_data
