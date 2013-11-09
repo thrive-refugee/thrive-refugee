@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 
 from simple_rest import Resource
+from django_ical.views import ICalFeed
 
 from .models import Event
 
@@ -42,3 +43,33 @@ def showCalendar(request):
     context = {}
     return render(request, 'refugee_manager/calendar.html', context)
 
+class EventFeed(ICalFeed):
+    """
+    A simple event calender
+    
+    http://django-ics.readthedocs.org/en/latest/usage.html
+    """
+    product_id = '-//refugeesupportgr.com//Global//EN'
+    timezone = 'US/Detroit'
+
+    def items(self):
+        return Event.objects.all().order_by('-start')
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.description
+
+    def item_start_datetime(self, item):
+        return item.start
+    
+    def item_end_datetime(self, item):
+        return item.end
+    
+    def item_link(self, item):
+        return None
+    
+    def item_guid(self, item):
+        return str(item.id) + '@refugeesupportgr.com'
+    
