@@ -17,7 +17,11 @@ else
 VERSION := python2.7
 BIN := $(VIRTUALENV)/bin
 LIB := $(VIRTUALENV)/lib/python2.7
-OPEN := open
+	ifeq ($(OS),Linux)
+	OPEN := xdg-open
+	else
+	OPEN := open
+	endif
 endif
 MAN := man
 SHARE := share
@@ -175,5 +179,5 @@ run: develop syncdb
 
 .PHONY: launch
 launch: develop syncdb
-	eval "sleep 1; open http://localhost:8000" &
+	eval "sleep 1; $(OPEN) http://localhost:8000" &
 	$(MANAGE) runserver
