@@ -351,7 +351,7 @@ class SwingtimeICalFeed(ICalFeed):
     product_id = '-//refugeesupportgr.com//Everything//EN'
     timezone = settings.TIME_ZONE
     title = 'Thrive: All Events'
-    
+
     def __init__(self, request, slug):
         super(SwingtimeICalFeed, self).__init__()
         self.request = request
@@ -366,7 +366,7 @@ class SwingtimeICalFeed(ICalFeed):
 
         if self.calendar.everything and not self.calendar.volunteer.user.is_superuser:
             raise ValueError("Not Superuser")
-        
+
         if not self.calendar.everything:
             self.title = 'Thrive: ' + self.calendar.volunteer.user.get_full_name()
             self.product_id = '-//refugeesupportgr.com//User:{}//EN'.format(self.calendar.volunteer.user.id)
@@ -380,7 +380,7 @@ class SwingtimeICalFeed(ICalFeed):
                 Q(event__for_case__volunteers=self.calendar.volunteer)
                 | Q(event__for_case=None)
                 )
-        
+
         return rv.filter(end_time__gte=datetime.today()).order_by('-start_time')
 
     def item_title(self, item):
@@ -390,14 +390,11 @@ class SwingtimeICalFeed(ICalFeed):
             return item.event.title
 
     def item_description(self, item):
-        if item.notes.count():
-            rv = "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
-        else:
-            rv = item.event.description
-        
+    	rv = item.event.description
+
         if 'google' in self.request.META.get('HTTP_USER_AGENT', '').lower():
             rv += '\n\n' + self.item_link(item)
-        
+
         return rv
 
     def item_start_datetime(self, item):

@@ -19,36 +19,12 @@ from dateutil import rrule
 from refugee_manager.models import Case, Volunteer
 
 __all__ = (
-    'Note',
     'EventType',
     'Event',
     'Occurrence',
     'ICal_Calendar',
     'create_event'
 )
-
-#===============================================================================
-class Note(models.Model):
-    '''
-    A generic model for adding simple, arbitrary notes to other models such as
-    ``Event`` or ``Occurrence``.
-
-    '''
-    note = models.TextField(_('note'))
-    created = models.DateTimeField(_('created'), auto_now_add=True)
-
-    content_type = models.ForeignKey(ContentType, verbose_name=_('content type'))
-    object_id = models.PositiveIntegerField(_('object id'))
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
-
-    #===========================================================================
-    class Meta:
-        verbose_name = _('note')
-        verbose_name_plural = _('notes')
-
-    #---------------------------------------------------------------------------
-    def __unicode__(self):
-        return self.note
 
 
 #===============================================================================
@@ -79,7 +55,6 @@ class Event(models.Model):
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     for_case = models.ForeignKey(Case, null=True, blank=True, db_index=True)
-    notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
     #===========================================================================
     class Meta:
@@ -193,7 +168,6 @@ class Occurrence(models.Model):
     start_time = models.DateTimeField(_('start time'))
     end_time = models.DateTimeField(_('end time'))
     event = models.ForeignKey(Event, verbose_name=_('event'), editable=False)
-    notes = generic.GenericRelation(Note, verbose_name=_('notes'))
     address = models.CharField(max_length=255, blank=True)
 
     objects = OccurrenceManager()
@@ -235,7 +209,6 @@ def create_event(
     description='',
     start_time=None,
     end_time=None,
-    note=None,
     address='',
     for_case = None,
     **rrule_params
@@ -277,9 +250,6 @@ def create_event(
         description=description,
         event_type=event_type
     )
-
-    if note is not None:
-        event.notes.create(note=note)
 
     start_time = start_time or datetime.now().replace(
         minute=0,

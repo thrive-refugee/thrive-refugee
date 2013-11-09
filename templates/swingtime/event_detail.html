@@ -20,19 +20,6 @@
     </table>
     </form>
 
-    <h4>Notes</h4>
-    {% with event.notes.all as notes %}
-    {% if notes %}
-    <ul>
-        {% for note in notes %}
-        <li>{{ note }}</li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>None</p>
-    {% endif %}
-    {% endwith %}
-
     <h4>Occurrences</h4>
     {% if event.occurrence_set.count %}
     <ol>

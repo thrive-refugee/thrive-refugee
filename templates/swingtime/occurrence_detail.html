@@ -18,19 +18,6 @@
          <dt>Description:</dt>
          <dd>{{ occurrence.event.description|default:"None" }}</dd>
 
-         <dt>Note(s:)</dt>
-         <dd>
-             {% with occurrence.event.notes.all as notes %}
-             {% if notes %}
-             <ul>
-                 {% for note in notes %}
-                 <li>{{ note }}</li>
-                 {% endfor %}
-             </ul>
-             {% else %}None
-             {% endif %}
-             {% endwith %}
-         </dd>
      </dl>
 
      <form action="" method="post">

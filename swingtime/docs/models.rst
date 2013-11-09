@@ -10,7 +10,7 @@ Functions
 ``create_event``
 ----------------
 
-.. function:: create_event(title, event_type [, description, start_time, end_time, note, **rrule_params])
+.. function:: create_event(title, event_type [, description, start_time, end_time, **rrule_params])
 
     Convenience function to create an :class:`Event`, optionally create an 
     :class:`EventType`, and associated :class:`Occurrence` instances. 
@@ -34,9 +34,6 @@ Functions
         will default to ``start_time`` plus :const:`swingtime_settings.DEFAULT_OCCURRENCE_DURATION`
         hour if ``None``
         
-    ``note``
-        if not ``None``, add a ``Note`` instance to the new event
-    
     ``rrule_params``
         follows the ``dateutils`` API (see http://labix.org/python-dateutil)
     
@@ -59,23 +56,6 @@ Functions
 
 Classes
 =======
-
-``Note``
---------
-
-.. class:: Note(django.db.models.Model)
-    
-    A generic model for adding simple, arbitrary notes to other models such as
-    ``Event`` or ``Occurrence``.
-    
-    .. attribute:: note
-    
-        models.TextField
-        
-    .. attribute:: created
-    
-        models.DateTimeField
-
 
 ``EventType``
 -------------
@@ -112,10 +92,6 @@ Classes
     
         models.ForeignKey for ``EventType``
     
-    .. attribute:: notes 
-    
-        generic.GenericRelation for ``Note``
-
     .. method:: get_absolute_url
     
         return ('swingtime-event', [str(self.id)])
@@ -190,10 +166,6 @@ Classes
     
         models.ForeignKey - a non-editable Event object
         
-    .. attribute:: notes
-        
-        generic.GenericRelation ``Note``
-
     .. method:: get_absolute_url
         
         'swingtime-occurrence', [str(self.event.id), str(self.id)])
