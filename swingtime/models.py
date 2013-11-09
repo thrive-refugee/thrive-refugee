@@ -13,6 +13,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from dateutil import rrule
 
@@ -46,6 +47,20 @@ class EventType(models.Model):
         return self.label
 
 
+class EventManager(models.Manager):
+    def for_user(self, user):
+        if user.is_superuser:
+            rv = self.all()
+        else:
+            try:
+                rv = self.filter(
+                    Q(for_case__volunteers=user.volunteer)
+                    | Q(for_case=None)
+                    )
+            except Volunteer.DoesNotExist:
+                rv = self.filter(for_case=None)
+        return rv
+
 #===============================================================================
 class Event(models.Model):
     '''
@@ -55,6 +70,8 @@ class Event(models.Model):
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
     for_case = models.ForeignKey(Case, null=True, blank=True, db_index=True)
+    
+    objects = EventManager()
 
     #===========================================================================
     class Meta:
@@ -157,6 +174,19 @@ class OccurrenceManager(models.Manager):
         )
 
         return qs.filter(event=event) if event else qs
+    
+    def for_user(self, user):
+        if user.is_superuser:
+            rv = self.all()
+        else:
+            try:
+                rv = self.filter(
+                    Q(event__for_case__volunteers=user.volunteer)
+                    | Q(event__for_case=None)
+                    )
+            except Volunteer.DoesNotExist:
+                rv = self.filter(event__for_case=None)
+        return rv
 
 
 #===============================================================================
