@@ -1,5 +1,5 @@
 PROJECT := thrive-refugee
-PACKAGE := esl_manager refugee_manager thrive_refugee
+PACKAGE := esl_manager refugee_manager thrive_refugee swingtime
 SOURCES := Makefile requirements.txt
 
 VIRTUALENV := venv

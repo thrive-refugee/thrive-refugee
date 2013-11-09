@@ -10,3 +10,4 @@ venv
 *.komodoproject
 .project
 .pydevproject
+.settings
