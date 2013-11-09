@@ -1,5 +1,23 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
+{% load static %}
+
+{% block extrastyle %}
+<style>
+	#user-tools {
+		right: 20px;
+	}
+	
+	#nav-global {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 1.2em 10px;
+		font-size: 11px;
+		text-align: right;
+	}
+</style>
+{% endblock %}
 
 {% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
 
@@ -7,4 +25,8 @@
 <h1 id="site-name" style="width:500px;">{% trans 'Thrive: A Refugee Support Program' %}</h1>
 {% endblock %}
 
-{% block nav-global %}{% endblock %}
+{% block nav-global %}
+<div id="nav-global">
+	<a href="/calendar"><img src="{% static 'admin/img/icon_calendar.gif' %}" title="Calendar"></a>
+</div>
+{% endblock %}
