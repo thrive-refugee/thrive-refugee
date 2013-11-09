@@ -347,8 +347,6 @@ class SwingtimeICalFeed(ICalFeed):
     title = 'Thrive: All Events'
     description = 'All Thrive events'
     
-    # FIXME: caseless events
-    
     def __init__(self, request, slug):
         super(SwingtimeICalFeed, self).__init__()
         self.request = request
@@ -383,7 +381,10 @@ class SwingtimeICalFeed(ICalFeed):
             return item.event.title
 
     def item_description(self, item):
-        return "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
+        if item.notes.count():
+            return "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
+        else:
+            return item.event.description
 
     def item_start_datetime(self, item):
         return item.start_time

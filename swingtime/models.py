@@ -10,6 +10,9 @@ from django.contrib.contenttypes import generic
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 
 from dateutil import rrule
 
@@ -309,10 +312,17 @@ class ICal_Calendar(models.Model):
         v = u.volunteer
         cal, _ = ICal_Calendar.objects.get_or_create(volunteer=v, everything=everything)
         return reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug})
+    
+    @classmethod
+    def genwebcal(cls, request, everything=False):
+        url = cls.genurl(request, everything)
+        if url.startswith('http:'):
+            url = 'webcal:' + url[len('http:'):]
+        return url
 
 # Doesn't actually seem to be called?
-@django.db.models.signals.post_save.connect
+@receiver(post_save, sender=User)
 def remove_ical(sender, instance, created, raw, using, **kw):
     print sender, instance, created, raw, using, kw
-    if isinstance(instance, User) and not instance.is_active:
+    if not instance.is_active:
         ICal_Calendar.objects.filter(volunteer=instance.volunteer).delete()
