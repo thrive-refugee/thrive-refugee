@@ -1,3 +1,4 @@
+import string
 import random
 from datetime import datetime, date, timedelta
 
@@ -17,6 +18,7 @@ __all__ = (
     'EventType',
     'Event',
     'Occurrence',
+    'ICal_Calendar',
     'create_event'
 )
 
@@ -285,7 +287,7 @@ def create_event(
     return event
 
 def genslug():
-    return ''.join(Calendar._random.choice(string.uppercase) for _ in range(32))
+    return ''.join(ICal_Calendar._random.choice(string.uppercase) for _ in range(32))
 
 class ICal_Calendar(models.Model):
     slug = models.CharField(max_length=32, primary_key=True, default=genslug)
@@ -299,4 +301,9 @@ class ICal_Calendar(models.Model):
         """ICal_Calendar.genurl(request) -> str
         Find/create a calendar for the given user and return the URL to it.
         """
-        # TODO
+        u = request.user
+        if not u.is_superuser:
+            everything = False
+        v = u.get_profile()
+        cal, _ = ICal_Calendar.objects.get_or_create(volunteer=v, everything=everything)
+        return reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug})
