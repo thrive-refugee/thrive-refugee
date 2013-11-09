@@ -10,11 +10,13 @@ from django.core.exceptions import FieldError
 from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote, Event
 
 
-
 admin.site.disable_action('delete_selected')
+
+
 class DeleteNotAllowedModelAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
+
 
 # Define an inline admin descriptor for Volunteer model
 # which acts a bit like a singleton
@@ -25,7 +27,7 @@ class VolunteerInlineAdmin(admin.TabularInline):
 
 # Define a new User admin
 class UserAdminWithVolunteerInfo(UserAdmin):
-    inlines = (VolunteerInlineAdmin, )
+    inlines = (VolunteerInlineAdmin,)
     list_display = UserAdmin.list_display + ('volunteer_phone_number',)
 
     def volunteer_phone_number(self, obj):
@@ -41,14 +43,17 @@ class IndividualInlineAdmin(admin.TabularInline):
     model = Individual
     can_delete = False
 
+
 class CaseDetailInlineAdmin(admin.TabularInline):
     model = CaseDetail
     can_delete = False
     extra = 0
 
+
 class VolunteerFilter(admin.SimpleListFilter):
     title = 'Volunteer'
     parameter_name = 'volunteer'
+
     def lookups(self, request, model_admin):
         if request.user.is_superuser:
             return [
@@ -57,7 +62,7 @@ class VolunteerFilter(admin.SimpleListFilter):
             ]
         else:
             return [
-                (request.user.username,(request.user.first_name + ' ' + request.user.last_name))
+                (request.user.username, (request.user.first_name + ' ' + request.user.last_name))
             ]
 
     def queryset(self, request, queryset):
@@ -71,9 +76,11 @@ class VolunteerFilter(admin.SimpleListFilter):
         else:
             return queryset
 
+
 class CaseFilter(admin.SimpleListFilter):
     title = 'Case'
     parameter_name = 'case'
+
     def lookups(self, request, model_admin):
         if request.user.is_superuser:
             return [
@@ -96,18 +103,22 @@ class CaseFilter(admin.SimpleListFilter):
 class CaseAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
+
     def volunteers_list(self, obj):
-        return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name+v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all() )
+        return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name + v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all())
     volunteers_list.short_description = 'Volunteers'
+
     def family_members(self, obj):
         individuals = obj.individuals.all()
         return '%s: %s' % (len(individuals),
                            truncatechars(', '.join(i.name for i in individuals), 50))
+
     def queryset(self, request):
         qs = super(CaseAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.order_by('name').filter(volunteers__user__exact=request.user)
+
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'volunteers':
             if request.user.is_superuser:
@@ -118,7 +129,7 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
 
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
-    search_fields = [f.name for f in Case._meta.local_fields if isinstance(f, (CharField,TextField))]
+    search_fields = [f.name for f in Case._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('-active', 'name',)
 
     # individual stuff
@@ -129,7 +140,8 @@ admin.site.register(Case, CaseAdmin)
 
 class IndividualAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
-    list_display = ('case_link', 'name', 'relation', 'date_of_birth', )
+    list_display = ('case_link', 'name', 'relation', 'date_of_birth',)
+
     def case_link(self, obj):
         case = obj.case
         return '<a href="../../%s/%s/%d">%s</a>' % (
@@ -153,13 +165,15 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
     list_display_links = ('name', 'relation', 'date_of_birth',)
     list_filter = ('case', 'date_of_birth', 'case__active')
-    search_fields = [f.name for f in Individual._meta.local_fields if isinstance(f, (CharField,TextField))]
+    search_fields = [f.name for f in Individual._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('name',)
 
 admin.site.register(Individual, IndividualAdmin)
 
+
 class AssesmentAdmin(admin.ModelAdmin):
     list_display = ('case_link', 'date', 'calc_score')
+
     def case_link(self, obj):
         case = obj.case
         return '<a href="../../%s/%s/%d">%s</a>' % (
@@ -173,15 +187,15 @@ class AssesmentAdmin(admin.ModelAdmin):
                 kwargs['queryset'] = Case.objects.order_by('name')
             else:
                 kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
-        
+
         return super(AssesmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-        
+
     def queryset(self, request):
         qs = super(AssesmentAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)    
-		
+        return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
+
     def calc_score(self, obj):
         total = 0.0
         denom = 0.0
@@ -196,13 +210,15 @@ class AssesmentAdmin(admin.ModelAdmin):
 
             total += value
             denom += 10 if value != 0 else 0
-        if denom == 0: return u"0/0 , 0%"
-        return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total/denom)*100)
+        if denom == 0:
+            return u"0/0 , 0%"
+        return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total / denom) * 100)
     calc_score.allow_tags = True
     calc_score.description = "Score"
-    list_filter = ('date','case')
+    list_filter = ('date', 'case')
 
 admin.site.register(Assessment, AssesmentAdmin)
+
 
 class MinuteTotallingChangeList(ChangeList):
     def get_results(self, *args, **kwargs):
@@ -211,10 +227,12 @@ class MinuteTotallingChangeList(ChangeList):
         total = q['minutes_total'] or 0
         self.total_hours = total / 60
         self.total_minutes = total % 60
-            
+
+
 class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     # list view stuff
     list_display = ('case', 'volunteer', 'date', 'description_trunc', 'minutes')
+
     def description_trunc(self, obj):
         return truncatechars(obj.description, 30)
 
@@ -239,6 +257,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
         return super(ActivityNoteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     change_list_template = 'refugee_manager/activitynote_admin_list.html'
+
     def get_changelist(self, request):
         return MinuteTotallingChangeList
 
@@ -251,9 +270,11 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 
 admin.site.register(ActivityNote, ActivityNoteAdmin)
 
+
 class EventAdmin(admin.ModelAdmin):
     # list view stuff
     list_display = ('case', 'volunteer', 'start', 'end', 'title_trunc')
+
     def title_trunc(self, obj):
         return truncatechars(obj.title, 30)
     title_trunc.short_description = 'Title'
@@ -281,8 +302,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display_links = list_display
     list_filter = (CaseFilter, VolunteerFilter, 'start')
     date_hierarchy = 'start'
-    search_fields = [f.name for f in Event._meta.local_fields if isinstance(f, (CharField,TextField))]
+    search_fields = [f.name for f in Event._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('-start',)
 
 admin.site.register(Event, EventAdmin)
-
