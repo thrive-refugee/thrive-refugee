@@ -43,7 +43,7 @@ def event_listing(
     return render(
         request,
         template,
-        dict(extra_context, events=events or Event.objects.all())
+        dict(extra_context, events=events or Event.objects.for_user(request.user))
     )
 
 
@@ -211,7 +211,7 @@ def _datetime_view(
         'day': dt,
         'next_day': dt + timedelta(days=+1),
         'prev_day': dt + timedelta(days=-1),
-        'timeslots': timeslot_factory(dt, items, **params)
+        'timeslots': timeslot_factory(request, dt, items, **params)
     })
 
 
@@ -373,15 +373,7 @@ class SwingtimeICalFeed(ICalFeed):
             self.product_id = '-//refugeesupportgr.com//User:{}//EN'.format(self.calendar.volunteer.user.id)
 
     def items(self):
-        from django.db.models import Q
-        if self.calendar.everything:
-            rv = Occurrence.objects.all()
-        else:
-            rv = Occurrence.objects.filter(
-                Q(event__for_case__volunteers=self.calendar.volunteer)
-                | Q(event__for_case=None)
-                )
-
+        rv = Occurrence.objects.for_user(self.request.user)
         return rv.filter(end_time__gte=datetime.today()).order_by('-start_time')
 
     def item_title(self, item):
