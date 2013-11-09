@@ -75,7 +75,7 @@ endif
 
 .PHONY: pep8
 pep8: depends
-	$(PEP8) $(PACKAGE) --ignore=E501 
+	$(PEP8) $(PACKAGE) --ignore=E501
 
 # issue: pylint is not currently installing on Windows
 # tracker: https://bitbucket.org/logilab/pylint/issue/51/building-pylint-windows-installer-for
@@ -114,7 +114,7 @@ test: develop depends
 
 .PHONY: .clean-dist
 .clean-dist:
-	rm -rf dist build *.egg-info 
+	rm -rf dist build *.egg-info
 
 .PHONY: clean
 clean: .clean-env .clean-dist delete_db
@@ -131,7 +131,7 @@ clean-all: clean
 MANAGE := $(PYTHON) manage.py
 DB := thrive.db
 
-$(DB): 
+$(DB):
 	$(MAKE) syncdb load_data
 
 .PHONY: syncdb
@@ -151,10 +151,8 @@ load_data:
 	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
 	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
 	$(MANAGE) loaddata refugee_manager/fixtures/assessment.json
-	$(MANAGE) loaddata swingtime/fixtures/note.json
 	$(MANAGE) loaddata swingtime/fixtures/eventtype.json
 	$(MANAGE) loaddata swingtime/fixtures/event.json
-	$(MANAGE) loaddata swingtime/fixtures/occurrence.json
 
 .PHONY: dump_data
 dump_data:
@@ -168,11 +166,9 @@ dump_data:
 	$(MANAGE) dumpdata refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
 	$(MANAGE) dumpdata refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
 	$(MANAGE) dumpdata refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
-	$(MANAGE) dumpdata swingtime.Note > swingtime/fixtures/note.json
 	$(MANAGE) dumpdata swingtime.EventType > swingtime/fixtures/eventtype.json
 	$(MANAGE) dumpdata swingtime.Event > swingtime/fixtures/event.json
-	$(MANAGE) dumpdata swingtime.Occurrence > swingtime/fixtures/occurrence.json
-	
+
 .PHONY: delete_db
 delete_db:
 	rm -f $(DB)
