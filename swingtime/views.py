@@ -407,13 +407,13 @@ class SwingtimeICalFeed(ICalFeed):
         return item.end_time
 
     def item_link(self, item):
-        return reverse('admin:swingtime_event_change', args=(item.event.id,))
-    
+        return reverse('swingtime-event', args=(item.event.id,))
+
     def item_guid(self, item):
         return 'swingtime:occurance:{}@refugeesupportgr.com'.format(item.id)
-    
+
     def item_location(self, item):
         return item.address
-    
+
 def ics_feed(*p, **kw):
     return SwingtimeICalFeed(*p, **kw)(*p, **kw)
