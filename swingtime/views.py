@@ -7,6 +7,7 @@ from django.db import models
 from django.template.context import RequestContext
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from swingtime.models import Event, Occurrence, ICal_Calendar
 from swingtime import utils, forms
@@ -406,7 +407,7 @@ class SwingtimeICalFeed(ICalFeed):
         return item.end_time
 
     def item_link(self, item):
-        return self.request.build_absolute_uri("/admin/swingtime/event/{}".format(item.event.id))
+        return reverse('admin:swingtime_event_change', args=(item.event.id,))
     
     def item_guid(self, item):
         return 'swingtime:occurance:{}@refugeesupportgr.com'.format(item.id)
