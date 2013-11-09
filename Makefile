@@ -2,7 +2,7 @@ WD := $(shell pwd)
 VENV := $(WD)/venv
 PY := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
-MANAGE := $(WD)/manage.py
+MANAGE := $(PY) $(WD)/manage.py
 DEV := $(WD)/dev
 DB := $(DEV)/thrive.db
 
