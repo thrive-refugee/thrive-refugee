@@ -1,39 +1,144 @@
-WD := $(shell pwd)
-VENV := $(WD)/venv
-PY := $(VENV)/bin/python
-PIP := $(VENV)/bin/pip
-MANAGE := $(PY) $(WD)/manage.py
-DEV := $(WD)/dev
+PROJECT := thrive-refugee
+PACKAGE := esl_manager refugee_manager thrive_refugee
+SOURCES := Makefile requirements.txt
+
+VIRTUALENV := venv
+CACHE := .cache
+DEPENDS := $(VIRTUALENV)/.depends
+INSTALLED :=$(VIRTUALENV)/.installed
+
+ifeq ($(OS),Windows_NT)
+VERSION := C:\\Python27\\python.exe
+BIN := $(VIRTUALENV)/Scripts
+LIB := $(VIRTUALENV)/Lib/python3.3
+EXE := .exe
+OPEN := cmd /c start
+else
+VERSION := python2.7
+BIN := $(VIRTUALENV)/bin
+LIB := $(VIRTUALENV)/lib/python2.7
+	ifeq ($(shell uname),Linux)
+	OPEN := xdg-open
+	else
+	OPEN := open
+	endif
+endif
+MAN := man
+SHARE := share
+
+PYTHON := $(BIN)/python$(EXE)
+PIP := $(BIN)/pip$(EXE)
+PEP8 := $(BIN)/pep8$(EXE)
+PYLINT := $(BIN)/pylint$(EXE)
+NOSE := $(BIN)/nosetests$(EXE)
+
+# Installation ###############################################################
+
+.PHONY: all
+all: develop
+
+.PHONY: develop
+develop: .env $(INSTALLED)
+$(INSTALLED):
+	$(PIP) install -r requirements.txt  --download-cache=$(CACHE)
+	touch $(INSTALLED)  # flag to indicate project is installed
+
+.PHONY: .env
+.env: $(PYTHON)
+$(PYTHON):
+	virtualenv --python $(VERSION) $(VIRTUALENV)
+
+.PHONY: depends
+depends: .env $(DEPENDS) $(SOURCES)
+$(DEPENDS):
+	$(PIP) install pep8 nose coverage --download-cache=$(CACHE)
+	$(MAKE) .pylint
+	touch $(DEPENDS)  # flag to indicate dependencies are installed
+
+# issue: pylint is not currently installing on Windows
+# tracker: https://bitbucket.org/logilab/pylint/issue/51/building-pylint-windows-installer-for
+# workaround: skip pylint on windows
+.PHONY: .pylint
+ifeq ($(shell uname),Windows)
+.pylint: .env
+	@echo pylint cannot be installed on Windows
+else ifeq ($(shell uname),CYGWIN_NT-6.1-WOW64)
+.pylint: .env
+	@echo pylint cannot be installed on Cygwin
+else
+.pylint: .env
+	$(PIP) install pylint --download-cache=$(CACHE)
+endif
+
+
+# Static Analysis ############################################################
+
+.PHONY: pep8
+pep8: depends
+	$(PEP8) $(PACKAGE) --ignore=E501 
+
+# issue: pylint is not currently installing on Windows
+# tracker: https://bitbucket.org/logilab/pylint/issue/51/building-pylint-windows-installer-for
+# workaround: skip pylint on windows
+.PHONY: pylint
+ifeq ($(shell uname),Windows)
+pylint: depends
+	@echo pylint cannot be run on Windows
+else ifeq ($(shell uname),CYGWIN_NT-6.1-WOW64)
+pylint: depends
+	@echo pylint cannot be run on Cygwin
+else
+pylint: depends
+	$(PYLINT) $(PACKAGE) --reports no \
+	                     --msg-template="{msg_id}: {msg}: {obj} line:{line}" \
+	                     --max-line-length=99 \
+	                     --disable=I0011,W0142,W0511,R0801
+endif
+
+.PHONY: check
+check: depends
+	$(MAKE) pep8
+	$(MAKE) pylint
+
+# Testing ####################################################################
+
+.PHONY: test
+test: develop depends
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(NOSE)
+
+# Cleanup ####################################################################
+
+.PHONY: .clean-env
+.clean-env:
+	rm -rf $(VIRTUALENV)
+
+.PHONY: .clean-dist
+.clean-dist:
+	rm -rf dist build *.egg-info 
+
+.PHONY: clean
+clean: .clean-env .clean-dist delete_db
+	rm -rf */*.pyc */*/*.pyc */*/*/*.pyc */*/*/*/*.pyc
+	rm -rf */__pycache__ */*/__pycache__ */*/*/__pycache__ */*/*/*/__pycache__
+	rm -rf apidocs docs/README.html .coverage
+
+.PHONY: clean-all
+clean-all: clean
+	rm -rf $(CACHE)
+
+# Server ####################################################################
+
+MANAGE := $(PYTHON) manage.py
+DEV := dev
 DB := $(DEV)/thrive.db
 
-
-# Install and Setup
-.PHONY: install
-install: reset_venv
-
-.PHONY: create_venv
-create_venv:
-	virtualenv -p python2.7 $(VENV)
-
-.PHONY: setup_venv
-setup_venv:
-	$(PIP) install -r requirements.txt
-
-.PHONY: clean_venv
-clean_venv:
-	rm -rf $(VENV)
-
-.PHONY: reset_venv
-reset_venv: clean_venv create_venv setup_venv
-
-
-# Database
 .PHONY: delete_db
 delete_db:
 	rm -f $(DB)
 
 .PHONY: syncdb
 syncdb:
+	cp thrive_refugee/local_settings.default thrive_refugee/local_settings.py
 	$(MANAGE) syncdb --noinput
 
 .PHONY: dump_data
@@ -68,12 +173,11 @@ load_data:
 reset_db: delete_db syncdb load_data
 
 
-# Other
-.PHONY: reset_all
-reset_all: reset_db reset_venv
-
-
-# Run
 .PHONY: run
-run:
+run: develop syncdb
+	$(MANAGE) runserver
+
+.PHONY: launch
+launch: develop syncdb
+	eval "sleep 1; $(OPEN) http://localhost:8000" &
 	$(MANAGE) runserver
