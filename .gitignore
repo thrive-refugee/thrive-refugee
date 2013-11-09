@@ -6,4 +6,7 @@ thrive.db
 
 venv
 .cache
+
 *.komodoproject
+.project
+.pydevproject 
