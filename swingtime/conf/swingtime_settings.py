@@ -10,7 +10,7 @@ TIMESLOT_INTERVAL = datetime.timedelta(minutes=15)
 
 # A datetime.time value indicting the starting time for time slot grids and form
 # selectors
-TIMESLOT_START_TIME = datetime.time(9)
+TIMESLOT_START_TIME = datetime.time(7)
 
 # A datetime.timedelta value indicating the offset value from
 # TIMESLOT_START_TIME for creating time slot grids and form selectors. The for
@@ -19,7 +19,7 @@ TIMESLOT_START_TIME = datetime.time(9)
 # 1:30am (01:30), in which case a value of datetime.timedelta(hours=10.5)
 # could be specified to indicate that the 1:30 represents the following date's
 # time and not the current date.
-TIMESLOT_END_TIME_DURATION = datetime.timedelta(hours=+8)
+TIMESLOT_END_TIME_DURATION = datetime.timedelta(hours=+15)
 
 # Indicates a minimum value for the number grid columns to be shown in the time
 # slot table.
