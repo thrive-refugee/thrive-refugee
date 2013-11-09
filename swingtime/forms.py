@@ -400,6 +400,7 @@ class EventForm(forms.ModelForm):
         super(EventForm, self).__init__(*args, **kws)
         # override some o the automatic model-driven fields
         self.fields['title'].widget.attrs['size'] = 60
+        self.fields['title'].widget.attrs['required'] = True
 
         self.fields['description'].required = False
         self.fields['description'].widget = forms.Textarea(attrs={'cols': 80, 'rows': 4})
