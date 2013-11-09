@@ -364,15 +364,22 @@ class SwingtimeICalFeed(ICalFeed):
             raise ValueError("Not Superuser")
     
     def items(self):
+        from django.db.models import Q
         if self.calendar.everything:
             rv = Occurrence.objects.all()
         else:
-            rv = Occurrence.objects.filter(event__for_case__volunteers=self.calendar.volunteer)
+            rv = Occurrence.objects.filter(
+                Q(event__for_case__volunteers=self.calendar.volunteer)
+                | Q(event__for_case=None)
+                )
         
         return rv.filter(end_time__gte=datetime.today()).order_by('-start_time')
 
     def item_title(self, item):
-        return "{}: {}".format(item.event.for_case.name, item.event.title)
+        if item.event.for_case:
+            return "{}: {}".format(item.event.for_case.name, item.event.title)
+        else:
+            return item.event.title
 
     def item_description(self, item):
         return "{}\n\n{}".format(item.event.description, '\n\n'.join(item.notes.all()))
