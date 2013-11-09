@@ -1,10 +1,12 @@
 from django.db import models
+
 import datetime
 
 # Create your models here.
 
+
 class ESLStudent(models.Model):
-    FirstName = models.CharField("First Name",  max_length=50)
+    FirstName = models.CharField("First Name", max_length=50)
     LastName = models.CharField("Last Name", max_length=80)
     StreetAddress = models.CharField("Address", max_length=50)
     City = models.CharField(max_length=20)
@@ -19,6 +21,7 @@ class ESLStudent(models.Model):
 
     def __unicode__(self):
         return self.FirstName
+
 
 class Attended(models.Model):
     esl_tudent = models.ForeignKey(ESLStudent)

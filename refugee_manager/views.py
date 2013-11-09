@@ -12,6 +12,7 @@ from django_ical.views import ICalFeed
 
 from .models import Event, Calendar
 
+
 # @admin_required
 class Events(Resource):
 
@@ -25,14 +26,14 @@ class Events(Resource):
 
     def post(self, request, *args, **kwargs):
         Event.objects.create(
-            case = 1, 
-            volunteer = 1, 
-            start = request.POST.get('start'), 
-            end = request.POST.get('end'), 
-            allDay = request.POST.get('allDay'), 
-            title = request.POST.get('title'), 
-            description = request.POST.get('description')
-            )
+            case=1,
+            volunteer=1,
+            start=request.POST.get('start'),
+            end=request.POST.get('end'),
+            allDay=request.POST.get('allDay'),
+            title=request.POST.get('title'),
+            description=request.POST.get('description')
+        )
         return HttpResponse(status=201)
 
     def delete(self, request, event_id):
@@ -45,10 +46,11 @@ def showCalendar(request):
     context = {}
     return render(request, 'refugee_manager/calendar.html', context)
 
+
 class EventFeed(ICalFeed):
     """
     A simple event calender
-    
+
     http://django-ics.readthedocs.org/en/latest/usage.html
     """
     product_id = '-//refugeesupportgr.com//Global//EN'
@@ -87,10 +89,10 @@ class EventFeed(ICalFeed):
 
     def item_start_datetime(self, item):
         return item.start
-    
+
     def item_end_datetime(self, item):
         return item.end
-    
+
     def item_link(self, item):
         return self.request.build_absolute_uri("/admin/refugee_manager/event/{}".format(item.id))
     
