@@ -9,4 +9,4 @@ venv
 
 *.komodoproject
 .project
-.pydevproject 
+.pydevproject
