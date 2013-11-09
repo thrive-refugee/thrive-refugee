@@ -129,17 +129,32 @@ clean-all: clean
 # Server ####################################################################
 
 MANAGE := $(PYTHON) manage.py
-DEV := dev
-DB := $(DEV)/thrive.db
+DB := thrive.db
 
-.PHONY: delete_db
-delete_db:
-	rm -f $(DB)
+$(DB): 
+	$(MAKE) syncdb load_data
 
 .PHONY: syncdb
 syncdb:
 	cp thrive_refugee/local_settings.default thrive_refugee/local_settings.py
 	$(MANAGE) syncdb --noinput
+
+.PHONY: load_data
+load_data:
+	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
+	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
+	$(MANAGE) loaddata esl_manager/fixtures/attended.json
+	$(MANAGE) loaddata esl_manager/fixtures/assesment.json
+	$(MANAGE) loaddata refugee_manager/fixtures/volunteer.json
+	$(MANAGE) loaddata refugee_manager/fixtures/case.json
+	$(MANAGE) loaddata refugee_manager/fixtures/individual.json
+	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
+	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
+	$(MANAGE) loaddata refugee_manager/fixtures/assessment.json
+	$(MANAGE) loaddata swingtime/fixtures/note.json
+	$(MANAGE) loaddata swingtime/fixtures/eventtype.json
+	$(MANAGE) loaddata swingtime/fixtures/event.json
+	$(MANAGE) loaddata swingtime/fixtures/occurrence.json
 
 .PHONY: dump_data
 dump_data:
@@ -158,33 +173,18 @@ dump_data:
 	$(MANAGE) dumpdata swingtime.Event > swingtime/fixtures/event.json
 	$(MANAGE) dumpdata swingtime.Occurrence > swingtime/fixtures/occurrence.json
 	
-	
-.PHONY: load_data
-load_data:
-	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
-	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
-	$(MANAGE) loaddata esl_manager/fixtures/attended.json
-	$(MANAGE) loaddata esl_manager/fixtures/assesment.json
-	$(MANAGE) loaddata refugee_manager/fixtures/volunteer.json
-	$(MANAGE) loaddata refugee_manager/fixtures/case.json
-	$(MANAGE) loaddata refugee_manager/fixtures/individual.json
-	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
-	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
-	$(MANAGE) loaddata refugee_manager/fixtures/assessment.json
-	$(MANAGE) loaddata swingtime/fixtures/note.json
-	$(MANAGE) loaddata swingtime/fixtures/eventtype.json
-	$(MANAGE) loaddata swingtime/fixtures/event.json
-	$(MANAGE) loaddata swingtime/fixtures/occurrence.json
+.PHONY: delete_db
+delete_db:
+	rm -f $(DB)
 
 .PHONY: reset_db
 reset_db: delete_db syncdb load_data
 
-
 .PHONY: run
-run: develop syncdb
+run: develop $(DB)
 	$(MANAGE) runserver
 
 .PHONY: launch
-launch: develop syncdb
+launch: develop $(DB)
 	eval "sleep 1; $(OPEN) http://localhost:8000" &
 	$(MANAGE) runserver
