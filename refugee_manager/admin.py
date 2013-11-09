@@ -6,6 +6,7 @@ from django.template.defaultfilters import truncatechars
 from django.db.models import Sum
 from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
+from django import forms
 
 from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote
 
@@ -100,7 +101,30 @@ class CaseFilter(admin.SimpleListFilter):
             return queryset
 
 
+class CaseAdminForm(forms.ModelForm):
+    class Meta:
+        model = Case
+        widgets = {
+            'name': forms.TextInput(attrs={'size': 60}),
+            'employment': forms.TextInput(attrs={'size': 60}),
+            'english_classes': forms.TextInput(attrs={'size': 60}),
+            'origin': forms.TextInput(attrs={'size': 60}),
+            'language': forms.TextInput(attrs={'size': 60}),
+            'green_card': forms.TextInput(attrs={'size': 60}),
+            'dhs_worker': forms.TextInput(attrs={'size': 60}),
+            'school': forms.TextInput(attrs={'size': 60}),
+            'doctor': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+            'other1': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+            'other2': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+            'other3': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+            'other4': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+            'other5': forms.Textarea(attrs={'cols': 80, 'rows': 4}),
+        }
+
+
 class CaseAdmin(DeleteNotAllowedModelAdmin):
+    form = CaseAdminForm
+
     # list view stuff
     list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
 
