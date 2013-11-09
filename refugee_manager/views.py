@@ -1,4 +1,5 @@
 # Create your views here.
+import datetime
 
 from django.http import HttpResponse, Http404
 from django.core import serializers
@@ -9,7 +10,7 @@ from django.core.urlresolvers import reverse
 from simple_rest import Resource
 from django_ical.views import ICalFeed
 
-from .models import Event
+from .models import Event, Calendar
 
 # @admin_required
 class Events(Resource):
@@ -65,20 +66,21 @@ class EventFeed(ICalFeed):
             raise Http404
 
         if not self.calendar.volunteer.user.is_active:
-            raise Http404
+            raise ValueError("Inactive User")
         
         if self.calendar.everything and not self.calendar.volunteer.user.is_superuser:
-            raise Http404
+            raise ValueError("Not Superuser")
     
     def items(self):
-        # TODO: Future only
         if self.calendar.everything:
-            return Event.objects.all().order_by('-start')
+            rv = Event.objects.all()
         else:
-            pass
+            rv = Event.objects.filter(case__volunteers=self.calendar.volunteer)
+        
+        return rv.filter(end__gte=datetime.datetime.today()).order_by('-start')
 
     def item_title(self, item):
-        return "{}: {}".format(item.case.title, item.title)
+        return "{}: {}".format(item.case.name, item.title)
 
     def item_description(self, item):
         return item.description
