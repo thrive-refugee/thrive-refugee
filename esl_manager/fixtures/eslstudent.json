@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "esl_manager.eslstudent", "fields": {"City": "Grand Rapids", "FirstName": "Tara", "Zip": "49505", "LastName": "Rousch", "State": "MI", "StreetAddress": "1 Main St", "Phones": "", "Active": true}}]

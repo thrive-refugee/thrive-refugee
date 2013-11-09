@@ -152,9 +152,13 @@ dump_data:
 	$(MANAGE) dumpdata refugee_manager.Individual > refugee_manager/fixtures/individual.json
 	$(MANAGE) dumpdata refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
 	$(MANAGE) dumpdata refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
-	$(MANAGE) dumpdata refugee_manager.Event > refugee_manager/fixtures/event.json
 	$(MANAGE) dumpdata refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
-
+	$(MANAGE) dumpdata swingtime.Note > swingtime/fixtures/note.json
+	$(MANAGE) dumpdata swingtime.EventType > swingtime/fixtures/eventtype.json
+	$(MANAGE) dumpdata swingtime.Event > swingtime/fixtures/event.json
+	$(MANAGE) dumpdata swingtime.Occurrence > swingtime/fixtures/occurrence.json
+	
+	
 .PHONY: load_data
 load_data:
 	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
@@ -166,8 +170,11 @@ load_data:
 	$(MANAGE) loaddata refugee_manager/fixtures/individual.json
 	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
 	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
-	$(MANAGE) loaddata refugee_manager/fixtures/event.json
 	$(MANAGE) loaddata refugee_manager/fixtures/assessment.json
+	$(MANAGE) loaddata swingtime/fixtures/note.json
+	$(MANAGE) loaddata swingtime/fixtures/eventtype.json
+	$(MANAGE) loaddata swingtime/fixtures/event.json
+	$(MANAGE) loaddata swingtime/fixtures/occurrence.json
 
 .PHONY: reset_db
 reset_db: delete_db syncdb load_data

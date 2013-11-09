@@ -9,6 +9,8 @@ from django.conf import settings
 
 from dateutil import rrule
 
+from refugee_manager.models import Case
+
 __all__ = (
     'Note',
     'EventType',
@@ -68,6 +70,7 @@ class Event(models.Model):
     title = models.CharField(_('title'), max_length=32)
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'))
+    for_case = models.ForeignKey(Case, null=True, blank=True, db_index=True)
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
 
     #===========================================================================
@@ -183,6 +186,7 @@ class Occurrence(models.Model):
     end_time = models.DateTimeField(_('end time'))
     event = models.ForeignKey(Event, verbose_name=_('event'), editable=False)
     notes = generic.GenericRelation(Note, verbose_name=_('notes'))
+    address = models.CharField(max_length=255, blank=True)
 
     objects = OccurrenceManager()
 
@@ -224,6 +228,8 @@ def create_event(
     start_time=None,
     end_time=None,
     note=None,
+    address='',
+    for_case = None,
     **rrule_params
 ):
     '''

@@ -7,7 +7,7 @@ from django.db.models import Sum
 from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
 
-from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote, Event
+from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote
 
 
 admin.site.disable_action('delete_selected')
@@ -271,38 +271,38 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 admin.site.register(ActivityNote, ActivityNoteAdmin)
 
 
-class EventAdmin(admin.ModelAdmin):
-    # list view stuff
-    list_display = ('case', 'volunteer', 'start', 'end', 'title_trunc')
-
-    def title_trunc(self, obj):
-        return truncatechars(obj.title, 30)
-    title_trunc.short_description = 'Title'
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'case':
-            if request.user.is_superuser:
-                kwargs['queryset'] = Case.objects.order_by('name')
-            else:
-                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
-
-        if db_field.name == 'volunteer':
-            if request.user.is_superuser:
-                kwargs['queryset'] = Volunteer.objects
-            else:
-                kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
-        return super(EventAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def queryset(self, request):
-        qs = super(EventAdmin, self).queryset(request)
-        if request.user.is_superuser:
-            return qs.order_by('case')
-        return qs.order_by('case').filter(volunteer__user__exact=request.user)
-
-    list_display_links = list_display
-    list_filter = (CaseFilter, VolunteerFilter, 'start')
-    date_hierarchy = 'start'
-    search_fields = [f.name for f in Event._meta.local_fields if isinstance(f, (CharField, TextField))]
-    ordering = ('-start',)
-
-admin.site.register(Event, EventAdmin)
+#class EventAdmin(admin.ModelAdmin):
+#    # list view stuff
+#    list_display = ('case', 'volunteer', 'start', 'end', 'title_trunc')
+#
+#    def title_trunc(self, obj):
+#        return truncatechars(obj.title, 30)
+#    title_trunc.short_description = 'Title'
+#
+#    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+#        if db_field.name == 'case':
+#            if request.user.is_superuser:
+#                kwargs['queryset'] = Case.objects.order_by('name')
+#            else:
+#                kwargs['queryset'] = Case.objects.order_by('name').filter(volunteers__user=request.user)
+#
+#        if db_field.name == 'volunteer':
+#            if request.user.is_superuser:
+#                kwargs['queryset'] = Volunteer.objects
+#            else:
+#                kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
+#        return super(EventAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+#
+#    def queryset(self, request):
+#        qs = super(EventAdmin, self).queryset(request)
+#        if request.user.is_superuser:
+#            return qs.order_by('case')
+#        return qs.order_by('case').filter(volunteer__user__exact=request.user)
+#
+#    list_display_links = list_display
+#    list_filter = (CaseFilter, VolunteerFilter, 'start')
+#    date_hierarchy = 'start'
+#    search_fields = [f.name for f in Event._meta.local_fields if isinstance(f, (CharField, TextField))]
+#    ordering = ('-start',)
+#
+#admin.site.register(Event, EventAdmin)

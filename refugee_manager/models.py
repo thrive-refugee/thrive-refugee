@@ -94,29 +94,6 @@ class ActivityNote(models.Model):
         return '%s %s' % (self.case.name, self.date)
 
 
-class Event(models.Model):
-    case = models.ForeignKey(Case, related_name="event")
-    volunteer = models.ForeignKey(Volunteer, related_name='event')
-
-    start = models.DateTimeField()
-    end = models.DateTimeField()
-    allDay = models.BooleanField()
-    title = models.CharField(max_length=80)
-    description = models.CharField(max_length=200)
-
-    def __unicode__(self):
-        return '%s %s' % (self.case.name, self.start)
-
-def genslug():
-    return ''.join(Calendar._random.choice(string.uppercase) for _ in range(32))
-
-class Calendar(models.Model):
-    slug = models.CharField(max_length=32, primary_key=True, default=genslug)
-    volunteer = models.ForeignKey(Volunteer)
-    everything = models.BooleanField(default=False)
-    
-    _random = random.SystemRandom()
-
 class Assessment(models.Model):
     case = models.ForeignKey(Case, related_name='assessment')
     date = models.DateField(default=date.today)
