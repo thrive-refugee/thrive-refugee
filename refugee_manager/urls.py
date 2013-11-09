@@ -11,6 +11,6 @@ urlpatterns = patterns('',
     
     # calendar base page
     url(r'^calendar/?$', showCalendar),
-    url(r'^ics/?$', ics_feed),
+    url(r'^ics/(?P<slug>.*)$', ics_feed),
 
 )

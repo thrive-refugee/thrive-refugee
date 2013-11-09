@@ -1,6 +1,6 @@
 # Create your views here.
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.core import serializers
 from django.views.generic import TemplateView
 from django.shortcuts import render
@@ -55,15 +55,30 @@ class EventFeed(ICalFeed):
     title = 'Thrive: All Events'
     description = 'All Thrive events'
     
-    def __init__(self, request):
+    def __init__(self, request, slug):
         super(EventFeed, self).__init__()
         self.request = request
+        self.slug = slug
+        try:
+            self.calendar = Calendar.objects.get(slug=slug)
+        except Calendar.DoesNotExist:
+            raise Http404
+
+        if not self.calendar.volunteer.user.is_active:
+            raise Http404
+        
+        if self.calendar.everything and not self.calendar.volunteer.user.is_superuser:
+            raise Http404
     
     def items(self):
-        return Event.objects.all().order_by('-start')
+        # TODO: Future only
+        if self.calendar.everything:
+            return Event.objects.all().order_by('-start')
+        else:
+            pass
 
     def item_title(self, item):
-        return item.title
+        return "{}: {}".format(item.case.title, item.title)
 
     def item_description(self, item):
         return item.description
@@ -78,7 +93,7 @@ class EventFeed(ICalFeed):
         return self.request.build_absolute_uri("/admin/refugee_manager/event/{}".format(item.id))
     
     def item_guid(self, item):
-        return str(item.id) + '@refugeesupportgr.com'
+        return 'event:{}@refugeesupportgr.com'.format(item.id)
     
 def ics_feed(*p, **kw):
     return EventFeed(*p, **kw)(*p, **kw)
