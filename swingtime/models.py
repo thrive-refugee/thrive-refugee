@@ -1,5 +1,7 @@
 import string
 import random
+import django.db.models.signals
+
 from datetime import datetime, date, timedelta
 
 from django.utils.translation import ugettext_lazy as _
@@ -304,6 +306,13 @@ class ICal_Calendar(models.Model):
         u = request.user
         if not u.is_superuser:
             everything = False
-        v = u.get_profile()
+        v = u.volunteer
         cal, _ = ICal_Calendar.objects.get_or_create(volunteer=v, everything=everything)
         return reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug})
+
+# Doesn't actually seem to be called?
+@django.db.models.signals.post_save.connect
+def remove_ical(sender, instance, created, raw, using, **kw):
+    print sender, instance, created, raw, using, kw
+    if isinstance(instance, User) and not instance.is_active:
+        ICal_Calendar.objects.filter(volunteer=instance.volunteer).delete()
