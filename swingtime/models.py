@@ -302,23 +302,25 @@ class ICal_Calendar(models.Model):
     _random = random.SystemRandom()
     
     @classmethod
-    def genurl(cls, request, everything=False):
-        """ICal_Calendar.genurl(request) -> str
+    def genurl(cls, user, everything=False, protocol=None):
+        """ICal_Calendar.genurl(User) -> str
         Find/create a calendar for the given user and return the URL to it.
         """
-        u = request.user
-        if not u.is_superuser:
+        if not user.is_superuser:
             everything = False
-        v = u.volunteer
+        v = user.volunteer
         cal, _ = ICal_Calendar.objects.get_or_create(volunteer=v, everything=everything)
-        return reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug})
+        
+        url = reverse('swingtime.views.ics_feed', kwargs={'slug': cal.slug})
+        
+        if protocol is not None:
+            if url.startswith('http:'):
+                url = protocol + ':' + url[len('http:'):]
+        return url
     
     @classmethod
-    def genwebcal(cls, request, everything=False):
-        url = cls.genurl(request, everything)
-        if url.startswith('http:'):
-            url = 'webcal:' + url[len('http:'):]
-        return url
+    def genwebcal(cls, user, everything=False):
+        return cls.genurl(user, everything, protocol='webcal')
 
 # Doesn't actually seem to be called?
 @receiver(post_save, sender=User)
