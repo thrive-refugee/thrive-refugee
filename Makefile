@@ -92,7 +92,7 @@ pylint: depends
 	$(PYLINT) $(PACKAGE) --reports no \
 	                     --msg-template="{msg_id}: {msg}: {obj} line:{line}" \
 	                     --max-line-length=99 \
-	                     --disable=I0011,W0142,W0511,R0801
+	                     --disable=I0011,W0142,W0511,R,C
 endif
 
 .PHONY: check
@@ -176,6 +176,7 @@ dump_data:
 .PHONY: delete_db
 delete_db:
 	rm -f $(DB)
+	rm -f thrive_refugee/local_settings.py
 
 .PHONY: reset_db
 reset_db: delete_db syncdb load_data
