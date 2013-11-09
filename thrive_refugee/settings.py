@@ -97,6 +97,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'thrive_refugee.urls'
 
+LOGIN_URL = '/admin/'
+
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'thrive_refugee.wsgi.application'
 
