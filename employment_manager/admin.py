@@ -43,5 +43,7 @@ class EmploymentClientAdmin(CaseOrClientAdmin):
         return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name + v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all())
     volunteers_list.short_description = 'Volunteers'
 
+    def order_qs(self, qs):
+        return qs.order_by('LastName').order_by('FirstName')
 
 admin.site.register(EmploymentClient, EmploymentClientAdmin)
