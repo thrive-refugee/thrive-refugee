@@ -1,6 +1,10 @@
 {% extends "swingtime/base.html" %}
 {% load url from future %}
 {% block title %}Event: {{ event }}{% endblock %}
+{% block extended_head %}
+    <script type="text/javascript" src="{% static "js/recurring_form.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/event_detail.js" %}"></script>
+{% endblock %}
 {% block main_content %}
     <h4>Event Details</h4>
     <form action="" method="post">
@@ -34,8 +38,8 @@
     {% else %}
     {% endif %}
 
-    <h4>Add Occurrences</h4>
-    <form action="" method="post">
+    <h4 id="add_occurrences">Add Occurrences</h4>
+    <form action="" method="post" id="occurrences_form">
     {% csrf_token %}
     <table>
         <tfoot>
