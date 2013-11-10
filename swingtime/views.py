@@ -302,7 +302,11 @@ def json_feed(request):
     import calendar
     start = request.GET.get('start')
     end = request.GET.get('end')
-    qs = Occurrence.objects.for_user(request.user)
+    qs = Occurrence.objects.all()
+    if not request.user.is_superuser:
+        qs = qs.for_user(request.user)
+    else:
+        pass
     if start:
         qs = qs.filter(end_time__gte=datetime.fromtimestamp(int(start)))
     if end:
@@ -311,7 +315,11 @@ def json_feed(request):
     response_data = [
         {
             'id': occ.id,
-            'title': occ.event.title,
+            'title': (
+                "{}: {}".format(occ.event.for_case.name, occ.event.title)
+                if occ.event.for_case else
+                occ.event.title
+                ),
             'start': calendar.timegm(occ.start_time.timetuple()),
             'end': calendar.timegm(occ.end_time.timetuple()),
             'url': reverse('swingtime-event', args=(occ.event.id,)),
