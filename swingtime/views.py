@@ -215,9 +215,9 @@ def _datetime_view(
 
 
 @login_required()
-def month_view(
+def calendar_view(
     request,
-    template='swingtime/monthly_view.html',
+    template='swingtime/calendar_view.html',
     queryset=None
 ):
     data = {
