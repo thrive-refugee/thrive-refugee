@@ -315,6 +315,7 @@ def json_feed(request):
             'start': calendar.timegm(occ.start_time.timetuple()),
             'end': calendar.timegm(occ.end_time.timetuple()),
             'url': reverse('swingtime-event', args=(occ.event.id,)),
+            'allDay': False,
         }
         for occ in qs
     ]
