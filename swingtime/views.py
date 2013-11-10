@@ -22,32 +22,6 @@ if swingtime_settings.CALENDAR_FIRST_WEEKDAY is not None:
     calendar.setfirstweekday(swingtime_settings.CALENDAR_FIRST_WEEKDAY)
 
 
-@login_required()
-def event_listing(
-    request,
-    template='swingtime/event_list.html',
-    events=None,
-    **extra_context
-):
-    '''
-    View all ``events``.
-
-    If ``events`` is a queryset, clone it. If ``None`` default to all ``Event``s.
-
-    Context parameters:
-
-    events
-        an iterable of ``Event`` objects
-
-    ???
-        all values passed in via **extra_context
-    '''
-    return render(
-        request,
-        template,
-        dict(extra_context, events=events or Event.objects.for_user(request.user))
-    )
-
 
 @login_required()
 def event_view(
@@ -241,123 +215,13 @@ def _datetime_view(
 
 
 @login_required()
-def day_view(request, year, month, day, template='swingtime/daily_view.html', **params):
-    '''
-    See documentation for function``_datetime_view``.
-
-    '''
-    dt = datetime(int(year), int(month), int(day))
-    return _datetime_view(request, template, dt, **params)
-
-
-@login_required()
-def today_view(request, template='swingtime/daily_view.html', **params):
-    '''
-    See documentation for function``_datetime_view``.
-
-    '''
-    return _datetime_view(request, template, datetime.now(), **params)
-
-
-@login_required()
-def year_view(request, year, template='swingtime/yearly_view.html', queryset=None):
-    '''
-
-    Context parameters:
-
-    year
-        an integer value for the year in questin
-
-    next_year
-        year + 1
-
-    last_year
-        year - 1
-
-    by_month
-        a sorted list of (month, occurrences) tuples where month is a
-        datetime.datetime object for the first day of a month and occurrences
-        is a (potentially empty) list of values for that month. Only months
-        which have at least 1 occurrence is represented in the list
-
-    '''
-    year = int(year)
-    queryset = queryset._clone() if queryset else Occurrence.objects.select_related()
-    occurrences = queryset.filter(
-        models.Q(start_time__year=year) |
-        models.Q(end_time__year=year)
-    )
-
-    def group_key(o):
-        return datetime(
-            year,
-            o.start_time.month if o.start_time.year == year else o.end_time.month,
-            1
-        )
-
-    return render(request, template, {
-        'year': year,
-        'by_month': [(dt, list(o)) for dt, o in itertools.groupby(occurrences, group_key)],
-        'next_year': year + 1,
-        'last_year': year - 1
-
-    })
-
-
-@login_required()
 def month_view(
     request,
-    year,
-    month,
     template='swingtime/monthly_view.html',
     queryset=None
 ):
-    '''
-    Render a tradional calendar grid view with temporal navigation variables.
-
-    Context parameters:
-
-    today
-        the current datetime.datetime value
-
-    calendar
-        a list of rows containing (day, items) cells, where day is the day of
-        the month integer and items is a (potentially empty) list of occurrence
-        for the day
-
-    this_month
-        a datetime.datetime representing the first day of the month
-
-    next_month
-        this_month + 1 month
-
-    last_month
-        this_month - 1 month
-
-    '''
-    year, month = int(year), int(month)
-    cal = calendar.monthcalendar(year, month)
-    dtstart = datetime(year, month, 1)
-    last_day = max(cal[-1])
-    dtend = datetime(year, month, last_day)
-
-    # TODO Whether to include those occurrences that started in the previous
-    # month but end in this month?
-    queryset = queryset._clone() if queryset else Occurrence.objects.select_related()
-    occurrences = queryset.filter(start_time__year=year, start_time__month=month)
-
-    def start_day(o):
-        return o.start_time.day
-
-    by_day = dict([(dt, list(o)) for dt, o in itertools.groupby(occurrences, start_day)])
     data = {
-        'today': datetime.now(),
-        'calendar': [[(d, by_day.get(d, [])) for d in row] for row in cal],
-        'this_month': dtstart,
-        'next_month': dtstart + timedelta(days=+last_day),
-        'last_month': dtstart + timedelta(days=-1),
     }
-
     return render(request, template, data)
 
 

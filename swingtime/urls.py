@@ -4,32 +4,8 @@ from swingtime import views
 urlpatterns = patterns('',
     url(
         r'^(?:calendar/)?$',
-        views.today_view,
-        name='swingtime-today'
-    ),
-
-    url(
-        r'^calendar/(?P<year>\d{4})/$',
-        views.year_view,
-        name='swingtime-yearly-view'
-    ),
-
-    url(
-        r'^calendar/(\d{4})/(0?[1-9]|1[012])/$',
         views.month_view,
-        name='swingtime-monthly-view'
-    ),
-
-    url(
-        r'^calendar/(\d{4})/(0?[1-9]|1[012])/([0-3]?\d)/$',
-        views.day_view,
-        name='swingtime-daily-view'
-    ),
-
-    url(
-        r'^events/$',
-        views.event_listing,
-        name='swingtime-events'
+        name='swingtime-calendar'
     ),
 
     url(

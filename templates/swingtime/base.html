@@ -7,9 +7,9 @@
     <meta name="keywords" content="django swingtime demo">
     <title>{% block title %}{% endblock %}</title>
     <!-- <link rel="stylesheet" href="/media/css/demo.css" type="text/css" media="screen"> -->
-    <link rel='stylesheet' type='text/css' href='/static/css/calendar.css' />
-    <script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
+    <link rel='stylesheet' type='text/css' href='{% static "css/calendar.css" %}' />
     <link rel='stylesheet' type='text/css' href='{% static "fullcalendar.css" %}' />
+    <script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
     <script type='text/javascript' src='{% static "fullcalendar.js" %}'></script>
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -30,11 +30,7 @@
         {% endif %}
 
         <p style="font-weight: bold; ">
-            View:
-            <a href="{% url "swingtime-today" %}">Day</a>
-            <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month %}">Month</a>
-            <a href="{% url "swingtime-yearly-view" current_datetime.year %}">Year</a>
-            <a href="{% url "swingtime-events" %}">All</a>
+            <a href="{% url "swingtime-calendar" %}">Calendar</a>
             &mdash;
             <a href="{% url "swingtime-add-event" %}">Add Event</a>
         </p>
