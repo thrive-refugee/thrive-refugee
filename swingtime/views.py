@@ -324,6 +324,10 @@ def json_feed(request):
             'end': calendar.timegm(occ.end_time.timetuple()),
             'url': reverse('swingtime-event', args=(occ.event.id,)),
             'allDay': False,
+            'case': {
+                'id': occ.event.for_case.id,
+                'title': occ.event.for_case.name
+                },
         }
         for occ in qs
     ]
