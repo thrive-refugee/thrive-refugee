@@ -1,5 +1,6 @@
 {% extends "swingtime/base.html" %}
 {% load url from future %}
+{% load staticfiles %}
 {% block title %}Event: {{ event }}{% endblock %}
 {% block extended_head %}
     <script type="text/javascript" src="{% static "js/recurring_form.js" %}"></script>
