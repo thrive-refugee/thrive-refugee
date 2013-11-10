@@ -49,7 +49,7 @@ def event_view(
     event = get_object_or_404(Event, pk=pk)
 
     if not request.user.is_superuser:
-        if request.user.volunteer not in event.for_case.volunteers.all():
+        if request.user.volunteer not in event.case.volunteers.all():
             raise http.Http404
 
     event_form = recurrence_form = None
@@ -103,7 +103,7 @@ def occurrence_view(
     occurrence = get_object_or_404(Occurrence, pk=pk, event__pk=event_pk)
 
     if not request.user.is_superuser:
-        if request.user.volunteer not in occurrence.event.for_case.volunteers.all():
+        if request.user.volunteer not in occurrence.event.case.volunteers.all():
             raise http.Http404
 
     if request.method == 'POST':
@@ -266,8 +266,8 @@ class SwingtimeICalFeed(ICalFeed):
         return rv.filter(end_time__gte=datetime.today()).order_by('-start_time')
 
     def item_title(self, item):
-        if item.event.for_case:
-            return "{}: {}".format(item.event.for_case.name, item.event.title)
+        if item.event.case:
+            return "{}: {}".format(item.event.case.name, item.event.title)
         else:
             return item.event.title
 
@@ -316,8 +316,8 @@ def json_feed(request):
         {
             'id': occ.id,
             'title': (
-                "{}: {}".format(occ.event.for_case.name, occ.event.title)
-                if occ.event.for_case else
+                "{}: {}".format(occ.event.case.name, occ.event.title)
+                if occ.event.case else
                 occ.event.title
                 ),
             'start': calendar.timegm(occ.start_time.timetuple()),
@@ -325,9 +325,9 @@ def json_feed(request):
             'url': reverse('swingtime-event', args=(occ.event.id,)),
             'allDay': False,
             'case': {
-                'id': occ.event.for_case.id,
-                'title': occ.event.for_case.name
-                } if occ.event.for_case else None,
+                'id': occ.event.case.id,
+                'title': occ.event.case.name
+                } if occ.event.case else None,
         }
         for occ in qs
     ]

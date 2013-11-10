@@ -17,7 +17,9 @@ from django.db.models import Q
 
 from dateutil import rrule
 
-from refugee_manager.models import Case, Volunteer
+import refugee_manager.models as refugee_models
+import employment_manager.models as employment_models
+
 
 __all__ = (
     'EventType',
@@ -54,11 +56,12 @@ class EventQuerySet(models.query.QuerySet):
         else:
             try:
                 rv = self.filter(
-                    Q(for_case__volunteers=user.volunteer)
-                    | Q(for_case=None)
+                    Q(refugee_case__volunteers=user.volunteer)
+                    | Q(employment_case__volunteers=user.volunteer)
+                    | Q(refugee_case=None, employment_case=None)
                     )
             except Volunteer.DoesNotExist:
-                rv = self.filter(for_case=None)
+                rv = self.filter(refugee_case=None, employment_case=None)
         return rv
 
 class EventManager(models.Manager):
@@ -69,6 +72,31 @@ class EventManager(models.Manager):
     def for_user(self, user):
         return self.get_query_set().for_user(user)
 
+class AutoCase(object):
+    def __get__(self, obj, type=None):
+        rv = None
+        try:
+            rv = obj.refugee_case
+        except Exception:
+            pass
+        if rv is None:
+            rv = obj.employment_case
+        return rv
+    
+    def __set__(self, obj, value):
+        if value is None:
+            obj.refugee_case = None
+            obj.employment_case = None
+        elif isinstance(value, refugee_models.Case):
+            obj.refugee_case = value
+            obj.employment_case = None
+        elif isinstance(value, refugee_models.Case):
+            obj.refugee_case = None
+            obj.employment_case = value
+        else:
+            raise TypeError("Case cannot be a {} object".format(type(value).__name__))
+    
+
 #===============================================================================
 class Event(models.Model):
     '''
@@ -77,7 +105,10 @@ class Event(models.Model):
     title = models.CharField(_('title'), max_length=32)
     description = models.CharField(_('description'), max_length=100)
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'), null=True, blank=True)
-    for_case = models.ForeignKey(Case, null=True, blank=True, db_index=True)
+    refugee_case = models.ForeignKey(refugee_models.Case, null=True, blank=True, db_index=True)
+    employment_case = models.ForeignKey(employment_models.EmploymentClient, null=True, blank=True, db_index=True)
+    
+    case = AutoCase()
     
     objects = EventManager()
 
@@ -86,7 +117,11 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
         ordering = ('title', )
-
+    
+    def clean(self):
+        if self.refugee_case and self.employment_case:
+            raise ValidationError("Cannot have both a Refugee and Employment case")
+    
     #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.title
@@ -185,11 +220,12 @@ class OccurrenceQuerySet(models.query.QuerySet):
         else:
             try:
                 rv = self.filter(
-                    Q(event__for_case__volunteers=user.volunteer)
-                    | Q(event__for_case=None)
+                    Q(event__refugee_case__volunteers=user.volunteer)
+                    | Q(event__employment_case__volunteers=user.volunteer)
+                    | Q(event__refugee_case=None, employment_case=None)
                     )
             except Volunteer.DoesNotExist:
-                rv = self.filter(event__for_case=None)
+                rv = self.filter(event__refugee_case=None, employment_case=None)
         return rv
 
 class OccurrenceManager(models.Manager):
@@ -254,7 +290,7 @@ def create_event(
     start_time=None,
     end_time=None,
     address='',
-    for_case = None,
+    case = None,
     **rrule_params
 ):
     '''
@@ -294,6 +330,7 @@ def create_event(
         description=description,
         event_type=event_type
     )
+    event.case = case
 
     start_time = start_time or datetime.now().replace(
         minute=0,
