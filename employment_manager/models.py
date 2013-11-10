@@ -1,5 +1,7 @@
 from django.db import models
 
+from refugee_manager.models import Volunteer, CaseManager
+
 
 class IntegerRangeField(models.IntegerField):
 
@@ -14,6 +16,8 @@ class IntegerRangeField(models.IntegerField):
 
 
 class EmploymentClient(models.Model):
+    volunteers = models.ManyToManyField(Volunteer)
+
     FirstName = models.CharField("First Name", max_length=50)
     LastName = models.CharField("Last Name", max_length=80)
     StreetAddress = models.CharField("Address", max_length=50)
@@ -22,6 +26,8 @@ class EmploymentClient(models.Model):
     Zip = models.CharField(max_length=10)
     Phones = models.CharField(max_length=50, blank=True)
     Active = models.BooleanField(default=True)
+
+    objects = CaseManager()  # re-use same volunteer-based logic as refugee Case
 
     class Meta:
         verbose_name = 'Employment Client'

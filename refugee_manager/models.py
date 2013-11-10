@@ -37,10 +37,12 @@ class CaseQuerySet(models.query.QuerySet):
         return rv
 
 class CaseManager(models.Manager):
+    # also used by EmploymentClient
+    
     use_for_related_fields = True
     def get_query_set(self):
         return CaseQuerySet(self.model)
-        
+
     def for_user(self, user):
         return self.get_query_set().for_user(user)
 
@@ -69,7 +71,7 @@ class Case(models.Model):
     other3 = models.CharField('Other', max_length=2000, blank=True)
     other4 = models.CharField('Other', max_length=2000, blank=True)
     other5 = models.CharField('Other', max_length=2000, blank=True)
-    
+
     objects = CaseManager()
 
     def __unicode__(self):
