@@ -13,6 +13,8 @@ from swingtime.conf import settings as swingtime_settings
 from swingtime import utils
 from swingtime.models import *
 
+from refugee_manager.models import Case
+
 WEEKDAY_SHORT = (
     (7, _(u'Sun')),
     (1, _(u'Mon')),
@@ -397,14 +399,18 @@ class EventForm(forms.ModelForm):
         model = Event
 
     #---------------------------------------------------------------------------
-    def __init__(self, *args, **kws):
-        super(EventForm, self).__init__(*args, **kws)
-        # override some o the automatic model-driven fields
+    def __init__(self, *args, **kw):
+        request = kw.pop('request')
+        super(EventForm, self).__init__(*args, **kw)
+        # override some of the automatic model-driven fields
         self.fields['title'].widget.attrs['size'] = 60
         self.fields['title'].widget.attrs['required'] = True
 
         self.fields['description'].required = False
         self.fields['description'].widget = forms.Textarea(attrs={'cols': 80, 'rows': 4})
+
+        queryset = Case.objects.for_user(request.user)
+        self.fields['for_case'] = forms.ModelChoiceField(queryset, required=False)
 
 
 #===============================================================================

@@ -74,7 +74,7 @@ def event_view(
     event_form = recurrence_form = None
     if request.method == 'POST':
         if '_update' in request.POST:
-            event_form = event_form_class(request.POST, instance=event)
+            event_form = event_form_class(request.POST, instance=event, request=request)
             if event_form.is_valid():
                 event_form.save(event)
                 return http.HttpResponseRedirect(request.path)
@@ -88,7 +88,7 @@ def event_view(
 
     data = {
         'event': event,
-        'event_form': event_form or event_form_class(instance=event),
+        'event_form': event_form or event_form_class(instance=event, request=request),
         'recurrence_form': recurrence_form or recurrence_form_class(initial={'dtstart': datetime.now()})
     }
     return render(request, template, data)
@@ -150,7 +150,7 @@ def add_event(
     '''
     dtstart = None
     if request.method == 'POST':
-        event_form = event_form_class(request.POST)
+        event_form = event_form_class(request.POST, request=request)
         recurrence_form = recurrence_form_class(request.POST)
         if event_form.is_valid() and recurrence_form.is_valid():
             event = event_form.save()
@@ -166,7 +166,7 @@ def add_event(
                 pass
 
         dtstart = dtstart or datetime.now()
-        event_form = event_form_class()
+        event_form = event_form_class(request=request)
         recurrence_form = recurrence_form_class(initial={'dtstart': dtstart})
 
     return render(
