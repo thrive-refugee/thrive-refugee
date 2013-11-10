@@ -72,10 +72,15 @@ def event_view(
         a form object for adding occurrences
     '''
     event = get_object_or_404(Event, pk=pk)
+    
+    if not request.user.is_superuser:
+        if user.volunteer not in event.volunteers:
+            raise Http404
+    
     event_form = recurrence_form = None
     if request.method == 'POST':
         if '_update' in request.POST:
-            event_form = event_form_class(request.POST, instance=event, request=request)
+            event_form = event_form_class(request.POST, instance=event)
             if event_form.is_valid():
                 event_form.save(event)
                 return http.HttpResponseRedirect(request.path)
@@ -89,7 +94,7 @@ def event_view(
 
     data = {
         'event': event,
-        'event_form': event_form or event_form_class(instance=event, request=request),
+        'event_form': event_form or event_form_class(instance=event),
         'recurrence_form': recurrence_form or recurrence_form_class(initial={'dtstart': datetime.now()})
     }
     return render(request, template, data)
@@ -115,6 +120,11 @@ def occurrence_view(
         a form object for updating the occurrence
     '''
     occurrence = get_object_or_404(Occurrence, pk=pk, event__pk=event_pk)
+
+    if not request.user.is_superuser:
+        if user.volunteer not in occurrence.event.volunteers:
+            raise Http404
+    
     if request.method == 'POST':
         form = form_class(request.POST, instance=occurrence)
         if form.is_valid():
@@ -151,7 +161,7 @@ def add_event(
     '''
     dtstart = None
     if request.method == 'POST':
-        event_form = event_form_class(request.POST, request=request)
+        event_form = event_form_class(request.POST)
         recurrence_form = recurrence_form_class(request.POST)
         if event_form.is_valid() and recurrence_form.is_valid():
             event = event_form.save()
@@ -167,7 +177,7 @@ def add_event(
                 pass
 
         dtstart = dtstart or datetime.now()
-        event_form = event_form_class(request=request)
+        event_form = event_form_class()
         recurrence_form = recurrence_form_class(initial={'dtstart': dtstart})
 
     return render(
