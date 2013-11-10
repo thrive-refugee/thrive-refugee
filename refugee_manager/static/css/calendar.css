@@ -74,3 +74,5 @@ form input[type=submit] {
     .horizontal li label { width: 4em; display: block; float: left; }
 #recurrence-options { float: left; }
     #recurrence-options li { margin-bottom: 4px; }
+
+#add_occurrences { cursor: pointer; }
