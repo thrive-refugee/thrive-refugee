@@ -328,7 +328,7 @@ def json_feed(request):
             'allDay': False,
             'className': [
                 type(occ.event.case).__name__, 
-                'case-{}'.format(occ.event.case.id % 8) if occ.event.case else '',
+                'color-{}'.format(occ.event.id % 8),
             ],
             'case': {
                 'id': occ.event.case.id,
