@@ -30,11 +30,7 @@
         {% endif %}
 
         <p style="font-weight: bold; ">
-            View:
-            <a href="{% url "swingtime-today" %}">Day</a>
-            <a href="{% url "swingtime-monthly-view" current_datetime.year current_datetime.month %}">Month</a>
-            <a href="{% url "swingtime-yearly-view" current_datetime.year %}">Year</a>
-            <a href="{% url "swingtime-events" %}">All</a>
+            <a href="{% url "swingtime-calendar" %}">Calendar</a>
             &mdash;
             <a href="{% url "swingtime-add-event" %}">Add Event</a>
         </p>
