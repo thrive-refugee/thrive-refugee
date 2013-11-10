@@ -1,5 +1,9 @@
 {% extends "swingtime/base.html" %}
+{% load staticfiles %}
 {% block title %}Add Event{% endblock %}
+{% block extended_head %}
+    <script type="text/javascript" src="{% static "js/add_event.js" %}"></script>
+{% endblock %}
 {% block main_content %}
     <h3>Add Event</h3>
     {{ event_form.non_field_errors }}
