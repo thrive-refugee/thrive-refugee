@@ -51,4 +51,6 @@ urlpatterns = patterns('',
     ),
 
     url(r'^ics/(?P<slug>.*)$', views.ics_feed, name='swingtime-ical'),
+
+    url(r'^json$', views.json_feed, name='swingtime-json'),
 )

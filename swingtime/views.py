@@ -1,5 +1,6 @@
 import calendar
 import itertools
+import json
 from datetime import datetime, timedelta, time
 
 from django import http
@@ -407,3 +408,27 @@ class SwingtimeICalFeed(ICalFeed):
 
 def ics_feed(*p, **kw):
     return SwingtimeICalFeed(*p, **kw)(*p, **kw)
+
+@login_required()
+def json_feed(request):
+    import calendar
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    qs = Occurrence.objects.for_user(request.user)
+    if start:
+        qs = qs.filter(end_time__gte=datetime.fromtimestamp(start))
+    if end:
+        qs = qs.filter(start_time__lte=datetime.fromtimestamp(end))
+    
+    response_data = [
+        {
+            'id': occ.id,
+            'title': occ.event.title,
+            'start': calendar.timegm(occ.start_time.timetuple()),
+            'end': calendar.timegm(occ.end_time.timetuple()),
+            'url': reverse('swingtime-event', args=(occ.event.id,)),
+        }
+        for occ in qs
+    ]
+    
+    return http.HttpResponse(json.dumps(response_data), content_type="application/json")
