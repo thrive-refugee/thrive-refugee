@@ -326,9 +326,14 @@ def json_feed(request):
             'end': time_mod.mktime(occ.end_time.timetuple()),
             'url': reverse('swingtime-event', args=(occ.event.id,)),
             'allDay': False,
+            'className': [
+                type(occ.event.case).__name__, 
+                'case-{}'.format(occ.event.case.id % 8) if occ.event.case else '',
+            ],
             'case': {
                 'id': occ.event.case.id,
-                'title': unicode(occ.event.case)
+                'type': type(occ.event.case).__name__,
+                'title': unicode(occ.event.case),
                 } if occ.event.case else None,
         }
         for occ in qs
