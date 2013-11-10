@@ -1,3 +1,9 @@
+.container {
+    min-width: 50em;
+    max-width: 90%;
+    margin: auto;
+}
+
 .errorlist {
     color: red;
 }
@@ -30,6 +36,10 @@ dl {
     font-weight: normal;
 }
 
+form {
+    width: 50em;
+}
+
 form table {
     width: 100%;
     border-collapse: collapse;
@@ -53,6 +63,7 @@ form table tfoot {
 }
 form table tfoot td {
     padding: 1em;
+    text-align: center;
 }
 form input[type=submit] {
     font-size: 110%;
