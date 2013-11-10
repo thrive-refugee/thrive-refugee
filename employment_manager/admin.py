@@ -26,12 +26,14 @@ class LanguageInline(admin.TabularInline):
 
 class EmploymentClientAdmin(CaseOrClientAdmin):
     fieldsets = [
+        ('Volunteers', {'fields': ['volunteers',]}),
         ('Name', {'fields': ['FirstName', 'LastName', 'Active']}),
         ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip']}),
         ('Phones', {'fields': ['Phones']}),
     ]
     inlines = [JobInline, SkillInline, AssesmentInline, LanguageInline]
     list_display = ('Active', 'FirstName', 'LastName', 'StreetAddress', 'Phones', 'volunteers_list')
+    list_display_links = list_display
     list_filter = ['Active', VolunteerFilter, 'FirstName', 'LastName']
     search_fields = [f.name for f in EmploymentClient._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('-Active', 'LastName', 'FirstName')
