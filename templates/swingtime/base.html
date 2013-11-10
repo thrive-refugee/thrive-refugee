@@ -21,27 +21,30 @@
 </head>
 <body>
     <div class="container" id="main">
-        {% block navigation %}
-        <h2>Thrive: A Refugee Support Program</h2>
-
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-        <p style="font-weight: bold; ">
-            <a href="{% url 'admin:index' %}">Homepage</a>
-            &mdash;
-            <a href="{% url 'swingtime-calendar' %}">Calendar</a>
-            &mdash;
-            <a href="{% url "swingtime-add-event" %}">Add Event</a>
-        </p>
-        <hr />
-        {% endblock navigation %}
-        {% block main_content %}{% endblock main_content %}
+        <div id="header"><h1>Thrive: A Refugee Support Program</h1></div>
+        <div id="content">
+            {% block navigation %}
+            
+    
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+    
+            <p style="font-weight: bold; ">
+                <a href="{% url 'admin:index' %}">Homepage</a>
+                &mdash;
+                <a href="{% url 'swingtime-calendar' %}">Calendar</a>
+                &mdash;
+                <a href="{% url "swingtime-add-event" %}">Add Event</a>
+            </p>
+            <hr />
+            {% endblock navigation %}
+            {% block main_content %}{% endblock main_content %}
+        </div>
     </div>
 </body>
 </html>

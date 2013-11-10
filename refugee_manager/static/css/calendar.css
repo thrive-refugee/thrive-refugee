@@ -1,7 +1,33 @@
+body {
+    font-size: 12px;
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    margin: 0px;
+}
+
 .container {
     min-width: 50em;
-    max-width: 90%;
+    max-width: 100%;
     margin: auto;
+}
+
+#header {
+    background: #417690;
+    color: #ffc;
+    overflow: hidden;
+    width: 100%;
+    display: block;
+}
+
+h1 {
+    padding: 0 10px;
+    font-size: 18px;
+    margin: 8px 0;
+    font-weight: normal;
+    color: #f4f379;
+}
+
+#content {
+    margin: 10px 15px;
 }
 
 .errorlist {
@@ -20,6 +46,20 @@
 }
 .messages .info {
     color: green;
+}
+
+h3 {
+    font-size: 1.6em;
+    color: #666;
+    padding: 0 6px 0 0;
+    margin: 0 0 .2em 0;
+    font-weight: bold;
+    display: block;
+    -webkit-margin-before: 0.67em;
+    -webkit-margin-after: 0.67em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
 }
 
 input[name=_delete] {
@@ -79,4 +119,10 @@ form input[type=submit] {
 
 .ui-datepicker {
     font-size: 80%;
+}
+
+a:link, a:visited {
+    font-weight: bold;
+    color: #5b80b2;
+    text-decoration: none;
 }
