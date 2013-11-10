@@ -23,7 +23,6 @@ if swingtime_settings.CALENDAR_FIRST_WEEKDAY is not None:
     calendar.setfirstweekday(swingtime_settings.CALENDAR_FIRST_WEEKDAY)
 
 
-
 @login_required()
 def event_view(
     request,
@@ -273,7 +272,7 @@ class SwingtimeICalFeed(ICalFeed):
             return item.event.title
 
     def item_description(self, item):
-    	rv = item.event.description
+        rv = item.event.description
 
         if 'google' in self.request.META.get('HTTP_USER_AGENT', '').lower():
             rv += '\n\n' + self.item_link(item)
@@ -295,8 +294,10 @@ class SwingtimeICalFeed(ICalFeed):
     def item_location(self, item):
         return item.address
 
+
 def ics_feed(*p, **kw):
     return SwingtimeICalFeed(*p, **kw)(*p, **kw)
+
 
 @login_required()
 def json_feed(request):
