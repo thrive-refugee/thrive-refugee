@@ -222,7 +222,7 @@ class OccurrenceQuerySet(models.query.QuerySet):
                 rv = self.filter(
                     Q(event__refugee_case__volunteers=user.volunteer)
                     | Q(event__employment_case__volunteers=user.volunteer)
-                    | Q(event__refugee_case=None, employment_case=None)
+                    | Q(event__refugee_case=None, event__employment_case=None)
                     )
             except Volunteer.DoesNotExist:
                 rv = self.filter(event__refugee_case=None, employment_case=None)
