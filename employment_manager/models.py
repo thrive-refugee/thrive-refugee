@@ -26,6 +26,7 @@ class EmploymentClient(models.Model):
     Zip = models.CharField(max_length=10)
     Phones = models.CharField(max_length=50, blank=True)
     Active = models.BooleanField(default=True)
+    Other = models.TextField(blank=True)
 
     objects = CaseManager()  # re-use same volunteer-based logic as refugee Case
 

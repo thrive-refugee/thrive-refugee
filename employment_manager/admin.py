@@ -31,6 +31,7 @@ class EmploymentClientAdmin(CaseOrClientAdmin):
         ('Name', {'fields': ['FirstName', 'LastName', 'Active']}),
         ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip']}),
         ('Phones', {'fields': ['Phones']}),
+        ('Other', {'fields': ['Other']}),
     ]
     inlines = [JobInline, SkillInline, AssesmentInline, LanguageInline]
     list_display = ('Active', 'FirstName', 'LastName', 'StreetAddress', 'Phones', 'volunteers_list')
