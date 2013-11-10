@@ -262,7 +262,7 @@ class SwingtimeICalFeed(ICalFeed):
             self.product_id = '-//refugeesupportgr.com//User:{}//EN'.format(self.calendar.volunteer.user.id)
 
     def items(self):
-        rv = Occurrence.objects.for_user(self.request.user)
+        rv = Occurrence.objects.for_user(self.calendar.volunteer.user)
         return rv.filter(end_time__gte=datetime.today()).order_by('-start_time')
 
     def item_title(self, item):
