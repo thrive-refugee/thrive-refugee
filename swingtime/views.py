@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from swingtime.models import Event, Occurrence, ICal_Calendar
 from swingtime import utils, forms
@@ -72,11 +73,11 @@ def event_view(
         a form object for adding occurrences
     '''
     event = get_object_or_404(Event, pk=pk)
-    
+
     if not request.user.is_superuser:
         if user.volunteer not in event.volunteers:
             raise Http404
-    
+
     event_form = recurrence_form = None
     if request.method == 'POST':
         if '_update' in request.POST:
@@ -89,12 +90,16 @@ def event_view(
             if recurrence_form.is_valid():
                 recurrence_form.save(event)
                 return http.HttpResponseRedirect(request.path)
+        elif '_delete' in request.POST:
+            event.delete()
+            messages.add_message(request, messages.INFO, 'Event deleted.')
+            return http.HttpResponseRedirect('/calendar/')
         else:
             return http.HttpResponseBadRequest('Bad Request')
 
     data = {
         'event': event,
-        'event_form': event_form or event_form_class(instance=event),
+        'event_form': event_form or event_form_class(instance=event, request=request),
         'recurrence_form': recurrence_form or recurrence_form_class(initial={'dtstart': datetime.now()})
     }
     return render(request, template, data)
@@ -124,9 +129,9 @@ def occurrence_view(
     if not request.user.is_superuser:
         if user.volunteer not in occurrence.event.volunteers:
             raise Http404
-    
+
     if request.method == 'POST':
-        form = form_class(request.POST, instance=occurrence, request=request)
+        form = form_class(request.POST, instance=occurrence)
         if form.is_valid():
             form.save()
             return http.HttpResponseRedirect(request.path)
@@ -429,7 +434,7 @@ def json_feed(request):
         qs = qs.filter(end_time__gte=datetime.fromtimestamp(start))
     if end:
         qs = qs.filter(start_time__lte=datetime.fromtimestamp(end))
-    
+
     response_data = [
         {
             'id': occ.id,
@@ -440,5 +445,5 @@ def json_feed(request):
         }
         for occ in qs
     ]
-    
+
     return http.HttpResponse(json.dumps(response_data), content_type="application/json")
