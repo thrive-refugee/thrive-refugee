@@ -47,7 +47,7 @@ class EventType(models.Model):
         return self.label
 
 
-class EventManager(models.Manager):
+class EventQuerySet(models.query.QuerySet):
     def for_user(self, user):
         if user.is_superuser:
             rv = self.all()
@@ -61,6 +61,14 @@ class EventManager(models.Manager):
                 rv = self.filter(for_case=None)
         return rv
 
+class EventManager(models.Manager):
+    use_for_related_fields = True
+    def get_query_set(self):
+        return EventQuerySet(self.model)
+        
+    def __getattr__(self, name):
+        return getattr(self.get_query_set(), name)
+        
 #===============================================================================
 class Event(models.Model):
     '''
@@ -140,11 +148,7 @@ class Event(models.Model):
 
 
 #===============================================================================
-class OccurrenceManager(models.Manager):
-
-    use_for_related_fields = True
-
-    #---------------------------------------------------------------------------
+class OccurrenceQuerySet(models.query.QuerySet):
     def daily_occurrences(self, dt=None, event=None):
         '''
         Returns a queryset of for instances that have any overlap with a
@@ -177,7 +181,7 @@ class OccurrenceManager(models.Manager):
     
     def for_user(self, user):
         if user.is_superuser:
-            rv = self.all()
+            rv = self
         else:
             try:
                 rv = self.filter(
@@ -188,6 +192,13 @@ class OccurrenceManager(models.Manager):
                 rv = self.filter(event__for_case=None)
         return rv
 
+class OccurrenceManager(models.Manager):
+    use_for_related_fields = True
+    def get_query_set(self):
+        return OccurrenceQuerySet(self.model)
+        
+    def __getattr__(self, name):
+        return getattr(self.get_query_set(), name)
 
 #===============================================================================
 class Occurrence(models.Model):
