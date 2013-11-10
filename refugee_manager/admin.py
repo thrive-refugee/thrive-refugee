@@ -122,23 +122,18 @@ class CaseAdminForm(forms.ModelForm):
         }
 
 
-class CaseAdmin(DeleteNotAllowedModelAdmin):
-    form = CaseAdminForm
 
-    # list view stuff
-    list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
+class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
+    '''
+    Common functionality for EmploymentClients and refugee Cases which both have volunteer relations & security
+    '''
 
     def volunteers_list(self, obj):
         return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name + v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all())
     volunteers_list.short_description = 'Volunteers'
 
-    def family_members(self, obj):
-        individuals = obj.individuals.all()
-        return '%s: %s' % (len(individuals),
-                           truncatechars(', '.join(i.name for i in individuals), 50))
-
     def queryset(self, request):
-        qs = super(CaseAdmin, self).queryset(request)
+        qs = super(CaseOrClientAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.order_by('name').filter(volunteers__user__exact=request.user)
@@ -149,7 +144,19 @@ class CaseAdmin(DeleteNotAllowedModelAdmin):
                 kwargs['queryset'] = Volunteer.objects
             else:
                 kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
-        return super(CaseAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+        return super(CaseOrClientAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
+
+
+class CaseAdmin(CaseOrClientAdmin):
+    form = CaseAdminForm
+
+    # list view stuff
+    list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
+
+    def family_members(self, obj):
+        individuals = obj.individuals.all()
+        return '%s: %s' % (len(individuals),
+                           truncatechars(', '.join(i.name for i in individuals), 50))
 
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
