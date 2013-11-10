@@ -21,11 +21,42 @@ input[name=_delete] {
     margin-left: 5em;
 }
 
+h4 {
+    font-size: 150%;
+    margin: 1em;
+}
 
-form table { width: 100% }
-form table ul { margin: 0; padding: 0;}
-form table li { list-style-type: none; }
-form table th { text-align: right; width: 6em; }
+dl {
+    font-weight: normal;
+}
+
+form table {
+    width: 100%;
+    border-collapse: collapse;
+}
+form table ul {
+    margin: 0;
+    padding: 0;
+}
+form table li {
+    list-style-type: none;
+}
+form table th {
+    text-align: right;
+    width: 6em;
+    padding: 2px;
+    border: 1px solid #ccc;
+    background-color: #bba;
+}
+form table tfoot {
+    background-color: #888;
+}
+form table tfoot td {
+    padding: 1em;
+}
+form input[type=submit] {
+    font-size: 110%;
+}
 .form-indent { margin-left: 2.5em; }
 .horizontal { width: 30em; }
     .horizontal li { float: left; margin: 0; }
