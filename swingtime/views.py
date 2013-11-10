@@ -2,6 +2,7 @@ import calendar
 import itertools
 import json
 from datetime import datetime, timedelta, time
+import time as time_mod
 
 from django import http
 from django.db import models
@@ -320,8 +321,8 @@ def json_feed(request):
                 if occ.event.case else
                 occ.event.title
                 ),
-            'start': calendar.timegm(occ.start_time.timetuple()),
-            'end': calendar.timegm(occ.end_time.timetuple()),
+            'start': time_mod.mktime(occ.start_time.timetuple()),
+            'end': time_mod.mktime(occ.end_time.timetuple()),
             'url': reverse('swingtime-event', args=(occ.event.id,)),
             'allDay': False,
             'case': {
