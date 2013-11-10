@@ -4,6 +4,7 @@ from django.db.models.fields import CharField, TextField
 from employment_manager.models import EmploymentClient, Job, Skill, Assesment, Language
 from refugee_manager.admin import CaseOrClientAdmin, VolunteerFilter
 
+
 class JobInline(admin.TabularInline):
     model = Job
     extra = 1
@@ -26,7 +27,7 @@ class LanguageInline(admin.TabularInline):
 
 class EmploymentClientAdmin(CaseOrClientAdmin):
     fieldsets = [
-        ('Volunteers', {'fields': ['volunteers',]}),
+        ('Volunteers', {'fields': ['volunteers']}),
         ('Name', {'fields': ['FirstName', 'LastName', 'Active']}),
         ('Address', {'fields': ['StreetAddress', 'City', 'State', 'Zip']}),
         ('Phones', {'fields': ['Phones']}),
