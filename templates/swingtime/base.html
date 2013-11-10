@@ -1,5 +1,9 @@
 {% load url from future %}
+<<<<<<< Updated upstream
 {% load staticfiles %}
+=======
+{% load static %}
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +12,9 @@
     <title>{% block title %}{% endblock %}</title>
     <!-- <link rel="stylesheet" href="/media/css/demo.css" type="text/css" media="screen"> -->
     <link rel='stylesheet' type='text/css' href='/static/css/calendar.css' />
-    <script type="text/javascript" src="{% static "admin/js/jquery.js" %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/jquery.js' %}"></script>
+    <link rel='stylesheet' type='text/css' href='{% static "fullcalendar.css" %}' />
+    <script type='text/javascript' src='{% static "fullcalendar.js" %}'></script>
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->

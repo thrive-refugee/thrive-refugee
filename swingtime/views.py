@@ -431,9 +431,9 @@ def json_feed(request):
     end = request.GET.get('end')
     qs = Occurrence.objects.for_user(request.user)
     if start:
-        qs = qs.filter(end_time__gte=datetime.fromtimestamp(start))
+        qs = qs.filter(end_time__gte=datetime.fromtimestamp(int(start)))
     if end:
-        qs = qs.filter(start_time__lte=datetime.fromtimestamp(end))
+        qs = qs.filter(start_time__lte=datetime.fromtimestamp(int(end)))
 
     response_data = [
         {
