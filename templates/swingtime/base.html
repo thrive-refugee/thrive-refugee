@@ -21,14 +21,18 @@
 </head>
 <body>
     <div class="container" id="main">
-        <div id="header"><h1>Thrive: A Refugee Support Program</h1></div>
+        <div id="header"><h1>Thrive: A Refugee Support Program</h1>
+            <div id="nav-global">
+        	<a href="/admin"><img src="{% static 'admin/img/icon_changelink.gif' %}" title="Admin" width="24px"></a>
+            </div>
+        </div>
         <div id="content">
             {% block page_title %}
                 <h3>Thrive: A Refugee Support Program</h3>
             {% endblock page_title %}
             {% block navigation %}
-            
-    
+
+
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -36,10 +40,8 @@
                 {% endfor %}
             </ul>
             {% endif %}
-    
+
             <p style="font-weight: bold; ">
-                <a href="{% url 'admin:index' %}">Homepage</a>
-                &mdash;
                 <a href="{% url 'swingtime-calendar' %}">Calendar</a>
                 &mdash;
                 <a href="{% url "swingtime-add-event" %}">Add Event</a>

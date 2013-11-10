@@ -4,6 +4,13 @@ body {
     margin: 0px;
 }
 
+#nav-global {
+    padding: 0.2em 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .container {
     min-width: 50em;
     max-width: 100%;

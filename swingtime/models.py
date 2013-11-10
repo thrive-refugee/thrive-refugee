@@ -13,6 +13,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from dateutil import rrule
@@ -68,7 +69,7 @@ class EventManager(models.Manager):
     use_for_related_fields = True
     def get_query_set(self):
         return EventQuerySet(self.model)
-        
+
     def for_user(self, user):
         return self.get_query_set().for_user(user)
 
@@ -82,7 +83,7 @@ class AutoCase(object):
         if rv is None:
             rv = obj.employment_case
         return rv
-    
+
     def __set__(self, obj, value):
         if value is None:
             obj.refugee_case = None
@@ -95,7 +96,7 @@ class AutoCase(object):
             obj.employment_case = value
         else:
             raise TypeError("Case cannot be a {} object".format(type(value).__name__))
-    
+
 
 #===============================================================================
 class Event(models.Model):
@@ -107,9 +108,9 @@ class Event(models.Model):
     event_type = models.ForeignKey(EventType, verbose_name=_('event type'), null=True, blank=True)
     refugee_case = models.ForeignKey(refugee_models.Case, null=True, blank=True, db_index=True)
     employment_case = models.ForeignKey(employment_models.EmploymentClient, null=True, blank=True, db_index=True)
-    
+
     case = AutoCase()
-    
+
     objects = EventManager()
 
     #===========================================================================
@@ -117,11 +118,11 @@ class Event(models.Model):
         verbose_name = _('event')
         verbose_name_plural = _('events')
         ordering = ('title', )
-    
+
     def clean(self):
         if self.refugee_case and self.employment_case:
             raise ValidationError("Cannot have both a Refugee and Employment case")
-    
+
     #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.title
@@ -213,7 +214,7 @@ class OccurrenceQuerySet(models.query.QuerySet):
         )
 
         return qs.filter(event=event) if event else qs
-    
+
     def for_user(self, user):
         if user.is_superuser:
             rv = self
@@ -232,7 +233,7 @@ class OccurrenceManager(models.Manager):
     use_for_related_fields = True
     def get_query_set(self):
         return OccurrenceQuerySet(self.model)
-        
+
     def daily_occurrences(self, dt=None, event=None):
         return self.get_query_set().daily_occurrences(dt, event)
 

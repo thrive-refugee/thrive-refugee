@@ -407,6 +407,7 @@ class EventForm(forms.ModelForm):
 
         self.fields['description'].required = False
         self.fields['description'].widget = forms.Textarea(attrs={'cols': 80, 'rows': 4})
+        self.fields['description'].initial = 'Driver?\n\n'
 
         queryset = refugee_models.Case.objects.for_user(request.user)
         self.fields['refugee_case'] = forms.ModelChoiceField(queryset, required=False)
