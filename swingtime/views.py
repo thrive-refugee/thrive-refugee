@@ -327,7 +327,7 @@ def json_feed(request):
             'case': {
                 'id': occ.event.for_case.id,
                 'title': occ.event.for_case.name
-                },
+                } if occ.event.for_case else None,
         }
         for occ in qs
     ]
