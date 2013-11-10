@@ -11,3 +11,4 @@ function hide_occurrences_form() {
 function show_occurrences_form() {
     $("#occurrences_form").show();
 }
+
