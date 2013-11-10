@@ -131,10 +131,15 @@ def occurrence_view(
             raise http.Http404
 
     if request.method == 'POST':
-        form = form_class(request.POST, instance=occurrence)
-        if form.is_valid():
-            form.save()
-            return http.HttpResponseRedirect(request.path)
+        if '_delete' in request.POST:
+            occurrence.delete()
+            messages.add_message(request, messages.INFO, 'Occurrence deleted.')
+            return http.HttpResponseRedirect(occurrence.event.get_absolute_url())
+        else:
+            form = form_class(request.POST, instance=occurrence)
+            if form.is_valid():
+                form.save()
+                return http.HttpResponseRedirect(request.path)
     else:
         form = form_class(instance=occurrence)
 
