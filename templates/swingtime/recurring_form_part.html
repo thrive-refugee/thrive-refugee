@@ -6,7 +6,9 @@
             <td>{{ recurrence_form.end_time_delta }}</td></tr>
 
         <tr><th>{{ recurrence_form.address.label_tag }}</th>
-            <td>{{ recurrence_form.address }}</td></tr>
+            <td>
+                {{ recurrence_form.address.errors }}
+                {{ recurrence_form.address }}</td></tr>
 
         <tr><th>{{ recurrence_form.repeats.label_tag }}</th>
             <td>
