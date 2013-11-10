@@ -4,7 +4,7 @@ from swingtime import views
 urlpatterns = patterns('',
     url(
         r'^(?:calendar/)?$',
-        views.month_view,
+        views.calendar_view,
         name='swingtime-calendar'
     ),
 

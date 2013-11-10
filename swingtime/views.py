@@ -49,7 +49,7 @@ def event_view(
     event = get_object_or_404(Event, pk=pk)
 
     if not request.user.is_superuser:
-        if request.user.volunteer not in event.for_case.volunteers:
+        if request.user.volunteer not in event.for_case.volunteers.all():
             raise http.Http404
 
     event_form = recurrence_form = None
@@ -215,9 +215,9 @@ def _datetime_view(
 
 
 @login_required()
-def month_view(
+def calendar_view(
     request,
-    template='swingtime/monthly_view.html',
+    template='swingtime/calendar_view.html',
     queryset=None
 ):
     data = {
