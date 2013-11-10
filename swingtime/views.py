@@ -84,11 +84,13 @@ def event_view(
             event_form = event_form_class(request.POST, instance=event, request=request)
             if event_form.is_valid():
                 event_form.save(event)
+                messages.add_message(request, messages.INFO, 'Event updated.')
                 return http.HttpResponseRedirect(request.path)
         elif '_add' in request.POST:
             recurrence_form = recurrence_form_class(request.POST)
             if recurrence_form.is_valid():
                 recurrence_form.save(event)
+                messages.add_message(request, messages.INFO, 'Occurrences added.')
                 return http.HttpResponseRedirect(request.path)
         elif '_delete' in request.POST:
             event.delete()
@@ -139,6 +141,7 @@ def occurrence_view(
             form = form_class(request.POST, instance=occurrence)
             if form.is_valid():
                 form.save()
+                messages.add_message(request, messages.INFO, 'Occurrence updated.')
                 return http.HttpResponseRedirect(request.path)
     else:
         form = form_class(instance=occurrence)
@@ -176,6 +179,7 @@ def add_event(
         if event_form.is_valid() and recurrence_form.is_valid():
             event = event_form.save()
             recurrence_form.save(event)
+            messages.add_message(request, messages.INFO, 'Event added.')
             return http.HttpResponseRedirect(event.get_absolute_url())
 
     else:
