@@ -75,7 +75,7 @@ def event_view(
     event = get_object_or_404(Event, pk=pk)
 
     if not request.user.is_superuser:
-        if request.user.volunteer not in event.case.volunteers:
+        if request.user.volunteer not in event.for_case.volunteers:
             raise http.Http404
 
     event_form = recurrence_form = None
