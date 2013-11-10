@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 from refugee_manager.models import Volunteer, CaseManager
 
@@ -36,6 +37,18 @@ class EmploymentClient(models.Model):
 
     def __unicode__(self):
         return self.FirstName + ' ' + self.LastName
+
+
+class ActivityNote(models.Model):
+    employment_client = models.ForeignKey(EmploymentClient, related_name="activity")
+    volunteer = models.ForeignKey(Volunteer, related_name='employment_activity')
+
+    date = models.DateField(default=date.today)
+    description = models.TextField(max_length=10000)
+    minutes = models.IntegerField("Time spent in minutes", null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s %s' % (str(self.employment_client), self.date)
 
 
 class Job(models.Model):

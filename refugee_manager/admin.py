@@ -122,7 +122,6 @@ class CaseAdminForm(forms.ModelForm):
         }
 
 
-
 class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
     '''
     Common functionality for EmploymentClients and refugee Cases which both have volunteer relations & security
@@ -305,7 +304,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 admin.site.register(ActivityNote, ActivityNoteAdmin)
 
 
-#class EventAdmin(admin.ModelAdmin):
+# class EventAdmin(admin.ModelAdmin):
 #    # list view stuff
 #    list_display = ('case', 'volunteer', 'start', 'end', 'title_trunc')
 #
@@ -339,4 +338,4 @@ admin.site.register(ActivityNote, ActivityNoteAdmin)
 #    search_fields = [f.name for f in Event._meta.local_fields if isinstance(f, (CharField, TextField))]
 #    ordering = ('-start',)
 #
-#admin.site.register(Event, EventAdmin)
+# admin.site.register(Event, EventAdmin)

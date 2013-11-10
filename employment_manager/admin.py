@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.db.models.fields import CharField, TextField
+from django.template.defaultfilters import truncatechars
 
-from employment_manager.models import EmploymentClient, Job, Skill, Assesment, Language
-from refugee_manager.admin import CaseOrClientAdmin, VolunteerFilter
+from employment_manager.models import EmploymentClient, Job, Skill, Assesment, Language, ActivityNote
+from refugee_manager.admin import CaseOrClientAdmin, VolunteerFilter, DeleteNotAllowedModelAdmin, MinuteTotallingChangeList
+from refugee_manager.models import Volunteer
 
 
 class JobInline(admin.TabularInline):
@@ -48,3 +50,68 @@ class EmploymentClientAdmin(CaseOrClientAdmin):
         return qs.order_by('LastName').order_by('FirstName')
 
 admin.site.register(EmploymentClient, EmploymentClientAdmin)
+
+
+class EmploymentClientFilter(admin.SimpleListFilter):
+    title = 'Employment Client'
+    parameter_name = 'employment_client'
+
+    def lookups(self, request, model_admin):
+        if request.user.is_superuser:
+            return [
+                (str(c.id), '%s' % (str(c)))
+                for c in EmploymentClient.objects.order_by('LastName', 'FirstName').all()
+            ]
+        else:
+            return [
+                (str(c.id), '%s' % (str(c)))
+                for c in EmploymentClient.objects.order_by('LastName', 'FirstName').filter(volunteers__user__exact=request.user)
+            ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(employment_client=self.value())
+        else:
+            return queryset
+
+
+class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
+    # list view stuff
+    list_display = ('employment_client', 'volunteer', 'date', 'description_trunc', 'minutes')
+
+    def description_trunc(self, obj):
+        return truncatechars(obj.description, 30)
+
+    def queryset(self, request):
+        qs = super(ActivityNoteAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs.order_by('employment_client')
+        return qs.order_by('employment_client').filter(volunteer__user__exact=request.user)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'employment_client':
+            if request.user.is_superuser:
+                kwargs['queryset'] = EmploymentClient.objects.order_by('LastName', 'FirstName')
+            else:
+                kwargs['queryset'] = EmploymentClient.objects.order_by('LastName', 'FirstName').filter(volunteers__user=request.user)
+
+        if db_field.name == 'volunteer':
+            if request.user.is_superuser:
+                kwargs['queryset'] = Volunteer.objects
+            else:
+                kwargs['queryset'] = Volunteer.objects.filter(user=request.user)
+        return super(ActivityNoteAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    change_list_template = 'refugee_manager/activitynote_admin_list.html'
+
+    def get_changelist(self, request):
+        return MinuteTotallingChangeList
+
+    description_trunc.short_description = 'Description'
+    list_display_links = list_display
+    list_filter = (EmploymentClientFilter, VolunteerFilter, 'date')
+    date_hierarchy = 'date'
+    search_fields = ('description',)
+    ordering = ('-date',)
+
+admin.site.register(ActivityNote, ActivityNoteAdmin)
