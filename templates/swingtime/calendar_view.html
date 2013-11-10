@@ -2,17 +2,20 @@
 {% load url from future %}
 {% load static %}
 {% load ical %}
-{% block title %}Calendar{% endblock %}
+{% block title %}Thrive Calendar{% endblock %}
 {% block main_content %}
     <h3>
-        Calendar
+        Thrive Calendar
         <a href="{% ical %}"><img src="{% static 'ical.gif' %}" alt="ICAL" title="iCalendar feed"></a>
     </h3>
-    <p>
-        <button class=expando data-target="#howto-iphone">iPhone? iPod Touch?</button>
-        <button class=expando data-target="#howto-gcal">Google Calendar?</button>
-        <button class=expando data-target="#howto-android">Android?</button>
-    </p>
+    <div id="subscribe-instructions">
+        <p>
+            How to subscribe to this calendar ...
+            <button class=expando data-target="#howto-iphone">on an iOS device</button>
+            <button class=expando data-target="#howto-gcal">with Google Calendar</button>
+            <button class=expando data-target="#howto-android">on an Android device</button>
+        </p>
+    </div>
     <script>
         $(function() {
             $('.expando').click(function() {
@@ -21,27 +24,32 @@
         });
     </script>
     <div id="howto-iphone" style="display: none">
-        <h4>iPhone &amp; iPod Touch</h4>
+        <h4>On an iOS device</h4>
         <ol>
-            <li>Touch Button</li>
-            <li>Follow Prompts</li>
+            <li>Touch the ICAL button.</li>
+            <li>Follow the prompts.</li>
         </ol>
     </div>
     <div id="howto-android" style="display: none">
-        <h4>Android</h4>
+        <h4>On an Android device</h4>
         <ol>
-            <li>Copy above link</li>
-            <li>Open Calendar</li>
-            <li>...</li>
-            <li>Profit!</li>
+            <li>Long-press the ICAL button.</li>
+            <li>Select "Copy link address".</li>
+            <li><a href="https://calendar.google.com/" target="_blank">Touch here to open your Google Calendar</a>.</li>
+            <li>If necessary, login to your Google account.</li>
+            <li>Touch the little triangle next to "Other calendars".</li>
+            <li>Select "Add by URL".</li>
+            <li>Long-press in the "URL:" input box.</li>
+            <li>Select "Paste".</li>
+            <li>Press the "Add Calendar" button.</li>
         </ol>
     </div>
     <div id="howto-gcal" style="display: none">
-        <h4>Google Calendar</h4>
+        <h4>With Google Calendar</h4>
         <ol>
-            <li>Grab Ankles</li>
-            <li>Kiss good bye</li>
-            <li>Learn magic</li>
+            <li>Click the ICAL button.</li>
+            <li>If asked, login to your Google account.</li>
+            <li>Click on the "Yes, add this calendar" button.</li>
         </ol>
     </div>
     <div id="calendar"></div>
