@@ -49,7 +49,7 @@ h1 {
 }
 
 h3 {
-    font-size: 1.6em;
+    font-size: 18px;
     color: #666;
     padding: 0 6px 0 0;
     margin: 0 0 .2em 0;
@@ -125,4 +125,8 @@ a:link, a:visited {
     font-weight: bold;
     color: #5b80b2;
     text-decoration: none;
+}
+
+a.fc-event {
+    color: #fff;
 }

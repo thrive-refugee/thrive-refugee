@@ -3,14 +3,16 @@
 {% load static %}
 {% load ical %}
 {% block title %}Thrive Calendar{% endblock %}
-{% block main_content %}
+{% block page_title %}
     <h3>
         Thrive Calendar
-        <a href="{% ical %}"><img src="{% static 'ical.gif' %}" alt="ICAL" title="iCalendar feed"></a>
     </h3>
+{% endblock page_title %}
+{% block main_content %}
     <div id="subscribe-instructions">
         <p>
             How to subscribe to this calendar ...
+            <a href="{% ical %}"><img src="{% static 'ical.gif' %}" alt="ICAL" title="iCalendar feed" height="100%"></a>
             <button class=expando data-target="#howto-iphone">on an iOS device</button>
             <button class=expando data-target="#howto-gcal">with Google Calendar</button>
             <button class=expando data-target="#howto-android">on an Android device</button>
