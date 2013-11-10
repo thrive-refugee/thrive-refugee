@@ -161,8 +161,7 @@ load_data:
 
 .PHONY: dump_data
 dump_data:
-	# TODO: dumping and loading the auth data a second time causes IntegrityError
-	# $(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
+	$(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
 	$(MANAGE) dumpdata esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
 	$(MANAGE) dumpdata esl_manager.Attended > esl_manager/fixtures/attended.json
 	$(MANAGE) dumpdata esl_manager.Assesment > esl_manager/fixtures/assesment.json
