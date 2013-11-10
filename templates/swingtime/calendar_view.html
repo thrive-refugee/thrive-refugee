@@ -8,6 +8,41 @@
         Calendar
         <a href="{% ical %}"><img src="{% static 'ical.gif' %}" alt="ICAL" title="iCalendar feed"></a>
     </h3>
+    <p>
+        <button class=expando data-target="#howto-iphone">iPhone? iPod Touch?</button>
+        <button class=expando data-target="#howto-gcal">Google Calendar?</button>
+        <button class=expando data-target="#howto-android">Android?</button>
+    </p>
+    <script>
+        $(function() {
+            $('.expando').click(function() {
+                $($(this).attr('data-target')).toggle('long');
+            });
+        });
+    </script>
+    <div id="howto-iphone" style="display: none">
+        <h4>iPhone &amp; iPod Touch</h4>
+        <ol>
+            <li>Touch Button</li>
+            <li>Follow Prompts</li>
+        </ol>
+    </div>
+    <div id="howto-android" style="display: none">
+        <h4>Android</h4>
+        <ol>
+            <li>Grab Ankles</li>
+            <li>Kiss good bye</li>
+            <li>Learn magic</li>
+        </ol>
+    </div>
+    <div id="howto-gcal" style="display: none">
+        <h4>Google Calendar</h4>
+        <ol>
+            <li>Grab Ankles</li>
+            <li>Kiss good bye</li>
+            <li>Learn magic</li>
+        </ol>
+    </div>
     <div id="calendar"></div>
     <script>
 $(function() {
