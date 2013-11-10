@@ -75,8 +75,8 @@ def event_view(
     event = get_object_or_404(Event, pk=pk)
 
     if not request.user.is_superuser:
-        if user.volunteer not in event.volunteers:
-            raise Http404
+        if request.user.volunteer not in event.volunteers:
+            raise http.Http404
 
     event_form = recurrence_form = None
     if request.method == 'POST':
@@ -127,8 +127,8 @@ def occurrence_view(
     occurrence = get_object_or_404(Occurrence, pk=pk, event__pk=event_pk)
 
     if not request.user.is_superuser:
-        if user.volunteer not in occurrence.event.volunteers:
-            raise Http404
+        if request.user.volunteer not in occurrence.event.volunteers:
+            raise http.Http404
 
     if request.method == 'POST':
         form = form_class(request.POST, instance=occurrence)
