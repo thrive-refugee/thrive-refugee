@@ -208,7 +208,6 @@ class MultipleOccurrenceForm(forms.Form):
     day = forms.DateField(
         label=_(u'Date'),
         initial=date.today,
-        widget=SelectDateWidget()
     )
 
     start_time_delta = forms.IntegerField(
@@ -245,7 +244,6 @@ class MultipleOccurrenceForm(forms.Form):
     until = forms.DateField(
         required=False,
         initial=date.today,
-        widget=SelectDateWidget()
     )
 
     freq = forms.IntegerField(

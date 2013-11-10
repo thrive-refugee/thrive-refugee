@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    
-	hide_occurrences_form();
+
+    hide_occurrences_form();
     $("#add_occurrences").click(show_occurrences_form);
 });
 

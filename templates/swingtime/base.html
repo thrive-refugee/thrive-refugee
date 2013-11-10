@@ -7,11 +7,13 @@
     <meta name="keywords" content="django swingtime demo">
     <title>{% block title %}{% endblock %}</title>
     <!-- <link rel="stylesheet" href="/media/css/demo.css" type="text/css" media="screen"> -->
-    <link rel='stylesheet' type='text/css' href='{% static "css/calendar.css" %}' />
+    <link rel='stylesheet' type='text/css' href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'/>
     <link rel='stylesheet' type='text/css' href='{% static "cal/fullcalendar.css" %}' />
+    <link rel='stylesheet' type='text/css' href='{% static "css/calendar.css" %}' />
     <script type="text/javascript" src="{% static 'cal/jquery.min.js' %}"></script>
     <script type='text/javascript' src='{% static "cal/jquery-ui.custom.min.js" %}'></script>
     <script type='text/javascript' src='{% static "cal/fullcalendar.min.js" %}'></script>
+    <script type='text/javascript' src='{% static "js/jquery-ui-1.10.3-datepicker.min.js" %}'></script>
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
