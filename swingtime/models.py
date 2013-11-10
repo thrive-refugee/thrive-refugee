@@ -212,7 +212,7 @@ class Occurrence(models.Model):
     start_time = models.DateTimeField(_('start time'))
     end_time = models.DateTimeField(_('end time'))
     event = models.ForeignKey(Event, verbose_name=_('event'), editable=False)
-    address = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
 
     objects = OccurrenceManager()
 

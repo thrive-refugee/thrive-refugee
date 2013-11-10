@@ -221,7 +221,8 @@ class MultipleOccurrenceForm(forms.Form):
 
     address = forms.CharField(
         label=_(u'Address'),
-        widget=forms.TextInput(attrs={'size': 60})
+        widget=forms.TextInput(attrs={'size': 60}),
+        required=False,
     )
 
     # recurrence options
