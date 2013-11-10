@@ -66,8 +66,8 @@ class EventManager(models.Manager):
     def get_query_set(self):
         return EventQuerySet(self.model)
         
-    def __getattr__(self, name):
-        return getattr(self.get_query_set(), name)
+    def for_user(self, user):
+        return self.get_query_set().for_user(user)
         
 #===============================================================================
 class Event(models.Model):
@@ -197,8 +197,11 @@ class OccurrenceManager(models.Manager):
     def get_query_set(self):
         return OccurrenceQuerySet(self.model)
         
-    def __getattr__(self, name):
-        return getattr(self.get_query_set(), name)
+    def daily_occurrences(self, dt=None, event=None):
+        return self.get_query_set().daily_occurrences(dt, event)
+
+    def for_user(self, user):
+        return self.get_query_set().for_user(user)
 
 #===============================================================================
 class Occurrence(models.Model):
