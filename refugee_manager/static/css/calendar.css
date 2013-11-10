@@ -20,3 +20,15 @@ input[name=_delete] {
     color: red;
     margin-left: 5em;
 }
+
+
+form table { width: 100% }
+form table ul { margin: 0; padding: 0;}
+form table li { list-style-type: none; }
+form table th { text-align: right; width: 6em; }
+.form-indent { margin-left: 2.5em; }
+.horizontal { width: 30em; }
+    .horizontal li { float: left; margin: 0; }
+    .horizontal li label { width: 4em; display: block; float: left; }
+#recurrence-options { float: left; }
+    #recurrence-options li { margin-bottom: 4px; }
