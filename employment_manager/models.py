@@ -34,7 +34,7 @@ class EmploymentClient(models.Model):
         verbose_name_plural = 'Employment Clients'
 
     def __unicode__(self):
-        return self.FirstName
+        return self.FirstName + ' ' + self.LastName
 
 
 class Job(models.Model):

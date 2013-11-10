@@ -136,7 +136,7 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
         qs = super(CaseOrClientAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.order_by('name').filter(volunteers__user__exact=request.user)
+        return self.order_qs(qs).filter(volunteers__user__exact=request.user)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'volunteers':
@@ -165,6 +165,9 @@ class CaseAdmin(CaseOrClientAdmin):
 
     # individual stuff
     inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin,)
+
+    def order_qs(self, qs):
+        return qs.order_by('name')
 
 admin.site.register(Case, CaseAdmin)
 
