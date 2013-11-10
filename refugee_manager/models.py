@@ -25,6 +25,25 @@ class Volunteer(models.Model):
         return '%s %s (%s%s)' % (self.user.first_name, self.user.last_name,
                                  inactive, self.user.username)
 
+class CaseQuerySet(models.query.QuerySet):
+    def for_user(self, user):
+        if user.is_superuser:
+            rv = self.all()
+        else:
+            try:
+                rv = self.filter(volunteers=user.volunteer)
+            except Volunteer.DoesNotExist:
+                rv = self.none()
+        return rv
+
+class CaseManager(models.Manager):
+    use_for_related_fields = True
+    def get_query_set(self):
+        return CaseQuerySet(self.model)
+        
+    def for_user(self, user):
+        return self.get_query_set().for_user(user)
+
 
 class Case(models.Model):
     volunteers = models.ManyToManyField(Volunteer)
@@ -50,6 +69,8 @@ class Case(models.Model):
     other3 = models.CharField('Other', max_length=2000, blank=True)
     other4 = models.CharField('Other', max_length=2000, blank=True)
     other5 = models.CharField('Other', max_length=2000, blank=True)
+    
+    objects = CaseManager()
 
     def __unicode__(self):
         if self.active:

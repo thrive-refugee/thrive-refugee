@@ -68,7 +68,7 @@ class EventManager(models.Manager):
         
     def for_user(self, user):
         return self.get_query_set().for_user(user)
-        
+
 #===============================================================================
 class Event(models.Model):
     '''
