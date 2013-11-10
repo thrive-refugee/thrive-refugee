@@ -103,7 +103,7 @@ def occurrence_view(
     occurrence = get_object_or_404(Occurrence, pk=pk, event__pk=event_pk)
 
     if not request.user.is_superuser:
-        if request.user.volunteer not in occurrence.event.volunteers:
+        if request.user.volunteer not in occurrence.event.for_case.volunteers.all():
             raise http.Http404
 
     if request.method == 'POST':
