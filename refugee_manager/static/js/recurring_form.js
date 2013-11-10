@@ -8,7 +8,7 @@ $(document).ready(function() {
 			hide_frequency();
 		}
 	});
-    $("#id_count").change(function() {
+    $("#id_count").keyup(function() {
 		if ($("#id_count").val() > 1) {
 			show_frequency();
 		} else {
