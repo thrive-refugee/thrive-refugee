@@ -348,7 +348,7 @@ def genslug():
 
 class ICal_Calendar(models.Model):
     slug = models.CharField(max_length=32, primary_key=True, default=genslug)
-    volunteer = models.ForeignKey(Volunteer)
+    volunteer = models.ForeignKey(refugee_models.Volunteer)
     everything = models.BooleanField(default=False)
 
     _random = random.SystemRandom()
