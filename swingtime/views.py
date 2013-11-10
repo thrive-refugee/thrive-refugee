@@ -268,7 +268,7 @@ class SwingtimeICalFeed(ICalFeed):
 
     def item_title(self, item):
         if item.event.case:
-            return "{}: {}".format(item.event.case.name, item.event.title)
+            return "{}: {}".format(item.event.case, item.event.title)
         else:
             return item.event.title
 
@@ -317,7 +317,7 @@ def json_feed(request):
         {
             'id': occ.id,
             'title': (
-                "{}: {}".format(occ.event.case.name, occ.event.title)
+                "{}: {}".format(occ.event.case, occ.event.title)
                 if occ.event.case else
                 occ.event.title
                 ),
@@ -327,7 +327,7 @@ def json_feed(request):
             'allDay': False,
             'case': {
                 'id': occ.event.case.id,
-                'title': occ.event.case.name
+                'title': unicode(occ.event.case)
                 } if occ.event.case else None,
         }
         for occ in qs
