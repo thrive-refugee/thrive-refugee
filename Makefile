@@ -175,7 +175,7 @@ dump_data:
 	$(MANAGE) dumpdata swingtime.Event > swingtime/fixtures/event.json
 	$(MANAGE) dumpdata employment_manager.EmploymentClient > employment_manager/fixtures/employmentclient.json
 	$(MANAGE) dumpdata employment_manager.Job > employment_manager/fixtures/job.json
-	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skillcd .json
+	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skill.json
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
 
