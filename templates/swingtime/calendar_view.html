@@ -11,11 +11,13 @@
 {% block main_content %}
     <div id="subscribe-instructions">
         <p>
-            How to subscribe to this calendar ...
-            <a href="{% ical %}"><img src="{% static 'ical.gif' %}" alt="ICAL" title="iCalendar feed"></a>
-            <button class=expando data-target="#howto-iphone">on an iOS device</button>
-            <button class=expando data-target="#howto-gcal">with Google Calendar</button>
-            <button class=expando data-target="#howto-android">on an Android device</button>
+            <a href="{% ical %}"><img src="{% static 'ical.gif' %}" alt="ICAL" title="ICS feed"></a>
+            subscription with...
+            <button class=expando data-target="#howto-android">an Android device</button>
+            <button class=expando data-target="#howto-ios7">an iOS 7 device</button>
+            <button class=expando data-target="#howto-ios6">an iOS 6 device</button>
+            <button class=expando data-target="#howto-computer">a computer</button>
+
         </p>
     </div>
     <script>
@@ -25,15 +27,21 @@
             });
         });
     </script>
-    <div id="howto-iphone" style="display: none">
-        <h4>On an iOS device</h4>
+    <div id="howto-ios7" style="display: none">
+        <h4>How to subscribe on an iOS 7 device</h4>
         <ol>
-            <li>Touch the ICAL button.</li>
-            <li>Follow the prompts.</li>
+            <li>Touch the ICAL button above</li>
+            <li>Follow the instructions to subscribe</li>
+        </ol>
+    </div>
+    <div id="howto-ios6" style="display: none">
+        <h4>How to subscribe on an iOS 6 device</h4>
+        <ol>
+            <li>(TBD) <a href="http://www.youtube.com/watch?v=PM851dc3CiE">Instructions on YouTube</a></li>
         </ol>
     </div>
     <div id="howto-android" style="display: none">
-        <h4>On an Android device</h4>
+        <h4>How to subscribe on an Android device:</h4>
         <ol>
             <li>Long-press the ICAL button.</li>
             <li>Select "Copy link address".</li>
@@ -46,12 +54,12 @@
             <li>Press the "Add Calendar" button.</li>
         </ol>
     </div>
-    <div id="howto-gcal" style="display: none">
-        <h4>With Google Calendar</h4>
+    <div id="howto-computer" style="display: none">
+        <h4>How to subscribe on a computer:</h4>
         <ol>
-            <li>Click the ICAL button.</li>
-            <li>If asked, login to your Google account.</li>
-            <li>Click on the "Yes, add this calendar" button.</li>
+            <li>Click the ICAL button above</li>
+            <li>The link should open with your default calendar program</li>
+            <li>Follow the instructions to subscribe</li>
         </ol>
     </div>
     <div id="calendar"></div>
