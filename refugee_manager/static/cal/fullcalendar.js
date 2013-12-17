@@ -19,7 +19,7 @@ var defaults = {
 
 	// display
 	defaultView: 'month',
-	aspectRatio: 2.55,
+	aspectRatio: 2.7,
 	header: {
 		left: 'title',
 		center: '',
