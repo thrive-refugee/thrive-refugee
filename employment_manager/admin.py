@@ -68,7 +68,7 @@ class EmploymentClientFilter(admin.SimpleListFilter):
                 for c in EmploymentClient.objects.order_by('LastName', 'FirstName').filter(volunteers__user__exact=request.user)
             ]
 
-    def queryset(self, request, queryset):
+    def get_queryset(self, request, queryset):
         if self.value():
             return queryset.filter(employment_client=self.value())
         else:
@@ -82,7 +82,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     def description_trunc(self, obj):
         return truncatechars(obj.description, 30)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = super(ActivityNoteAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs.order_by('employment_client')

@@ -66,7 +66,7 @@ class VolunteerFilter(admin.SimpleListFilter):
                 (request.user.username, (request.user.first_name + ' ' + request.user.last_name))
             ]
 
-    def queryset(self, request, queryset):
+    def get_queryset(self, request, queryset):
         if self.value():
             try:
                 # for Cases (many-to-many)
@@ -94,7 +94,7 @@ class CaseFilter(admin.SimpleListFilter):
                 for c in Case.objects.order_by('name').filter(volunteers__user__exact=request.user)
             ]
 
-    def queryset(self, request, queryset):
+    def get_queryset(self, request, queryset):
         if self.value():
             return queryset.filter(case=self.value())
         else:
@@ -131,7 +131,7 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
         return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name + v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all())
     volunteers_list.short_description = 'Volunteers'
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = super(CaseOrClientAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
@@ -191,7 +191,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
 
         return super(IndividualAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = super(IndividualAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
@@ -223,7 +223,7 @@ class AssesmentAdmin(admin.ModelAdmin):
 
         return super(AssesmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = super(AssesmentAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
@@ -269,7 +269,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     def description_trunc(self, obj):
         return truncatechars(obj.description, 30)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = super(ActivityNoteAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs.order_by('case')
