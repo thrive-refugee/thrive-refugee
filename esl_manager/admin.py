@@ -1,6 +1,5 @@
 from esl_manager.models import ESLStudent, Attended, Assesment
 from django.contrib import admin
-# import reversion
 
 
 class AttendedInline(admin.TabularInline):
