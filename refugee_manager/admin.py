@@ -66,7 +66,7 @@ class VolunteerFilter(admin.SimpleListFilter):
                 (request.user.username, (request.user.first_name + ' ' + request.user.last_name))
             ]
 
-    def get_queryset(self, request, queryset):
+    def queryset(self, request, queryset):
         if self.value():
             try:
                 # for Cases (many-to-many)
@@ -94,7 +94,7 @@ class CaseFilter(admin.SimpleListFilter):
                 for c in Case.objects.order_by('name').filter(volunteers__user__exact=request.user)
             ]
 
-    def get_queryset(self, request, queryset):
+    def queryset(self, request, queryset):
         if self.value():
             return queryset.filter(case=self.value())
         else:
@@ -132,7 +132,7 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
     volunteers_list.short_description = 'Volunteers'
 
     def get_queryset(self, request):
-        qs = super(CaseOrClientAdmin, self).queryset(request)
+        qs = super(CaseOrClientAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return self.order_qs(qs).filter(volunteers__user__exact=request.user)
@@ -192,7 +192,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
         return super(IndividualAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request):
-        qs = super(IndividualAdmin, self).queryset(request)
+        qs = super(IndividualAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
@@ -224,7 +224,7 @@ class AssesmentAdmin(admin.ModelAdmin):
         return super(AssesmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_queryset(self, request):
-        qs = super(AssesmentAdmin, self).queryset(request)
+        qs = super(AssesmentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
@@ -270,7 +270,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
         return truncatechars(obj.description, 30)
 
     def get_queryset(self, request):
-        qs = super(ActivityNoteAdmin, self).queryset(request)
+        qs = super(ActivityNoteAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs.order_by('case')
         return qs.order_by('case').filter(volunteer__user__exact=request.user)
