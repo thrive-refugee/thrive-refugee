@@ -1,5 +1,4 @@
 Django==1.7.1
 django-simple-rest==1.4.1
-django-reversion==1.6.4
 django-ical==1.2
 python-dateutil==2.2
