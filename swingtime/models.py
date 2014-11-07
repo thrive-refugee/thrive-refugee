@@ -67,11 +67,11 @@ class EventQuerySet(models.query.QuerySet):
 
 class EventManager(models.Manager):
     use_for_related_fields = True
-    def get_query_set(self):
+    def get_queryset(self):
         return EventQuerySet(self.model)
 
     def for_user(self, user):
-        return self.get_query_set().for_user(user)
+        return self.get_queryset().for_user(user)
 
 class AutoCase(object):
     def __get__(self, obj, type=None):
@@ -231,14 +231,14 @@ class OccurrenceQuerySet(models.query.QuerySet):
 
 class OccurrenceManager(models.Manager):
     use_for_related_fields = True
-    def get_query_set(self):
+    def get_queryset(self):
         return OccurrenceQuerySet(self.model)
 
     def daily_occurrences(self, dt=None, event=None):
-        return self.get_query_set().daily_occurrences(dt, event)
+        return self.get_queryset().daily_occurrences(dt, event)
 
     def for_user(self, user):
-        return self.get_query_set().for_user(user)
+        return self.get_queryset().for_user(user)
 
 #===============================================================================
 class Occurrence(models.Model):
