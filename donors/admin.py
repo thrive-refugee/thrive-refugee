@@ -18,6 +18,6 @@ class DonorAdmin(admin.ModelAdmin):
             if donor.email:
                 response.write("{} <{}>\n".format(donor.name, donor.email))
         return response
-    make_list.short_description = "Create mailing list"
+    make_list.short_description = "Create mailing list (plain text)"
 
     actions = [make_list]
