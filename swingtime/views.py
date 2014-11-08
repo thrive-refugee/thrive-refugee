@@ -3,6 +3,7 @@ import itertools
 import json
 from datetime import datetime, timedelta, time
 import time as time_mod
+import logging
 
 from django import http
 from django.db import models
@@ -160,9 +161,9 @@ def add_event(
         if 'dtstart' in request.GET:
             try:
                 dtstart = parser.parse(request.GET['dtstart'])
-            except:
-                # TODO A badly formatted date is passed to add_event
-                pass
+            except (TypeError, ValueError) as exc:
+                # A badly formatted date was found and passed to add_event
+                logging.warning(exc)
 
         dtstart = dtstart or datetime.now()
         event_form = event_form_class(request=request)
