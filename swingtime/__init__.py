@@ -1,3 +1,6 @@
+from django.apps import AppConfig
+
+
 VERSION = (0, 3, 0, 'beta', 0)
 
 
@@ -13,3 +16,11 @@ def get_version():
             version = '%s %s' % (version, VERSION[4])
 
     return version
+
+
+class SwingtimeAppConfig(AppConfig):
+    name = 'swingtime'
+    verbose_name = 'Calendar Configuration'
+
+
+default_app_config = 'swingtime.SwingtimeAppConfig'
