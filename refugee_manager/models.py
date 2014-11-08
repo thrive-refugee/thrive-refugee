@@ -12,6 +12,7 @@ class Volunteer(models.Model):
     user = models.OneToOneField(User)
 
     phone = models.CharField(max_length=255)
+    mailing_address = models.CharField(max_length=10000, blank=True)
 
     class Meta:
         verbose_name = 'Volunteer Info'
