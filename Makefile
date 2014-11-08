@@ -79,7 +79,7 @@ $(ALL): $(SOURCES)
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: env
+ci: env thrive.db
 # TODO: gradually add these steps back in as they start passing
 # ci: pep8 pep257 test tests
 
