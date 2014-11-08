@@ -65,6 +65,16 @@ class CaseFileInlineAdmin(admin.TabularInline):
     extra = 1
 
 
+class AssessmentInlineAdmin(admin.TabularInline):
+    model = Assessment
+    can_delete = False
+    extra = 0
+    fields = ('date', 'calc_score')
+    readonly_fields = fields
+    def calc_score(self, obj):
+        return obj.format_score()
+
+
 class VolunteerFilter(admin.SimpleListFilter):
     title = 'Volunteer'
     parameter_name = 'volunteer'
@@ -178,7 +188,7 @@ class CaseAdmin(CaseOrClientAdmin):
     ordering = ('-active', 'name',)
 
     # individual stuff
-    inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin, CaseFileInlineAdmin)
+    inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin, CaseFileInlineAdmin, AssessmentInlineAdmin)
 
     def order_qs(self, qs):
         return qs.order_by('name')
@@ -245,21 +255,7 @@ class AssesmentAdmin(admin.ModelAdmin):
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
 
     def calc_score(self, obj):
-        total = 0.0
-        denom = 0.0
-        q = obj.get_fields()[3:]
-        # return unicode(q)
-        for value in q:
-            try:
-                value = int(value[1])
-            except (ValueError, TypeError):
-                continue
-
-            total += value
-            denom += 10 if value != 0 else 0
-        if denom == 0:
-            return u"0/0 , 0%"
-        return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total / denom) * 100)
+        return obj.format_score()
     calc_score.allow_tags = True
     calc_score.description = "Score"
     list_filter = ('date', 'case')
