@@ -19,10 +19,18 @@ class DeleteNotAllowedModelAdmin(admin.ModelAdmin):
         return request.user.is_superuser
 
 
-# Define an inline admin descriptor for Volunteer model
-# which acts a bit like a singleton
+class VolunteerInlineAdminForm(forms.ModelForm):
+    class Meta:
+        model = Volunteer
+        fields = '__all__'
+        widgets = {
+            'mailing_address': forms.Textarea(attrs={'cols': 60, 'rows': 3}),
+        }
+
+
 class VolunteerInlineAdmin(admin.TabularInline):
     model = Volunteer
+    form = VolunteerInlineAdminForm
     can_delete = False
 
 
