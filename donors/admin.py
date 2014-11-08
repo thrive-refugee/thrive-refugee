@@ -8,6 +8,8 @@ from .models import Donor
 class DonorAdmin(admin.ModelAdmin):
     date_hierarchy = 'last_donation'
     actions_on_bottom = True
+    list_display = 'name', 'business', 'last_donation'
+    search_fields = 'name', 'business', 'email', 'address'
 
     def make_list(self, request, queryset):
         response = HttpResponse(content_type="text/plain")
