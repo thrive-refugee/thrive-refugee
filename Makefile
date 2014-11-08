@@ -81,7 +81,7 @@ ci: env db test
 
 .PHONY: env
 env: .virtualenv $(INSTALLED) thrive_refugee/local_settings.py
-$(INSTALLED):
+$(INSTALLED): requirements.txt
 	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt $(PIP_CACHE)
 	touch $(INSTALLED)  # flag to indicate project is installed
 
@@ -184,7 +184,7 @@ DB := thrive.db
 
 .PHONY: db
 db: env $(DB)
-$(DB):
+$(DB): */fixtures/*.json
 	$(MAKE) syncdb loaddata
 
 .PHONY: clean-db
@@ -197,7 +197,7 @@ syncdb: env
 	$(MANAGE) syncdb --noinput
 
 .PHONY: loaddata
-loaddata: env
+loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
 	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
 	$(MANAGE) loaddata esl_manager/fixtures/attended.json
@@ -215,6 +215,7 @@ loaddata: env
 	$(MANAGE) loaddata employment_manager/fixtures/skill.json
 	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
+	$(MANAGE) loaddata donors/fixtures/donors.json
 
 .PHONY: dumpdata
 dumpdata: env
@@ -235,6 +236,7 @@ dumpdata: env
 	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skill.json
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
+	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donors.json
 
 .PHONY: run
 run: env $(DB) syncdb
