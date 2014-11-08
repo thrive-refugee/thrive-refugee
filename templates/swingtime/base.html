@@ -9,9 +9,11 @@
     <!-- <link rel="stylesheet" href="/media/css/demo.css" type="text/css" media="screen"> -->
     <link rel='stylesheet' type='text/css' href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'/>
     <link rel='stylesheet' type='text/css' href='{% static "cal/fullcalendar.css" %}' />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/commons.css" %}" />    
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap.min.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap-responsive.min.css" %}" />
     <link rel='stylesheet' type='text/css' href='{% static "css/admin.css" %}' />
+    <link rel='stylesheet' type='text/css' href='{% static "admin/css/dashboard.css" %}' />
     <script type="text/javascript" src="{% static 'cal/jquery.min.js' %}"></script>
     <script type='text/javascript' src='{% static "cal/jquery-ui.custom.min.js" %}'></script>
     <script type='text/javascript' src='{% static "cal/fullcalendar.min.js" %}'></script>
@@ -33,28 +35,29 @@
                 </div>
             </div>
         </div>
-        <div id="content">
-            {% block page_title %}
-                <h3>Thrive: A Refugee Support Program</h3>
-            {% endblock page_title %}
-            {% block navigation %}
+        <div class="row-fluid dashboard-tools">
+            <div id="content">
+                {% block page_title %}
+                    <h3>Thrive: A Refugee Support Program</h3>
+                {% endblock page_title %}
+                {% block navigation %}
 
 
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-
-            <p style="font-weight: bold; ">
-                <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary pull-left">View Calendar</a>
-                <a href="{% url "swingtime-add-event" %}" class="btn btn-info pull-left">Add Event</a>
-            </p>
-            <hr />
-            {% endblock navigation %}
-            {% block main_content %}{% endblock main_content %}
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p style="font-weight: bold; ">
+                    <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary">View Calendar</a>
+                    <a href="{% url "swingtime-add-event" %}" class="btn btn-info">Add Event</a>
+                </p>
+                <hr />
+                {% endblock navigation %}
+                {% block main_content %}{% endblock main_content %}
+            </div>
         </div>
     </div>
 </body>
