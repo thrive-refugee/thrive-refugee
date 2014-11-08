@@ -41,7 +41,7 @@ MEDIA_ROOT = os.path.join(SITE_ROOT, 'uploads')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '/media/'
+MEDIA_URL = '/uploads/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -158,5 +158,7 @@ LOGGING = {
         },
     }
 }
+
+SENDFILE_BACKEND = 'sendfile.backends.simple'
 
 from local_settings import *
