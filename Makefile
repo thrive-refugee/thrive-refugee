@@ -246,5 +246,20 @@ run: env $(DB) syncdb
 
 .PHONY: launch
 launch: env $(DB) syncdb
-	eval "sleep 1; $(OPEN) http://localhost:8000" &
+	eval "sleep 1; $(OPEN) http://127.0.0.1:8000" &
+	$(MAKE) run
+
+.PHONY: run-private
+run-private: run
+
+.PHONY: launch-private
+launch-private: launch
+
+.PHONY: run-public
+run-public: env $(DB) syncdb
 	$(MANAGE) runserver 0.0.0.0:8000
+
+.PHONY: launch-public
+launch-public: env $(DB) syncdb
+	eval "sleep 1; $(OPEN) http://localhost:8000" &
+	$(MAKE) run-public
