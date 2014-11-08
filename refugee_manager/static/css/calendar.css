@@ -131,9 +131,17 @@ form input[type=submit] {
 a:link, a:visited {
     font-weight: bold;
     color: #5b80b2;
-    text-decoration: none;
 }
 
 a.fc-event {
     color: #fff;
+}
+
+@media (max-device-width: 600px) {
+    #subscribe-instructions {
+        font-size: 450%;
+    }
+    #subscribe-instructions h4 {
+        font-size: 100%;
+    }
 }
