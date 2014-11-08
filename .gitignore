@@ -8,6 +8,7 @@ __pycache__
 *.log
 local_settings.py
 *.db
+uploads/
 
 # Temporary OS files
 Icon*
