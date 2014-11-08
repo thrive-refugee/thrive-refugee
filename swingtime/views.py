@@ -1,13 +1,10 @@
 import calendar
-import itertools
 import json
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
 import time as time_mod
 import logging
 
 from django import http
-from django.db import models
-from django.template.context import RequestContext
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.core.urlresolvers import reverse

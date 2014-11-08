@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date
+from datetime import date as _date
 
 from refugee_manager.models import Volunteer, CaseManager
 
@@ -43,7 +43,7 @@ class ActivityNote(models.Model):
     employment_client = models.ForeignKey(EmploymentClient, related_name="activity")
     volunteer = models.ForeignKey(Volunteer, related_name='employment_activity')
 
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=_date.today)
     description = models.TextField(max_length=10000)
     minutes = models.IntegerField("Time spent in minutes", null=True, blank=True)
 
