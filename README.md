@@ -25,7 +25,7 @@ Environment
 
 Create a virtualenv:
 
-    make
+    make env
 
 Run the server and open a web browser:
 
@@ -38,5 +38,4 @@ Restart a stopped server:
 Run static analysis and tests:
 
     make pep8
-    make pylint
     make test

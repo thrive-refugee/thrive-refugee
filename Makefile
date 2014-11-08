@@ -81,7 +81,7 @@ ci: env db test
 
 .PHONY: env
 env: .virtualenv $(INSTALLED) thrive_refugee/local_settings.py
-$(INSTALLED):
+$(INSTALLED): requirements.txt
 	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt $(PIP_CACHE)
 	touch $(INSTALLED)  # flag to indicate project is installed
 
@@ -133,12 +133,14 @@ fix: .depends-dev
 
 .PHONY: test
 test: .depends-ci
+	$(COVERAGE) erase
 	$(COVERAGE) run --source='.' manage.py test
+	$(COVERAGE) report --fail-under=45
 
 # Cleanup ####################################################################
 
 .PHONY: clean
-clean: .clean-dist .clean-test .clean-doc .clean-build delete_db
+clean: .clean-dist .clean-test .clean-doc .clean-build clean-db
 	rm -rf $(ALL)
 
 .PHONY: clean-env
@@ -181,16 +183,21 @@ MANAGE := $(PYTHON) manage.py
 DB := thrive.db
 
 .PHONY: db
-db: $(DB)
-$(DB): env
-	$(MAKE) syncdb load_data
+db: env $(DB)
+$(DB): */fixtures/*.json
+	$(MAKE) syncdb loaddata
+
+.PHONY: clean-db
+clean-db: env
+	rm -f $(DB)
+	rm -f thrive_refugee/local_settings.py
 
 .PHONY: syncdb
 syncdb: env
 	$(MANAGE) syncdb --noinput
 
-.PHONY: load_data
-load_data: env
+.PHONY: loaddata
+loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
 	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
 	$(MANAGE) loaddata esl_manager/fixtures/attended.json
@@ -208,9 +215,10 @@ load_data: env
 	$(MANAGE) loaddata employment_manager/fixtures/skill.json
 	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
+	$(MANAGE) loaddata donors/fixtures/donors.json
 
-.PHONY: dump_data
-dump_data: env
+.PHONY: dumpdata
+dumpdata: env
 	$(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
 	$(MANAGE) dumpdata esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
 	$(MANAGE) dumpdata esl_manager.Attended > esl_manager/fixtures/attended.json
@@ -228,14 +236,7 @@ dump_data: env
 	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skill.json
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
-
-.PHONY: delete_db
-delete_db: env
-	rm -f $(DB)
-	rm -f thrive_refugee/local_settings.py
-
-.PHONY: reset_db
-reset_db: delete_db syncdb load_data
+	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donors.json
 
 .PHONY: run
 run: env $(DB) syncdb

@@ -301,7 +301,6 @@ def ics_feed(*p, **kw):
 
 @login_required()
 def json_feed(request):
-    import calendar
     start = request.GET.get('start')
     end = request.GET.get('end')
     qs = Occurrence.objects.all()
@@ -327,7 +326,7 @@ def json_feed(request):
             'url': reverse('swingtime-event', args=(occ.event.id,)),
             'allDay': False,
             'className': [
-                type(occ.event.case).__name__, 
+                type(occ.event.case).__name__,
                 'color-{}'.format(occ.event.id % 8),
             ],
             'case': {
