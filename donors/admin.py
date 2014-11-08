@@ -1,15 +1,26 @@
 from __future__ import absolute_import
 from django.contrib import admin
 from django.http import HttpResponse
-from .models import Donor
+from .models import Donor, Donation
+
+
+class DonationInline(admin.TabularInline):
+    model = Donation
+    extra = 0
 
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
-    date_hierarchy = 'last_donation'
+    inlines = [
+        DonationInline
+    ]
+    # date_hierarchy = 'last_donation'
     actions_on_bottom = True
     list_display = 'name', 'business', 'last_donation'
     search_fields = 'name', 'business', 'email', 'address'
+
+    def last_donation(self, obj):
+        return obj.donation_set.latest().when
 
     def make_list(self, request, queryset):
         response = HttpResponse(content_type="text/plain")

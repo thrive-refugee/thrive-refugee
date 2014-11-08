@@ -70,6 +70,8 @@ ALL := $(ENV)/.all
 all: depends $(ALL)
 $(ALL): $(SOURCES)
 	$(MAKE) pep8
+	# TODO: gradually add these steps back in as they start passing
+	# ci: pep257 pylint
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
@@ -135,7 +137,7 @@ fix: .depends-dev
 test: .depends-ci
 	$(COVERAGE) erase
 	$(COVERAGE) run --source='.' manage.py test
-	$(COVERAGE) report --fail-under=45
+	$(COVERAGE) report --fail-under=49
 
 # Cleanup ####################################################################
 
@@ -204,6 +206,7 @@ loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata esl_manager/fixtures/assesment.json
 	$(MANAGE) loaddata refugee_manager/fixtures/volunteer.json
 	$(MANAGE) loaddata refugee_manager/fixtures/case.json
+	$(MANAGE) loaddata refugee_manager/fixtures/casefile.json
 	$(MANAGE) loaddata refugee_manager/fixtures/individual.json
 	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
 	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
@@ -216,6 +219,7 @@ loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
 	$(MANAGE) loaddata donors/fixtures/donors.json
+	$(MANAGE) loaddata donors/fixtures/donations.json
 
 .PHONY: dumpdata
 dumpdata: env
@@ -225,6 +229,7 @@ dumpdata: env
 	$(MANAGE) dumpdata esl_manager.Assesment > esl_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata refugee_manager.Volunteer > refugee_manager/fixtures/volunteer.json
 	$(MANAGE) dumpdata refugee_manager.Case > refugee_manager/fixtures/case.json
+	$(MANAGE) dumpdata refugee_manager.CaseFile > refugee_manager/fixtures/casefile.json
 	$(MANAGE) dumpdata refugee_manager.Individual > refugee_manager/fixtures/individual.json
 	$(MANAGE) dumpdata refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
 	$(MANAGE) dumpdata refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
@@ -237,6 +242,7 @@ dumpdata: env
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
 	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donors.json
+	$(MANAGE) dumpdata donors.Donation > donors/fixtures/donations.json
 
 .PHONY: run
 run: env $(DB) syncdb
@@ -244,5 +250,20 @@ run: env $(DB) syncdb
 
 .PHONY: launch
 launch: env $(DB) syncdb
-	eval "sleep 1; $(OPEN) http://localhost:8000" &
+	eval "sleep 1; $(OPEN) http://127.0.0.1:8000" &
+	$(MAKE) run
+
+.PHONY: run-private
+run-private: run
+
+.PHONY: launch-private
+launch-private: launch
+
+.PHONY: run-public
+run-public: env $(DB) syncdb
 	$(MANAGE) runserver 0.0.0.0:8000
+
+.PHONY: launch-public
+launch-public: env $(DB) syncdb
+	eval "sleep 1; $(OPEN) http://localhost:8000" &
+	$(MAKE) run-public

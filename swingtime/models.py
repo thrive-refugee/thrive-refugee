@@ -115,7 +115,8 @@ class Event(models.Model):
 
     def clean(self):
         if self.refugee_case and self.employment_case:
-            raise ValidationError("Cannot have both a Refugee and Employment case")
+            raise ValidationError(
+                "Cannot have both a Refugee and Employment case")
 
     def __unicode__(self):
         return self.title
@@ -214,7 +215,8 @@ class OccurrenceQuerySet(models.query.QuerySet):
                     | Q(event__refugee_case=None, event__employment_case=None)
                 )
             except Volunteer.DoesNotExist:
-                rv = self.filter(event__refugee_case=None, employment_case=None)
+                rv = self.filter(
+                    event__refugee_case=None, employment_case=None)
         return rv
 
 
