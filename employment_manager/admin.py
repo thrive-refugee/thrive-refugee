@@ -82,8 +82,8 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     def description_trunc(self, obj):
         return truncatechars(obj.description, 30)
 
-    def queryset(self, request):
-        qs = super(ActivityNoteAdmin, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(ActivityNoteAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs.order_by('employment_client')
         return qs.order_by('employment_client').filter(volunteer__user__exact=request.user)

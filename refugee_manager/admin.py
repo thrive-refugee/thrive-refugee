@@ -104,6 +104,7 @@ class CaseFilter(admin.SimpleListFilter):
 class CaseAdminForm(forms.ModelForm):
     class Meta:
         model = Case
+        fields = '__all__'
         widgets = {
             'name': forms.TextInput(attrs={'size': 60}),
             'employment': forms.TextInput(attrs={'size': 60}),
@@ -131,8 +132,8 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
         return ', '.join(v.user.first_name + ' ' + v.user.last_name if v.user.first_name + v.user.last_name.strip() != "" else v.user.username for v in obj.volunteers.all())
     volunteers_list.short_description = 'Volunteers'
 
-    def queryset(self, request):
-        qs = super(CaseOrClientAdmin, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(CaseOrClientAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return self.order_qs(qs).filter(volunteers__user__exact=request.user)
@@ -191,8 +192,8 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
 
         return super(IndividualAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def queryset(self, request):
-        qs = super(IndividualAdmin, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(IndividualAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
@@ -223,8 +224,8 @@ class AssesmentAdmin(admin.ModelAdmin):
 
         return super(AssesmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def queryset(self, request):
-        qs = super(AssesmentAdmin, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(AssesmentAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs
         return qs.order_by('case').filter(case__volunteers__user__exact=request.user)
@@ -269,8 +270,8 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     def description_trunc(self, obj):
         return truncatechars(obj.description, 30)
 
-    def queryset(self, request):
-        qs = super(ActivityNoteAdmin, self).queryset(request)
+    def get_queryset(self, request):
+        qs = super(ActivityNoteAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return qs.order_by('case')
         return qs.order_by('case').filter(volunteer__user__exact=request.user)

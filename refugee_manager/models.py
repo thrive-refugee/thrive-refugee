@@ -40,11 +40,11 @@ class CaseManager(models.Manager):
     # also used by EmploymentClient
     
     use_for_related_fields = True
-    def get_query_set(self):
+    def get_queryset(self):
         return CaseQuerySet(self.model)
 
     def for_user(self, user):
-        return self.get_query_set().for_user(user)
+        return self.get_queryset().for_user(user)
 
 
 class Case(models.Model):
