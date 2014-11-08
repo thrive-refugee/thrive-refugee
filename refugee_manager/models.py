@@ -148,6 +148,11 @@ class ActivityNote(models.Model):
 class Assessment(models.Model):
     case = models.ForeignKey(Case, related_name='assessment')
     date = models.DateField(default=date.today)
+
+    def __unicode__(self):
+        # Hide "Assessment object"
+        return ""
+
     LANGUAGE_CHOICES = (
         (0, "0 - Please Select"),
         (1, "1 - No English"),
