@@ -203,6 +203,7 @@ clean-all: clean clean-env .clean-workspace .clean-cache
 .PHONY: .clean-workspace
 .clean-workspace:
 	rm -rf *.sublime-workspace
+	rm -rf .settings
 
 # Server ####################################################################
 
