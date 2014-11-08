@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>thrive-refuge</name>
+	<name>thrive_refugee</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -13,10 +13,11 @@
 	</buildSpec>
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
+		<nature>org.python.pydev.django.djangoNature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1398478527151</id>
+			<id>0</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -25,7 +26,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527152</id>
+			<id>0</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -34,7 +35,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527153</id>
+			<id>0</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -43,7 +44,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527154</id>
+			<id>0</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -52,7 +53,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527155</id>
+			<id>0</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -61,7 +62,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527156</id>
+			<id>0</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -70,7 +71,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527157</id>
+			<id>0</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -79,7 +80,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527158</id>
+			<id>0</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -88,7 +89,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1398478527159</id>
+			<id>0</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
