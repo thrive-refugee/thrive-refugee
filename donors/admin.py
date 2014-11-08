@@ -14,8 +14,12 @@ class DonorAdmin(admin.ModelAdmin):
     ]
     # date_hierarchy = 'last_donation'
     actions_on_bottom = True
-    list_display = 'name', 'business', #'last_donation'
+    list_display = 'name', 'business', 'last_donation'
     search_fields = 'name', 'business', 'email', 'address'
+
+    def last_donation(self, obj):
+        return obj.donation_set.latest().when
+
 
     def make_list(self, request, queryset):
         response = HttpResponse(content_type="text/plain")
