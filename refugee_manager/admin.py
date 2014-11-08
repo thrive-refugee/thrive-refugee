@@ -71,6 +71,7 @@ class AssessmentInlineAdmin(admin.TabularInline):
     extra = 0
     fields = ('date', 'calc_score')
     readonly_fields = fields
+
     def calc_score(self, obj):
         return obj.format_score()
 
