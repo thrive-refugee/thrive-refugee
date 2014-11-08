@@ -1,19 +1,11 @@
-{% load url from future %}
-{% load staticfiles %}
-{% load admin_static admin_urls bootstrap_template_tags %}<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="keywords" content="django swingtime demo">
-    <title>{% block title %}{% endblock %}</title>
-    <!-- <link rel="stylesheet" href="/media/css/demo.css" type="text/css" media="screen"> -->
+{% extends "admin/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrahead %}
     <link rel='stylesheet' type='text/css' href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'/>
     <link rel='stylesheet' type='text/css' href='{% static "cal/fullcalendar.css" %}' />
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/commons.css" %}" />    
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap.min.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap-responsive.min.css" %}" />
     <link rel='stylesheet' type='text/css' href='{% static "css/admin.css" %}' />
-    <link rel='stylesheet' type='text/css' href='{% static "admin/css/dashboard.css" %}' />
     <script type="text/javascript" src="{% static 'cal/jquery.min.js' %}"></script>
     <script type='text/javascript' src='{% static "cal/jquery-ui.custom.min.js" %}'></script>
     <script type='text/javascript' src='{% static "cal/fullcalendar.min.js" %}'></script>
@@ -22,43 +14,48 @@
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block extended_head %}{% endblock %}
-</head>
-<body>
-    <div class="container" id="main">
-        <div id="header" class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner" id="nav-menu-top-bar">
-                <div class="container-fluid">
-                    <a href="/admin"><h1 style="width:500px; float: left;">Thrive Admin</h1></a>
-                    <div id="nav-global" class="pull-right btn-group">
-                        <a href="{% url 'admin:index' %}" class="btn btn-info">Apps</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row-fluid dashboard-tools">
-            <div id="content">
-                {% block page_title %}
-                    <h3>Thrive: A Refugee Support Program</h3>
-                {% endblock page_title %}
-                {% block navigation %}
+{% endblock %}
+
+{% block nav-global %}
+    <div id="nav-global" class="pull-right btn-group">
+        <a href="{% url 'admin:index' %}" class="btn btn-info">Apps</a>
+    </div>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" style="width:500px; float: left;">
+    <a href="/admin">
+    {% trans 'Thrive Admin' %}
+    </a>
+</h1>
+{% endblock %}
+
+{% comment %} not sure if there's anything to put in the breadcrumbs... {% endcomment %}
+{% block breadcrumbs %} {% endblock %}
+
+{% block content %}
+    <div class="row-fluid dashboard-tools">
+        <div id="content">
+            {% block page_title %}
+                <h3>Thrive: A Refugee Support Program</h3>
+            {% endblock page_title %}
+            {% block navigation %}
 
 
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                <p style="font-weight: bold; ">
-                    <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary">View Calendar</a>
-                    <a href="{% url "swingtime-add-event" %}" class="btn btn-info">Add Event</a>
-                </p>
-                <hr />
-                {% endblock navigation %}
-                {% block main_content %}{% endblock main_content %}
-            </div>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <p style="font-weight: bold; ">
+                <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary">View Calendar</a>
+                <a href="{% url "swingtime-add-event" %}" class="btn btn-info">Add Event</a>
+            </p>
+            <hr />
+            {% endblock navigation %}
+            {% block main_content %}{% endblock main_content %}
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
