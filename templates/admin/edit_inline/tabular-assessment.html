@@ -1,0 +1,23 @@
+{% include 'admin/edit_inline/tabular.html' %}
+
+<script>
+(function($) {
+//  $('#assessment-group .original').remove();
+  $('#assessment-group tfoot').empty().append(
+    $('<tr>').append(
+      $('<td>'),
+      $('<td colspan="0">').append(
+        // TODO: Generate from django routing
+        // TODO: Add ?case=$n
+        $('<span class="move-add-row-after-me dynamic-assessment">'),
+        $('<div class="add-row">').append(
+          $('<a>').attr('href', '/admin/refugee_manager/assessment/add/').append(
+            $('<i class="icon-plus-sign"></i>'),
+            ' Add another Assessment'
+          )
+        )
+      )
+    )
+  );
+})(django.jQuery);
+</script>
