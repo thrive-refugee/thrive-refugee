@@ -27,8 +27,8 @@
             <div class="navbar-inner" id="nav-menu-top-bar">
                 <div class="container-fluid">
                     <a href="/admin"><h1 style="width:500px; float: left;">Thrive Admin</h1></a>
-                    <div id="nav-global" class="pull-right">
-                	<a href="/admin" ><img src="{% static 'admin/img/icon_changelink.gif' %}" title="Admin" width="24px"></a>
+                    <div id="nav-global" class="pull-right btn-group">
+                        <a href="{% url 'swingtime-calendar' %}" class="btn btn-info">Apps</a>
                     </div>
                 </div>
             </div>
@@ -49,9 +49,8 @@
             {% endif %}
 
             <p style="font-weight: bold; ">
-                <a href="{% url 'swingtime-calendar' %}">View Calendar</a>
-                &mdash;
-                <a href="{% url "swingtime-add-event" %}">Add Event</a>
+                <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary pull-left">View Calendar</a>
+                <a href="{% url "swingtime-add-event" %}" class="btn btn-info pull-left">Add Event</a>
             </p>
             <hr />
             {% endblock navigation %}
