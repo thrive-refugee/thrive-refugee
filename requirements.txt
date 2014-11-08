@@ -2,3 +2,4 @@ Django==1.7.1
 django-simple-rest==1.4.1
 django-ical==1.2
 python-dateutil==2.2
+django-localflavor==1.0
