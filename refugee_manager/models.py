@@ -25,7 +25,9 @@ class Volunteer(models.Model):
         return '%s %s (%s%s)' % (self.user.first_name, self.user.last_name,
                                  inactive, self.user.username)
 
+
 class CaseQuerySet(models.query.QuerySet):
+
     def for_user(self, user):
         if user.is_superuser:
             rv = self.all()
@@ -36,10 +38,12 @@ class CaseQuerySet(models.query.QuerySet):
                 rv = self.none()
         return rv
 
+
 class CaseManager(models.Manager):
     # also used by EmploymentClient
 
     use_for_related_fields = True
+
     def get_queryset(self):
         return CaseQuerySet(self.model)
 
@@ -95,7 +99,8 @@ class CaseFile(models.Model):
     date_uploaded = models.DateField(default=date.today)
 
     def __unicode__(self):
-        # this shows up in the inline admin form as a label that we don't want, so blank it out
+        # this shows up in the inline admin form as a label that we don't want,
+        # so blank it out
         return ''
 
     class Meta:
