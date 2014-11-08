@@ -236,7 +236,7 @@ dumpdata: env
 	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skill.json
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
-	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donor.json
+	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donors.json
 
 .PHONY: run
 run: env $(DB) syncdb
