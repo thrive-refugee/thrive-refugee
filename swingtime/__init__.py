@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.apps import AppConfig
 
 
@@ -20,7 +22,8 @@ def get_version():
 
 class SwingtimeAppConfig(AppConfig):
     name = 'swingtime'
-    verbose_name = 'Calendar Configuration'
+    _zero_width_space = u'\u200B'  # used to make it last alphabetically, better option: http://stackoverflow.com/questions/398163/ordering-admin-modeladmin-objects-in-django-admin
+    verbose_name = _zero_width_space + 'Calendar Configuration'
 
 
 default_app_config = 'swingtime.SwingtimeAppConfig'
