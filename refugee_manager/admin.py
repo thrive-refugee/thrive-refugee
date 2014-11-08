@@ -54,7 +54,7 @@ class CaseDetailInlineAdmin(admin.TabularInline):
 class CaseFileInlineAdmin(admin.TabularInline):
     model = CaseFile
     can_delete = True
-    extra = 2
+    extra = 1
 
 
 class VolunteerFilter(admin.SimpleListFilter):

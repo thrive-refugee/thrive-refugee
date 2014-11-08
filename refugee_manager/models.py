@@ -81,10 +81,17 @@ class Case(models.Model):
             return '%s (closed)' % self.name
 
 
+def case_file_upload_path(model_instance, original_filename):
+    """
+    Put each file in folder corresponding to its case number, so later we can use the case for security check
+    """
+    return '%s/%s' % (model_instance.case.id, original_filename)
+
+
 class CaseFile(models.Model):
     case = models.ForeignKey(Case, related_name='files')
     title = models.CharField(max_length=2000, blank=True)
-    file = models.FileField()
+    file = models.FileField(upload_to=case_file_upload_path)
     date_uploaded = models.DateField(default=date.today)
 
     def __unicode__(self):
