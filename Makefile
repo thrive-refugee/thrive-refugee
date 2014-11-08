@@ -218,6 +218,7 @@ loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
 	$(MANAGE) loaddata donors/fixtures/donors.json
+	$(MANAGE) loaddata donors/fixtures/donations.json
 
 .PHONY: dumpdata
 dumpdata: env
@@ -239,6 +240,7 @@ dumpdata: env
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
 	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donors.json
+	$(MANAGE) dumpdata donors.Donation > donors/fixtures/donations.json
 
 .PHONY: run
 run: env $(DB) syncdb

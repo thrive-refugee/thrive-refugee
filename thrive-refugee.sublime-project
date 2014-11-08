@@ -29,6 +29,14 @@
                 "max-line-length": 79,
                 "select": ""
             },
+            "flake8": {
+                "@disable": false,
+                "args": [],
+                "excludes": [],
+                "ignore": "E501",
+                "max-line-length": 79,
+                "select": ""
+            },
             "pylint": {
                 "@disable": false,
                 "args": ["--max-line-length=79"],
