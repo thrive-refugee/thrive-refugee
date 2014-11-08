@@ -7,7 +7,7 @@
 	#user-tools {
 		right: 36px;
 	}
-	
+
 	#nav-global {
 		position: absolute;
 		top: 0;
@@ -23,7 +23,11 @@
 {% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name" style="width:500px;">{% trans 'Thrive: A Refugee Support Program' %}</h1>
+<h1 id="site-name" style="width:500px;">
+    <a href="/admin">
+    {% trans 'Thrive Admin' %}
+    </a>
+</h1>
 {% endblock %}
 
 {% block nav-global %}
