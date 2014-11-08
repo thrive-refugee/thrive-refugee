@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'refugee_manager',
     'swingtime',
     'employment_manager',
+    'donors',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
