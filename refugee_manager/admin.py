@@ -244,8 +244,7 @@ class AssesmentAdmin(admin.ModelAdmin):
         for value in q:
             try:
                 value = int(value[1])
-                # return unicode(value)
-            except:
+            except (ValueError, TypeError):
                 continue
 
             total += value
