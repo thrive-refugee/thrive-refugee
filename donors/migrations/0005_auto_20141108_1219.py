@@ -13,12 +13,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Donations',
+            name='Donation',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('when', models.DateField(default=datetime.date.today)),
                 ('amount', models.DecimalField(max_digits=11, decimal_places=2)),
                 ('memo', models.CharField(max_length=256, blank=True)),
+                ('donor', models.ForeignKey(to='donors.Donor')),
             ],
             options={
             },

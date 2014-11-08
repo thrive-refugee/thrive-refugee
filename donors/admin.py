@@ -1,11 +1,16 @@
 from __future__ import absolute_import
 from django.contrib import admin
 from django.http import HttpResponse
-from .models import Donor
+from .models import Donor, Donation
 
+class DonationInline(admin.TabularInline):
+    model = Donation
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
+    inlines = [
+        DonationInline
+    ]
     # date_hierarchy = 'last_donation'
     actions_on_bottom = True
     list_display = 'name', 'business', #'last_donation'
