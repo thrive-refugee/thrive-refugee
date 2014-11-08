@@ -165,6 +165,7 @@ dump_data:
 	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skill.json
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
+	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donor.json
 
 .PHONY: delete_db
 delete_db:
