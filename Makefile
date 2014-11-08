@@ -245,4 +245,4 @@ run: env $(DB) syncdb
 .PHONY: launch
 launch: env $(DB) syncdb
 	eval "sleep 1; $(OPEN) http://localhost:8000" &
-	$(MANAGE) runserver
+	$(MANAGE) runserver 0.0.0.0:8000

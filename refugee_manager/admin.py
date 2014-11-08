@@ -16,13 +16,21 @@ admin.site.disable_action('delete_selected')
 
 class DeleteNotAllowedModelAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
-        return False
+        return request.user.is_superuser
 
 
-# Define an inline admin descriptor for Volunteer model
-# which acts a bit like a singleton
+class VolunteerInlineAdminForm(forms.ModelForm):
+    class Meta:
+        model = Volunteer
+        fields = '__all__'
+        widgets = {
+            'mailing_address': forms.Textarea(attrs={'cols': 60, 'rows': 3}),
+        }
+
+
 class VolunteerInlineAdmin(admin.TabularInline):
     model = Volunteer
+    form = VolunteerInlineAdminForm
     can_delete = False
 
 
@@ -244,8 +252,7 @@ class AssesmentAdmin(admin.ModelAdmin):
         for value in q:
             try:
                 value = int(value[1])
-                # return unicode(value)
-            except:
+            except (ValueError, TypeError):
                 continue
 
             total += value

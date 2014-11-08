@@ -4,7 +4,7 @@ python:
 install:
 - pip install coveralls scrutinizer-ocular
 script: make ci
-after_script:
+after_success:
 - coveralls
 - ocular
 notifications:
