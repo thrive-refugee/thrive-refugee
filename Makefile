@@ -1,117 +1,206 @@
+# Python settings
+ifndef TRAVIS
+	PYTHON_MAJOR := 2
+	PYTHON_MINOR := 7
+endif
+
+# Test runner settings
+ifndef TEST_RUNNER
+	# options are: nose, pytest
+	TEST_RUNNER := nose
+endif
+
+# Project settings
 PROJECT := thrive-refugee
 PACKAGE := esl_manager refugee_manager thrive_refugee swingtime
 SOURCES := Makefile requirements.txt
 
-VIRTUALENV := venv
-CACHE := .cache
-DEPENDS := $(VIRTUALENV)/.depends
-INSTALLED :=$(VIRTUALENV)/.installed
-
-ifeq ($(OS),Windows_NT)
-VERSION := C:\\Python27\\python.exe
-BIN := $(VIRTUALENV)/Scripts
-LIB := $(VIRTUALENV)/Lib/python2.7
-EXE := .exe
-OPEN := cmd /c start
+# System paths
+PLATFORM := $(shell python -c 'import sys; print(sys.platform)')
+ifneq ($(findstring win32, $(PLATFORM)), )
+	SYS_PYTHON_DIR := C:\\Python$(PYTHON_MAJOR)$(PYTHON_MINOR)
+	SYS_PYTHON := $(SYS_PYTHON_DIR)\\python.exe
+	SYS_VIRTUALENV := $(SYS_PYTHON_DIR)\\Scripts\\virtualenv.exe
+	# https://bugs.launchpad.net/virtualenv/+bug/449537
+	export TCL_LIBRARY=$(SYS_PYTHON_DIR)\\tcl\\tcl8.5
 else
-VERSION := python2.7
-BIN := $(VIRTUALENV)/bin
-LIB := $(VIRTUALENV)/lib/python2.7
-	ifeq ($(shell uname),Linux)
-	OPEN := xdg-open
+	SYS_PYTHON := python$(PYTHON_MAJOR)
+	ifdef PYTHON_MINOR
+		SYS_PYTHON := $(SYS_PYTHON).$(PYTHON_MINOR)
+	endif
+	SYS_VIRTUALENV := virtualenv
+endif
+
+# virtualenv paths
+ENV := env
+ifneq ($(findstring win32, $(PLATFORM)), )
+	BIN := $(ENV)/Scripts
+	OPEN := cmd /c start
+else
+	BIN := $(ENV)/bin
+	ifneq ($(findstring cygwin, $(PLATFORM)), )
+		OPEN := cygstart
 	else
-	OPEN := open
+		OPEN := open
 	endif
 endif
-MAN := man
-SHARE := share
 
-PYTHON := $(BIN)/python$(EXE)
-PIP := $(BIN)/pip$(EXE)
-PEP8 := $(BIN)/pep8$(EXE)
-PYLINT := $(BIN)/pylint$(EXE)
-NOSE := $(BIN)/nosetests$(EXE)
+# virtualenv executables
+PYTHON := $(BIN)/python
+PIP := $(BIN)/pip
+EASY_INSTALL := $(BIN)/easy_install
+RST2HTML := $(PYTHON) $(BIN)/rst2html.py
+PDOC := $(PYTHON) $(BIN)/pdoc
+PEP8 := $(BIN)/pep8
+PEP8RADIUS := $(BIN)/pep8radius
+PEP257 := $(BIN)/pep257
+PYLINT := $(BIN)/pylint
+PYREVERSE := $(BIN)/pyreverse
+NOSE := $(BIN)/nosetests
+PYTEST := $(BIN)/py.test
+COVERAGE := $(BIN)/coverage
 
-# Installation ###############################################################
+# Remove if you don't want pip to cache downloads
+PIP_CACHE_DIR := .cache
+PIP_CACHE := --download-cache $(PIP_CACHE_DIR)
+
+# Flags for PHONY targets
+INSTALLED :=$(ENV)/.installed
+DEPENDS_CI := $(ENV)/.depends-ci
+DEPENDS_DEV := $(ENV)/.depends-dev
+ALL := $(ENV)/.all
+
+# Main Targets ###############################################################
 
 .PHONY: all
-all: develop
+all: depends $(ALL)
+$(ALL): $(SOURCES)
+	$(MAKE) check
+	touch $(ALL)  # flag to indicate all setup steps were successful
 
-.PHONY: develop
-develop: .env $(INSTALLED)
+.PHONY: ci
+ci: pep8 pep257 test tests
+
+# Development Installation ###################################################
+
+.PHONY: env
+env: .virtualenv $(INSTALLED) thrive_refugee/local_settings.py
 $(INSTALLED):
-	$(PIP) install -r requirements.txt  --download-cache=$(CACHE)
+	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt $(PIP_CACHE)
 	touch $(INSTALLED)  # flag to indicate project is installed
 
-.PHONY: .env
-.env: $(PYTHON)
-$(PYTHON):
-	virtualenv --python $(VERSION) $(VIRTUALENV)
+.PHONY: .virtualenv
+.virtualenv: $(PIP)
+$(PIP):
+	$(SYS_VIRTUALENV) --python $(SYS_PYTHON) $(ENV)
+
+thrive_refugee/local_settings.py:
+	cp thrive_refugee/local_settings.default thrive_refugee/local_settings.py
 
 .PHONY: depends
-depends: .env $(DEPENDS) $(SOURCES)
-$(DEPENDS):
-	$(PIP) install pep8 nose coverage --download-cache=$(CACHE)
-	$(MAKE) .pylint
-	touch $(DEPENDS)  # flag to indicate dependencies are installed
+depends: .depends-ci .depends-dev
 
-# issue: pylint is not currently installing on Windows from PyPI
-# tracker: https://bitbucket.org/logilab/pylint/issue/51
-# workaround: install from the source repositories on Windows/Cygwin
-.PHONY: .pylint
-ifeq ($(shell uname),$(filter $(shell uname),Windows CYGWIN_NT-6.1 CYGWIN_NT-6.1-WOW64))
-.pylint: .env
-	$(PIP) install https://bitbucket.org/moben/logilab-common/get/cb9cb5b8fff228b9a4244e4a6d9b2464a7b6148f.zip --download-cache=$(CACHE)
-	$(PIP) install https://bitbucket.org/logilab/pylint/get/8200a32b14597c24f0f4706417bf30aec1e25386.zip --download-cache=$(CACHE)
-else
-.pylint: .env
-	$(PIP) install pylint --download-cache=$(CACHE)
-endif
+.PHONY: .depends-ci
+.depends-ci: env Makefile $(DEPENDS_CI)
+$(DEPENDS_CI): Makefile
+	$(PIP) install $(PIP_CACHE) --upgrade pep8 pep257 $(TEST_RUNNER) coverage
+	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
+.PHONY: .depends-dev
+.depends-dev: env Makefile $(DEPENDS_DEV)
+$(DEPENDS_DEV): Makefile
+	$(PIP) install $(PIP_CACHE) --upgrade pep8radius pygments docutils pdoc pylint wheel
+	touch $(DEPENDS_DEV)  # flag to indicate dependencies are installed
 
 # Static Analysis ############################################################
 
+.PHONY: check
+check: pep8 pep257 pylint
+
 .PHONY: pep8
-pep8: depends
+pep8: .depends-ci
 	$(PEP8) $(PACKAGE) --ignore=E501
 
-.PHONY: pylint
-pylint: depends
-	$(PYLINT) $(PACKAGE) --reports no \
-	                     --msg-template="{msg_id}: {msg}: {obj} line:{line}" \
-	                     --max-line-length=99 \
-	                     --disable=I0011,W0142,W0511,R,C
+.PHONY: pep257
+pep257: .depends-ci
+	$(PEP257) $(PACKAGE)
 
-.PHONY: check
-check: depends
-	$(MAKE) pep8
-	$(MAKE) pylint
+.PHONY: pylint
+pylint: .depends-dev
+	$(PYLINT) $(PACKAGE) --rcfile=.pylintrc
+
+.PHONY: fix
+fix: .depends-dev
+	$(PEP8RADIUS) --docformatter --in-place
 
 # Testing ####################################################################
 
 .PHONY: test
-test: develop depends
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(NOSE)
+test: test-$(TEST_RUNNER)
+
+.PHONY: tests
+tests: tests-$(TEST_RUNNER)
+
+# nosetest commands
+
+.PHONY: test-nose
+test-nose: .depends-ci
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(NOSE) --config=.noserc
+
+.PHONY: tests-nose
+tests-nose: .depends-ci
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings TEST_INTEGRATION=1 $(NOSE) --config=.noserc --cover-package=$(PACKAGE) -xv
+
+# pytest commands
+
+.PHONY: test-py.test
+test-pytest: .depends-ci
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(COVERAGE) run --source $(PACKAGE) -m py.test $(PACKAGE) --doctest-modules --junitxml=pyunit.xml
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(COVERAGE) report --show-missing --fail-under=100
+
+.PHONY: tests-py.test
+tests-pytest: .depends-ci
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings TEST_INTEGRATION=1 $(COVERAGE) run --source $(PACKAGE) -m py.test $(PACKAGE) --doctest-modules --junitxml=pyunit.xml
+	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(COVERAGE) report --show-missing --fail-under=100
 
 # Cleanup ####################################################################
 
-.PHONY: .clean-env
-.clean-env:
-	rm -rf $(VIRTUALENV)
+.PHONY: clean
+clean: .clean-dist .clean-test .clean-doc .clean-build delete_db
+	rm -rf $(ALL)
+
+.PHONY: clean-env
+clean-env: clean
+	rm -rf $(ENV)
+
+.PHONY: clean-all
+clean-all: clean clean-env .clean-workspace .clean-cache
+
+.PHONY: .clean-build
+.clean-build:
+	find . -name '*.pyc' -delete
+	find . -name '__pycache__' -delete
+	rm -rf *.egg-info
+
+.PHONY: .clean-doc
+.clean-doc:
+	rm -rf README.rst apidocs docs/*.html docs/*.png
+
+.PHONY: .clean-test
+.clean-test:
+	rm -rf .coverage
 
 .PHONY: .clean-dist
 .clean-dist:
-	rm -rf dist build *.egg-info
+	rm -rf dist build
 
-.PHONY: clean
-clean: .clean-env .clean-dist delete_db
-	rm -rf */*.pyc */*/*.pyc */*/*/*.pyc */*/*/*/*.pyc
-	rm -rf */__pycache__ */*/__pycache__ */*/*/__pycache__ */*/*/*/__pycache__
-	rm -rf apidocs docs/README.html .coverage
+.PHONY: .clean-cache
+.clean-cache:
+	rm -rf $(PIP_CACHE_DIR)
 
-.PHONY: clean-all
-clean-all: clean
-	rm -rf $(CACHE)
+.PHONY: .clean-workspace
+.clean-workspace:
+	rm -rf *.sublime-workspace
 
 # Server ####################################################################
 
@@ -123,7 +212,6 @@ $(DB):
 
 .PHONY: syncdb
 syncdb:
-	cp thrive_refugee/local_settings.default thrive_refugee/local_settings.py
 	$(MANAGE) syncdb --noinput
 
 .PHONY: load_data
@@ -175,10 +263,10 @@ delete_db:
 reset_db: delete_db syncdb load_data
 
 .PHONY: run
-run: develop $(DB) syncdb
+run: env $(DB) syncdb
 	$(MANAGE) runserver
 
 .PHONY: launch
-launch: develop $(DB) syncdb
+launch: env $(DB) syncdb
 	eval "sleep 1; $(OPEN) http://localhost:8000" &
 	$(MANAGE) runserver
