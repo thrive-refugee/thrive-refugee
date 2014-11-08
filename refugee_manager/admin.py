@@ -8,7 +8,7 @@ from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
 from django import forms
 
-from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote
+from .models import Volunteer, Case, Individual, CaseDetail, Assessment, ActivityNote, CaseFile
 
 
 admin.site.disable_action('delete_selected')
@@ -49,6 +49,12 @@ class CaseDetailInlineAdmin(admin.TabularInline):
     model = CaseDetail
     can_delete = False
     extra = 0
+
+
+class CaseFileInlineAdmin(admin.TabularInline):
+    model = CaseFile
+    can_delete = True
+    extra = 2
 
 
 class VolunteerFilter(admin.SimpleListFilter):
@@ -164,7 +170,7 @@ class CaseAdmin(CaseOrClientAdmin):
     ordering = ('-active', 'name',)
 
     # individual stuff
-    inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin,)
+    inlines = (CaseDetailInlineAdmin, IndividualInlineAdmin, CaseFileInlineAdmin)
 
     def order_qs(self, qs):
         return qs.order_by('name')

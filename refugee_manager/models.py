@@ -71,7 +71,6 @@ class Case(models.Model):
     other3 = models.CharField('Other', max_length=2000, blank=True)
     other4 = models.CharField('Other', max_length=2000, blank=True)
     other5 = models.CharField('Other', max_length=2000, blank=True)
-    file = models.FileField()
 
     objects = CaseManager()
 
@@ -80,6 +79,21 @@ class Case(models.Model):
             return self.name
         else:
             return '%s (closed)' % self.name
+
+
+class CaseFile(models.Model):
+    case = models.ForeignKey(Case, related_name='files')
+    title = models.CharField(max_length=2000, blank=True)
+    file = models.FileField()
+    date_uploaded = models.DateField(default=date.today)
+
+    def __unicode__(self):
+        # this shows up in the inline admin form as a label that we don't want, so blank it out
+        return ''
+
+    class Meta:
+        verbose_name = 'File'
+        verbose_name_plural = 'Files'
 
 
 class Individual(models.Model):
