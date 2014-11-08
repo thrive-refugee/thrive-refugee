@@ -5,7 +5,7 @@ from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q, Count
 from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
 from django import forms
@@ -217,6 +217,17 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
         return super(CaseOrClientAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
+class CaseTotallingChangeList(ChangeList):
+    def get_results(self, *args, **kwargs):
+        super(CaseTotallingChangeList, self).get_results(*args, **kwargs)
+
+        q = self.result_list.aggregate(total_cases=Count('id'))
+        self.total_cases = q['total_cases']
+
+        q = self.result_list.aggregate(total_individuals=Count('individuals'))
+        self.total_individuals = q['total_individuals']
+
+
 class CaseAdmin(CaseOrClientAdmin):
     form = CaseAdminForm
 
@@ -256,6 +267,11 @@ class CaseAdmin(CaseOrClientAdmin):
 
     def order_qs(self, qs):
         return qs.order_by('name')
+
+    change_list_template = 'refugee_manager/case_admin_list.html'
+
+    def get_changelist(self, request):
+        return CaseTotallingChangeList
 
 admin.site.register(Case, CaseAdmin)
 
