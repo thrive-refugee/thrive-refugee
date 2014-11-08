@@ -1,13 +1,47 @@
-*.log
-*.pot
+# Temporary Python files
 *.pyc
+*.pot
+*.egg-info
+__pycache__
+
+# Temporary Django files
+*.log
 local_settings.py
-thrive.db
+*.db
 
-venv
+# Temporary OS files
+Icon*
+
+# Temporary virtualenv files
 .cache
+env
 
-*.komodoproject
-.project
-.pydevproject
+# Generated documentation
+docs/gen
+apidocs
+docs/*.html
+*.rst
+docs/*.png
+
+# Google Drive
+*.gdoc
+*.gsheet
+*.gslides
+*.gdraw
+
+# Testing and coverage results
+.coverage
+pyunit.xml
+
+# Build and release directories
+build
+dist
+
+# Sublime Text
+*.sublime-workspace
+
+# Eclipse
 .settings
+
+# Komodo
+*.komodoproject

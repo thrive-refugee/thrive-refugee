@@ -3,6 +3,10 @@ thrive-refugee
 
 A refugee management system in Django.
 
+[![Build Status](http://img.shields.io/travis/thrive-refugee/thrive-refugee/master.svg)](https://travis-ci.org/thrive-refugee/thrive-refugee)
+[![Coverage Status](http://img.shields.io/coveralls/thrive-refugee/thrive-refugee/master.svg)](https://coveralls.io/r/thrive-refugee/thrive-refugee)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/thrive-refugee/thrive-refugee.svg)](https://scrutinizer-ci.com/g/thrive-refugee/thrive-refugee/?branch=master)
+
 For Developers
 ==============
 
