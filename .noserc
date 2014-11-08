@@ -5,7 +5,7 @@ exe=1
 with-doctest=1
 
 with-coverage=1
-cover-package=thrive_refugee
+cover-package=employment_manager,esl_manager,refugee_manager,thrive_refugee
 cover-erase=1
 cover-min-percentage=100
 
