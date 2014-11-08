@@ -71,6 +71,13 @@ class Assesment(models.Model):
     TakenDate = models.DateField('Taken')
     Score = models.IntegerField()
 
+    def __unicode__(self):
+        return 'Assessment'
+
+    class Meta:
+        verbose_name = 'Assessment'
+        verbose_name_plural = 'Assessments'
+
 
 class Language(models.Model):
     employment_client = models.ForeignKey(EmploymentClient)
