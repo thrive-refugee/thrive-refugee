@@ -182,15 +182,15 @@ DB := thrive.db
 
 .PHONY: db
 db: $(DB)
-$(DB):
+$(DB): env
 	$(MAKE) syncdb load_data
 
 .PHONY: syncdb
-syncdb:
+syncdb: env
 	$(MANAGE) syncdb --noinput
 
 .PHONY: load_data
-load_data:
+load_data: env
 	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
 	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
 	$(MANAGE) loaddata esl_manager/fixtures/attended.json
@@ -210,7 +210,7 @@ load_data:
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
 
 .PHONY: dump_data
-dump_data:
+dump_data: env
 	$(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
 	$(MANAGE) dumpdata esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
 	$(MANAGE) dumpdata esl_manager.Attended > esl_manager/fixtures/attended.json
@@ -230,7 +230,7 @@ dump_data:
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
 
 .PHONY: delete_db
-delete_db:
+delete_db: env
 	rm -f $(DB)
 	rm -f thrive_refugee/local_settings.py
 
