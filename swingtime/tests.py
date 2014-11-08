@@ -63,17 +63,15 @@ expected_table_5 = '''\
 | 16:30 | alpha    | bravo    | foxtrot  | charlie  | delta    |
 '''
 
-#===============================================================================
+
 @skip("TODO: fix these tests")
 class TableTest(TestCase):
 
-    fixtures = ['event','eventtype','case']
+    fixtures = ['event', 'eventtype', 'case']
 
-    #---------------------------------------------------------------------------
     def setUp(self):
-        self._dt = dt = datetime(2008,12,11)
+        self._dt = dt = datetime(2008, 12, 11)
 
-    #---------------------------------------------------------------------------
     def table_as_string(self, table):
         timefmt = '| %-5s'
         cellfmt = '| %-8s'
@@ -89,7 +87,6 @@ class TableTest(TestCase):
 
         return out.getvalue()
 
-    #---------------------------------------------------------------------------
     def _do_test(self, start, end, expect):
         import pdb
         start = time(*start)
@@ -104,34 +101,27 @@ class TableTest(TestCase):
         print out
         self.assertEqual(actual, expect, out)
 
-    #---------------------------------------------------------------------------
     def test_slot_table_1(self):
-        self._do_test((15,0), (18,0), expected_table_1)
+        self._do_test((15, 0), (18, 0), expected_table_1)
 
-    #---------------------------------------------------------------------------
     def test_slot_table_2(self):
-        self._do_test((15,30), (17,30), expected_table_2)
+        self._do_test((15, 30), (17, 30), expected_table_2)
 
-    #---------------------------------------------------------------------------
     def test_slot_table_3(self):
-        self._do_test((16,0), (17,30), expected_table_3)
+        self._do_test((16, 0), (17, 30), expected_table_3)
 
-    #---------------------------------------------------------------------------
     def test_slot_table_4(self):
-        self._do_test((18,0), (19,30), expected_table_4)
+        self._do_test((18, 0), (19, 30), expected_table_4)
 
-    #---------------------------------------------------------------------------
     def test_slot_table_5(self):
-        self._do_test((16,30), (16,30), expected_table_5)
+        self._do_test((16, 30), (16, 30), expected_table_5)
 
 
-#===============================================================================
 @skip("TODO: fix these tests")
 class NewEventFormTest(TestCase):
 
-    fixtures = ['event','eventtype','case']
+    fixtures = ['event', 'eventtype', 'case']
 
-    #---------------------------------------------------------------------------
     def test_new_event_simple(self):
         from swingtime.forms import EventForm, MultipleOccurrenceForm
 
@@ -164,7 +154,7 @@ class NewEventFormTest(TestCase):
             'Bad start_time: %s' % pformat(occ_form.cleaned_data)
         )
 
-#-------------------------------------------------------------------------------
+
 def doc_tests():
     '''
         >>> from dateutil import rrule
