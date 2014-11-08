@@ -46,3 +46,6 @@ dist
 
 # Komodo
 *.komodoproject
+
+# PyCharm
+.idea/
