@@ -14,12 +14,14 @@ def serve_file(request, filename):
         # trying to get outside of MEDIA_ROOT
         raise Http404
 
-    case_id, file = filename.split('/', 1)  # e.g. 12/myupload.pdf
-    case = Case.objects.get(id=int(case_id))
-    if request.user.is_superuser or request.user in [v.user for v in case.volunteers.all()]:
-        return sendfile(request, filepath)
+    upload_type, case_id, file = filename.split('/', 2)  # e.g. case/12/myupload.pdf
+    if upload_type == 'case':
+        case = Case.objects.get(id=int(case_id))
+        if request.user.is_superuser or request.user in [v.user for v in case.volunteers.all()]:
+            return sendfile(request, filepath)
+        else:
+            raise PermissionDenied()
     else:
-        raise PermissionDenied()
-
+        raise Http404
 
 

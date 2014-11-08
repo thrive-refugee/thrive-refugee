@@ -85,7 +85,7 @@ def case_file_upload_path(model_instance, original_filename):
     """
     Put each file in folder corresponding to its case number, so later we can use the case for security check
     """
-    return '%s/%s' % (model_instance.case.id, original_filename)
+    return 'case/%s/%s' % (model_instance.case.id, original_filename)
 
 
 class CaseFile(models.Model):
