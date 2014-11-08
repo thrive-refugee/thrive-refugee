@@ -145,6 +145,7 @@ load_data:
 	$(MANAGE) loaddata employment_manager/fixtures/skill.json
 	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
+	$(MANAGE) loaddata donors/fixtures/donor.json
 
 .PHONY: dump_data
 dump_data:
