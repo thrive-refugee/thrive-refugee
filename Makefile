@@ -183,8 +183,8 @@ MANAGE := $(PYTHON) manage.py
 DB := thrive.db
 
 .PHONY: db
-db: $(DB)
-$(DB): env
+db: env $(DB)
+$(DB):
 	$(MAKE) syncdb load_data
 
 .PHONY: syncdb
