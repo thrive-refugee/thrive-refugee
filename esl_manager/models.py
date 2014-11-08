@@ -27,8 +27,19 @@ class Attended(models.Model):
     esl_tudent = models.ForeignKey(ESLStudent)
     attend_date = models.DateField('Attended')
 
+    class Meta:
+        verbose_name = 'Attendance Record'
+        verbose_name_plural = 'Attendance Records'
+
 
 class Assesment(models.Model):
     esl_tudent = models.ForeignKey(ESLStudent)
     taken_date = models.DateField('Taken')
     Score = models.IntegerField()
+
+    def __unicode__(self):
+        return 'Assessment'
+
+    class Meta:
+        verbose_name = 'Assessment'
+        verbose_name_plural = 'Assessments'
