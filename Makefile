@@ -206,6 +206,7 @@ loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata esl_manager/fixtures/assesment.json
 	$(MANAGE) loaddata refugee_manager/fixtures/volunteer.json
 	$(MANAGE) loaddata refugee_manager/fixtures/case.json
+	$(MANAGE) loaddata refugee_manager/fixtures/casefile.json
 	$(MANAGE) loaddata refugee_manager/fixtures/individual.json
 	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
 	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
@@ -228,6 +229,7 @@ dumpdata: env
 	$(MANAGE) dumpdata esl_manager.Assesment > esl_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata refugee_manager.Volunteer > refugee_manager/fixtures/volunteer.json
 	$(MANAGE) dumpdata refugee_manager.Case > refugee_manager/fixtures/case.json
+	$(MANAGE) dumpdata refugee_manager.CaseFile > refugee_manager/fixtures/casefile.json
 	$(MANAGE) dumpdata refugee_manager.Individual > refugee_manager/fixtures/individual.json
 	$(MANAGE) dumpdata refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
 	$(MANAGE) dumpdata refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
