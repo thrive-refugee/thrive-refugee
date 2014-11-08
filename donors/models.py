@@ -1,3 +1,4 @@
+from __future__ import absolute_import, unicode_literals
 from django.db import models
 import datetime
 
@@ -11,3 +12,9 @@ class Donor(models.Model):
     last_amount = models.DecimalField(max_digits=9+2, decimal_places=2)
     last_donation = models.DateField(default=datetime.date.today)
     notes = models.TextField(blank=True)
+
+    def __unicode__(self):
+        if self.business:
+            return "{} ({})".format(self.name, self.business)
+        else:
+            return self.name
