@@ -65,7 +65,7 @@ expected_table_5 = '''\
 #===============================================================================
 class TableTest(TestCase):
 
-    fixtures = ['swingtime_test']
+    fixtures = ['event','eventtype']
 
     #---------------------------------------------------------------------------
     def setUp(self):
@@ -126,7 +126,7 @@ class TableTest(TestCase):
 #===============================================================================
 class NewEventFormTest(TestCase):
 
-    fixtures = ['swingtime_test']
+    fixtures = ['event','eventtype']
     
     #---------------------------------------------------------------------------
     def test_new_event_simple(self):
