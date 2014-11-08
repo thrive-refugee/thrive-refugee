@@ -184,7 +184,7 @@ DB := thrive.db
 
 .PHONY: db
 db: env $(DB)
-$(DB):
+$(DB): */fixtures/*.json
 	$(MAKE) syncdb load_data
 
 .PHONY: syncdb
@@ -192,7 +192,7 @@ syncdb: env
 	$(MANAGE) syncdb --noinput
 
 .PHONY: load_data
-load_data: env
+load_data: env */fixtures/*.json
 	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
 	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
 	$(MANAGE) loaddata esl_manager/fixtures/attended.json
@@ -210,7 +210,7 @@ load_data: env
 	$(MANAGE) loaddata employment_manager/fixtures/skill.json
 	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
-	$(MANAGE) loaddata donors/fixtures/donor.json
+	$(MANAGE) loaddata donors/fixtures/donors.json
 
 .PHONY: dump_data
 dump_data: env
