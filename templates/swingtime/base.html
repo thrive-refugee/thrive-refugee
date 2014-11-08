@@ -9,7 +9,9 @@
     <!-- <link rel="stylesheet" href="/media/css/demo.css" type="text/css" media="screen"> -->
     <link rel='stylesheet' type='text/css' href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'/>
     <link rel='stylesheet' type='text/css' href='{% static "cal/fullcalendar.css" %}' />
-    <link rel='stylesheet' type='text/css' href='{% static "css/calendar.css" %}' />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap.min.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap-responsive.min.css" %}" />
+    <link rel='stylesheet' type='text/css' href='{% static "css/admin.css" %}' />
     <script type="text/javascript" src="{% static 'cal/jquery.min.js' %}"></script>
     <script type='text/javascript' src='{% static "cal/jquery-ui.custom.min.js" %}'></script>
     <script type='text/javascript' src='{% static "cal/fullcalendar.min.js" %}'></script>
@@ -21,10 +23,14 @@
 </head>
 <body>
     <div class="container" id="main">
-        <div id="header">
-            <a href="/admin"><h1>Thrive Admin</h1></a>
-            <div id="nav-global">
-        	<a href="/admin"><img src="{% static 'admin/img/icon_changelink.gif' %}" title="Admin" width="24px"></a>
+        <div id="header" class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner" id="nav-menu-top-bar">
+                <div class="container-fluid">
+                    <a href="/admin"><h1 style="width:500px; float: left;">Thrive Admin</h1></a>
+                    <div id="nav-global" class="pull-right">
+                	<a href="/admin" ><img src="{% static 'admin/img/icon_changelink.gif' %}" title="Admin" width="24px"></a>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="content">
