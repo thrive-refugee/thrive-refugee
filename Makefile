@@ -79,9 +79,9 @@ $(ALL): $(SOURCES)
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: env thrive.db
+ci: env db test tests
 # TODO: gradually add these steps back in as they start passing
-# ci: pep8 pep257 test tests
+# ci: pep8 pep257
 
 # Development Installation ###################################################
 
@@ -209,6 +209,8 @@ clean-all: clean clean-env .clean-workspace .clean-cache
 MANAGE := $(PYTHON) manage.py
 DB := thrive.db
 
+.PHONY: db
+db: $(DB)
 $(DB):
 	$(MAKE) syncdb load_data
 
