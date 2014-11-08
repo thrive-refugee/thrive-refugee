@@ -162,7 +162,7 @@ def add_event(
             try:
                 dtstart = parser.parse(request.GET['dtstart'])
             except (TypeError, ValueError) as exc:
-                # TODO: A badly formatted date is passed to add_event
+                # A badly formatted date was found and passed to add_event
                 logging.warning(exc)
 
         dtstart = dtstart or datetime.now()
