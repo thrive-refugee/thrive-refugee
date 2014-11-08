@@ -1,6 +1,6 @@
 {% load url from future %}
 {% load staticfiles %}
-<!DOCTYPE html>
+{% load admin_static admin_urls bootstrap_template_tags %}<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -30,7 +30,7 @@
                 <div class="container-fluid">
                     <a href="/admin"><h1 style="width:500px; float: left;">Thrive Admin</h1></a>
                     <div id="nav-global" class="pull-right btn-group">
-                        <a href="/admin" class="btn btn-info">Apps</a>
+                        <a href="{% url 'admin:index' %}" class="btn btn-info">Apps</a>
                     </div>
                 </div>
             </div>
