@@ -18,6 +18,7 @@ class Donor(models.Model):
         else:
             return self.name
 
+
 class Donation(models.Model):
     donor = models.ForeignKey(Donor)
     when = models.DateField(default=datetime.date.today)

@@ -5,6 +5,7 @@ from .models import Donor, Donation
 
 class DonationInline(admin.TabularInline):
     model = Donation
+    extra = 0
 
 @admin.register(Donor)
 class DonorAdmin(admin.ModelAdmin):
