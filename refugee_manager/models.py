@@ -1,6 +1,3 @@
-import random
-import string
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -146,6 +143,11 @@ class ActivityNote(models.Model):
 
 
 class Assessment(models.Model):
+    class Meta:
+        get_latest_by = "date"
+        # order_with_respect_to = "case"
+        # ordering = ['-date']
+
     case = models.ForeignKey(Case, related_name='assessment')
     date = models.DateField(default=date.today)
     LANGUAGE_CHOICES = (
