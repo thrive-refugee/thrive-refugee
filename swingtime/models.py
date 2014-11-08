@@ -1,15 +1,11 @@
 import string
 import random
-import django.db.models.signals
 
-from datetime import datetime, date, timedelta
+from datetime import datetime
 
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 from django.db import models
 from django.contrib.auth.models import User
-from django.conf import settings
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
@@ -309,7 +305,7 @@ def create_event(
     from swingtime.conf import settings as swingtime_settings
 
     if isinstance(event_type, tuple):
-        event_type, created = EventType.objects.get_or_create(
+        event_type, _created = EventType.objects.get_or_create(
             abbr=event_type[0],
             label=event_type[1]
         )

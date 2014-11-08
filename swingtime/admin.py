@@ -1,4 +1,3 @@
-from django.contrib.contenttypes import generic
 from django.contrib import admin
 
 from .models import EventType
