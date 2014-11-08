@@ -176,7 +176,6 @@ def add_event(
     )
 
 
-#-------------------------------------------------------------------------------
 def _datetime_view(
     request,
     template,
@@ -230,6 +229,7 @@ from django_ical.views import ICalFeed
 
 
 class SwingtimeICalFeed(ICalFeed):
+
     """
     A simple event calender
 
@@ -321,7 +321,7 @@ def json_feed(request):
                 "{}: {}".format(occ.event.case, occ.event.title)
                 if occ.event.case else
                 occ.event.title
-                ),
+            ),
             'start': time_mod.mktime(occ.start_time.timetuple()),
             'end': time_mod.mktime(occ.end_time.timetuple()),
             'url': reverse('swingtime-event', args=(occ.event.id,)),
@@ -334,7 +334,7 @@ def json_feed(request):
                 'id': occ.event.case.id,
                 'type': type(occ.event.case).__name__,
                 'title': unicode(occ.event.case),
-                } if occ.event.case else None,
+            } if occ.event.case else None,
         }
         for occ in qs
     ]

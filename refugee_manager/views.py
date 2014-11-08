@@ -8,6 +8,7 @@ from sendfile import sendfile
 
 from refugee_manager.models import Case
 
+
 def serve_file(request, filename):
     filepath = os.path.join(settings.MEDIA_ROOT, filename)
     if not os.path.abspath(filepath).startswith(settings.MEDIA_ROOT):
@@ -23,5 +24,3 @@ def serve_file(request, filename):
             raise PermissionDenied()
     else:
         raise Http404
-
-

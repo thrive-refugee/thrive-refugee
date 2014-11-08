@@ -22,7 +22,6 @@ class DonorAdmin(admin.ModelAdmin):
     def last_donation(self, obj):
         return obj.donation_set.latest().when
 
-
     def make_list(self, request, queryset):
         response = HttpResponse(content_type="text/plain")
         response['Content-Disposition'] = 'attachment; filename=donors.txt'

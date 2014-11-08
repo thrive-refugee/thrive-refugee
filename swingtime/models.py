@@ -31,26 +31,22 @@ __all__ = (
 )
 
 
-#===============================================================================
 class EventType(models.Model):
-    '''
-    Simple ``Event`` classifcation.
 
-    '''
+    """Simple ``Event`` classifcation."""
     abbr = models.CharField(_(u'abbreviation'), max_length=4, unique=True)
     label = models.CharField(_('label'), max_length=50)
 
-    #===========================================================================
     class Meta:
         verbose_name = _('event type')
         verbose_name_plural = _('event types')
 
-    #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.label
 
 
 class EventQuerySet(models.query.QuerySet):
+
     def for_user(self, user):
         if user.is_superuser:
             rv = self.all()
@@ -60,20 +56,24 @@ class EventQuerySet(models.query.QuerySet):
                     Q(refugee_case__volunteers=user.volunteer)
                     | Q(employment_case__volunteers=user.volunteer)
                     | Q(refugee_case=None, employment_case=None)
-                    )
+                )
             except Volunteer.DoesNotExist:
                 rv = self.filter(refugee_case=None, employment_case=None)
         return rv
 
+
 class EventManager(models.Manager):
     use_for_related_fields = True
+
     def get_queryset(self):
         return EventQuerySet(self.model)
 
     def for_user(self, user):
         return self.get_queryset().for_user(user)
 
+
 class AutoCase(object):
+
     def __get__(self, obj, type=None):
         rv = None
         try:
@@ -98,7 +98,6 @@ class AutoCase(object):
             raise TypeError("Case cannot be a {} object".format(type(value).__name__))
 
 
-#===============================================================================
 class Event(models.Model):
     '''
     Container model for general metadata and associated ``Occurrence`` entries.
@@ -113,29 +112,25 @@ class Event(models.Model):
 
     objects = EventManager()
 
-    #===========================================================================
     class Meta:
         verbose_name = _('event')
         verbose_name_plural = _('events')
-        ordering = ('title', )
+        ordering = ('title',)
 
     def clean(self):
         if self.refugee_case and self.employment_case:
-            raise ValidationError("Cannot have both a Refugee and Employment case")
+            raise ValidationError(
+                "Cannot have both a Refugee and Employment case")
 
-    #---------------------------------------------------------------------------
     def __unicode__(self):
         return self.title
 
-    #---------------------------------------------------------------------------
     @models.permalink
     def get_absolute_url(self):
         return ('swingtime-event', [str(self.id)])
 
-    #---------------------------------------------------------------------------
     def add_occurrences(self, start_time, end_time, address, **rrule_params):
-        '''
-        Add one or more occurences to the event using a comparable API to
+        """Add one or more occurences to the event using a comparable API to
         ``dateutil.rrule``.
 
         If ``rrule_params`` does not contain a ``freq``, one will be defaulted
@@ -148,7 +143,8 @@ class Event(models.Model):
         If both ``count`` and ``until`` entries are missing from ``rrule_params``,
         only a single ``Occurrence`` instance will be created using the exact
         ``start_time`` and ``end_time`` values.
-        '''
+
+        """
         rrule_params.setdefault('freq', rrule.DAILY)
 
         if 'count' not in rrule_params and 'until' not in rrule_params:
@@ -158,7 +154,6 @@ class Event(models.Model):
             for ev in rrule.rrule(dtstart=start_time, **rrule_params):
                 self.occurrence_set.create(start_time=ev, end_time=ev + delta, address=address)
 
-    #---------------------------------------------------------------------------
     def upcoming_occurrences(self):
         '''
         Return all occurrences that are set to start on or after the current
@@ -166,7 +161,6 @@ class Event(models.Model):
         '''
         return self.occurrence_set.filter(start_time__gte=datetime.now())
 
-    #---------------------------------------------------------------------------
     def next_occurrence(self):
         '''
         Return the single occurrence set to start on or after the current time
@@ -175,7 +169,6 @@ class Event(models.Model):
         upcoming = self.upcoming_occurrences()
         return upcoming and upcoming[0] or None
 
-    #---------------------------------------------------------------------------
     def daily_occurrences(self, dt=None):
         '''
         Convenience method wrapping ``Occurrence.objects.daily_occurrences``.
@@ -183,8 +176,8 @@ class Event(models.Model):
         return Occurrence.objects.daily_occurrences(dt=dt, event=self)
 
 
-#===============================================================================
 class OccurrenceQuerySet(models.query.QuerySet):
+
     def daily_occurrences(self, dt=None, event=None):
         '''
         Returns a queryset of for instances that have any overlap with a
@@ -224,13 +217,16 @@ class OccurrenceQuerySet(models.query.QuerySet):
                     Q(event__refugee_case__volunteers=user.volunteer)
                     | Q(event__employment_case__volunteers=user.volunteer)
                     | Q(event__refugee_case=None, event__employment_case=None)
-                    )
+                )
             except Volunteer.DoesNotExist:
-                rv = self.filter(event__refugee_case=None, employment_case=None)
+                rv = self.filter(
+                    event__refugee_case=None, employment_case=None)
         return rv
+
 
 class OccurrenceManager(models.Manager):
     use_for_related_fields = True
+
     def get_queryset(self):
         return OccurrenceQuerySet(self.model)
 
@@ -240,12 +236,11 @@ class OccurrenceManager(models.Manager):
     def for_user(self, user):
         return self.get_queryset().for_user(user)
 
-#===============================================================================
+
 class Occurrence(models.Model):
-    '''
-    Represents the start end time for a specific occurrence of a master ``Event``
-    object.
-    '''
+
+    """Represents the start end time for a specific occurrence of a master
+    ``Event`` object."""
     start_time = models.DateTimeField(_('start time'))
     end_time = models.DateTimeField(_('end time'))
     event = models.ForeignKey(Event, verbose_name=_('event'), editable=False)
@@ -253,37 +248,30 @@ class Occurrence(models.Model):
 
     objects = OccurrenceManager()
 
-    #===========================================================================
     class Meta:
         verbose_name = _('occurrence')
         verbose_name_plural = _('occurrences')
         ordering = ('start_time', 'end_time')
 
-    #---------------------------------------------------------------------------
     def __unicode__(self):
         return u'%s: %s' % (self.title, self.start_time.isoformat())
 
-    #---------------------------------------------------------------------------
     @models.permalink
     def get_absolute_url(self):
         return ('swingtime-occurrence', [str(self.event.id), str(self.id)])
 
-    #---------------------------------------------------------------------------
     def __cmp__(self, other):
         return cmp(self.start_time, other.start_time)
 
-    #---------------------------------------------------------------------------
     @property
     def title(self):
         return self.event.title
 
-    #---------------------------------------------------------------------------
     @property
     def event_type(self):
         return self.event.event_type
 
 
-#-------------------------------------------------------------------------------
 def create_event(
     title,
     event_type,
@@ -291,7 +279,7 @@ def create_event(
     start_time=None,
     end_time=None,
     address='',
-    case = None,
+    case=None,
     **rrule_params
 ):
     '''
@@ -347,6 +335,7 @@ def create_event(
 def genslug():
     return ''.join(ICal_Calendar._random.choice(string.uppercase) for _ in range(32))
 
+
 class ICal_Calendar(models.Model):
     slug = models.CharField(max_length=32, primary_key=True, default=genslug)
     volunteer = models.ForeignKey(refugee_models.Volunteer)
@@ -377,6 +366,8 @@ class ICal_Calendar(models.Model):
         return cls.genurl(request, everything, protocol='webcal')
 
 # Doesn't actually seem to be called?
+
+
 @receiver(post_save, sender=User)
 def remove_ical(sender, instance, created, raw, using, **kw):
     print sender, instance, created, raw, using, kw

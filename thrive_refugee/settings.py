@@ -17,7 +17,7 @@ TIME_ZONE = 'America/Detroit'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-#SITE_ID = 1
+# SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -84,7 +84,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 # TEMPLATE_LOADERS = (
 #     'django.template.loaders.filesystem.Loader',
 #     'django.template.loaders.app_directories.Loader',
-#     # 'django.template.loaders.eggs.Loader',
+# 'django.template.loaders.eggs.Loader',
 # )
 
 MIDDLEWARE_CLASSES = (
@@ -113,10 +113,11 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'bootstrap_admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-#    'django.contrib.sites',
+    #    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',

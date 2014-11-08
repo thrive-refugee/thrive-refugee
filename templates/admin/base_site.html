@@ -7,9 +7,8 @@
 	#user-tools {
 		right: 36px;
 	}
-	
+
 	#nav-global {
-		position: absolute;
 		top: 0;
 		right: 0;
 		padding: 0.2em 10px;
@@ -23,11 +22,15 @@
 {% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name" style="width:500px;">{% trans 'Thrive: A Refugee Support Program' %}</h1>
+<h1 id="site-name" style="width:500px; float: left;">
+    <a href="/admin">
+    {% trans 'Thrive Admin' %}
+    </a>
+</h1>
 {% endblock %}
 
 {% block nav-global %}
-<div id="nav-global">
+<div id="nav-global" class="pull-right">
 	<a href="/calendar"><img src="{% static 'admin/img/icon_calendar.gif' %}" title="Calendar" width="24px"></a>
 </div>
 {% endblock %}
