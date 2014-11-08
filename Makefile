@@ -133,7 +133,7 @@ fix: .depends-dev
 
 .PHONY: test
 test: .depends-ci
-	$(PYTHON) manage.py test
+	$(COVERAGE) run --source='.' manage.py test
 
 # Cleanup ####################################################################
 
