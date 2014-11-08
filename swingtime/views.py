@@ -161,9 +161,9 @@ def add_event(
         if 'dtstart' in request.GET:
             try:
                 dtstart = parser.parse(request.GET['dtstart'])
-            except Exception as exc:
+            except (TypeError, ValueError) as exc:
                 # TODO: A badly formatted date is passed to add_event
-                logging.exception(exc)
+                logging.warning(exc)
 
         dtstart = dtstart or datetime.now()
         event_form = event_form_class(request=request)
