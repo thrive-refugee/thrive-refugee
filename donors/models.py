@@ -31,7 +31,6 @@ class Donation(models.Model):
         # return "{}: {}".format(self.donor.name, self.when)
         return ""
 
-
     class Meta:
         get_latest_by = "when"
         order_with_respect_to = "donor"
