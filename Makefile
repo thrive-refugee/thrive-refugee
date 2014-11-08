@@ -4,12 +4,6 @@ ifndef TRAVIS
 	PYTHON_MINOR := 7
 endif
 
-# Test runner settings
-ifndef TEST_RUNNER
-	# options are: nose, pytest
-	TEST_RUNNER := nose
-endif
-
 # Project settings
 PROJECT := thrive-refugee
 PACKAGE := esl_manager refugee_manager thrive_refugee swingtime
@@ -81,7 +75,7 @@ $(ALL): $(SOURCES)
 .PHONY: ci
 ci: env db test
 # TODO: gradually add these steps back in as they start passing
-# ci: pep8 pep257 tests
+# ci: pep8 pep257
 
 # Development Installation ###################################################
 
@@ -105,13 +99,13 @@ depends: .depends-ci .depends-dev
 .PHONY: .depends-ci
 .depends-ci: env Makefile $(DEPENDS_CI)
 $(DEPENDS_CI): Makefile
-	$(PIP) install $(PIP_CACHE) --upgrade pep8 pep257 $(TEST_RUNNER) coverage
+	$(PIP) install $(PIP_CACHE) --upgrade pep8 pep257 coverage
 	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
 .PHONY: .depends-dev
 .depends-dev: env Makefile $(DEPENDS_DEV)
 $(DEPENDS_DEV): Makefile
-	$(PIP) install $(PIP_CACHE) --upgrade pep8radius pygments docutils pdoc pylint wheel
+	$(PIP) install $(PIP_CACHE) --upgrade pep8radius pylint
 	touch $(DEPENDS_DEV)  # flag to indicate dependencies are installed
 
 # Static Analysis ############################################################
@@ -138,32 +132,8 @@ fix: .depends-dev
 # Testing ####################################################################
 
 .PHONY: test
-test: test-$(TEST_RUNNER)
-
-.PHONY: tests
-tests: tests-$(TEST_RUNNER)
-
-# nosetest commands
-
-.PHONY: test-nose
-test-nose: .depends-ci
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(NOSE) --config=.noserc
-
-.PHONY: tests-nose
-tests-nose: .depends-ci
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings TEST_INTEGRATION=1 $(NOSE) --config=.noserc --cover-package=$(PACKAGE) -xv
-
-# pytest commands
-
-.PHONY: test-py.test
-test-pytest: .depends-ci
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(COVERAGE) run --source $(PACKAGE) -m py.test $(PACKAGE) --doctest-modules --junitxml=pyunit.xml
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(COVERAGE) report --show-missing --fail-under=100
-
-.PHONY: tests-py.test
-tests-pytest: .depends-ci
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings TEST_INTEGRATION=1 $(COVERAGE) run --source $(PACKAGE) -m py.test $(PACKAGE) --doctest-modules --junitxml=pyunit.xml
-	DJANGO_SETTINGS_MODULE=thrive_refugee.settings $(COVERAGE) report --show-missing --fail-under=100
+test: .depends-ci
+	$(PYTHON) manage.py test
 
 # Cleanup ####################################################################
 
