@@ -38,7 +38,7 @@ class CaseQuerySet(models.query.QuerySet):
 
 class CaseManager(models.Manager):
     # also used by EmploymentClient
-    
+
     use_for_related_fields = True
     def get_queryset(self):
         return CaseQuerySet(self.model)
@@ -79,6 +79,28 @@ class Case(models.Model):
             return self.name
         else:
             return '%s (closed)' % self.name
+
+
+def case_file_upload_path(model_instance, original_filename):
+    """
+    Put each file in folder corresponding to its case number, so later we can use the case for security check
+    """
+    return 'case/%s/%s' % (model_instance.case.id, original_filename)
+
+
+class CaseFile(models.Model):
+    case = models.ForeignKey(Case, related_name='files')
+    title = models.CharField(max_length=2000, blank=True)
+    file = models.FileField(upload_to=case_file_upload_path)
+    date_uploaded = models.DateField(default=date.today)
+
+    def __unicode__(self):
+        # this shows up in the inline admin form as a label that we don't want, so blank it out
+        return ''
+
+    class Meta:
+        verbose_name = 'File'
+        verbose_name_plural = 'Files'
 
 
 class Individual(models.Model):

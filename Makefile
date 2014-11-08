@@ -81,7 +81,7 @@ ci: env db test
 
 .PHONY: env
 env: .virtualenv $(INSTALLED) thrive_refugee/local_settings.py
-$(INSTALLED):
+$(INSTALLED): requirements.txt
 	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt $(PIP_CACHE)
 	touch $(INSTALLED)  # flag to indicate project is installed
 
@@ -140,7 +140,7 @@ test: .depends-ci
 # Cleanup ####################################################################
 
 .PHONY: clean
-clean: .clean-dist .clean-test .clean-doc .clean-build delete_db
+clean: .clean-dist .clean-test .clean-doc .clean-build clean-db
 	rm -rf $(ALL)
 
 .PHONY: clean-env
@@ -185,14 +185,19 @@ DB := thrive.db
 .PHONY: db
 db: env $(DB)
 $(DB): */fixtures/*.json
-	$(MAKE) syncdb load_data
+	$(MAKE) syncdb loaddata
+
+.PHONY: clean-db
+clean-db: env
+	rm -f $(DB)
+	rm -f thrive_refugee/local_settings.py
 
 .PHONY: syncdb
 syncdb: env
 	$(MANAGE) syncdb --noinput
 
-.PHONY: load_data
-load_data: env */fixtures/*.json
+.PHONY: loaddata
+loaddata: env */fixtures/*.json
 	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
 	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
 	$(MANAGE) loaddata esl_manager/fixtures/attended.json
@@ -212,8 +217,8 @@ load_data: env */fixtures/*.json
 	$(MANAGE) loaddata employment_manager/fixtures/language.json
 	$(MANAGE) loaddata donors/fixtures/donors.json
 
-.PHONY: dump_data
-dump_data: env
+.PHONY: dumpdata
+dumpdata: env
 	$(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
 	$(MANAGE) dumpdata esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
 	$(MANAGE) dumpdata esl_manager.Attended > esl_manager/fixtures/attended.json
@@ -232,14 +237,6 @@ dump_data: env
 	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
 	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
 	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donor.json
-
-.PHONY: delete_db
-delete_db: env
-	rm -f $(DB)
-	rm -f thrive_refugee/local_settings.py
-
-.PHONY: reset_db
-reset_db: delete_db syncdb load_data
 
 .PHONY: run
 run: env $(DB) syncdb
