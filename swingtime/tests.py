@@ -163,6 +163,25 @@ class NewEventFormTest(TestCase):
             datetime(2008, 12, 11, 8),
             'Bad start_time: %s' % pformat(occ_form.cleaned_data)
         )
+class AddEventTest(TestCase):
+
+    fixtures = ['event','eventtype','case']
+
+    def test_new_monday_event(self):
+        from swingtime.forms import EventForm, MultipleOccurrenceForm
+
+        data = dict(
+            title='Test Monday Event',
+            event_type='2',
+            day='2014-11-17',
+            start_time_delta='28800',
+            end_time_delta='29700',
+            request={'user': 'admin'},
+            )
+        evt_form = EventForm(data)
+        self.assertTrue(evt_form.is_valid(), evt_form.errors.as_text())
+ 
+
 
 #-------------------------------------------------------------------------------
 def doc_tests():
