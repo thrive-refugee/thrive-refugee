@@ -166,8 +166,9 @@ class CaseAdmin(CaseOrClientAdmin):
     form = CaseAdminForm
 
     # list view stuff
-    list_display = ('active', 'name', 'start', 'end', 'arrival', 
-        'volunteers_list', 'phone', 'family_members', 'next_assessment')
+    list_display = (
+        'active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone',
+        'family_members', 'next_assessment')
 
     def family_members(self, obj):
         individuals = obj.individuals.all()
