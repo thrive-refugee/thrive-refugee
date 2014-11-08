@@ -1,7 +1,10 @@
 from django.conf.urls import patterns, url
 from swingtime import views
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+
+    '',
+
     url(
         r'^(?:calendar/)?$',
         views.calendar_view,
@@ -29,4 +32,5 @@ urlpatterns = patterns('',
     url(r'^ics/(?P<slug>.*)$', views.ics_feed, name='swingtime-ical'),
 
     url(r'^json$', views.json_feed, name='swingtime-json'),
+
 )

@@ -23,7 +23,8 @@ class Donor(models.Model):
 class Donation(models.Model):
     donor = models.ForeignKey(Donor)
     when = models.DateField(default=datetime.date.today)
-    amount = models.DecimalField(max_digits=9+2, decimal_places=2, validators=[MinValueValidator(0)])
+    amount = models.DecimalField(max_digits=9 + 2, decimal_places=2,
+                                 validators=[MinValueValidator(0)])
     memo = models.CharField(max_length=256, blank=True)
 
     def __unicode__(self):
