@@ -3,13 +3,12 @@ Common features and functions for swingtime
 
 '''
 from collections import defaultdict
-from datetime import datetime, date, time, timedelta
+from datetime import datetime, date, timedelta
 import itertools
 
 from django.db.models.query import QuerySet
 from django.utils.safestring import mark_safe
 
-from dateutil import rrule
 from swingtime.conf import settings as swingtime_settings
 
 
@@ -41,7 +40,7 @@ def month_boundaries(dt=None):
     '''
     import calendar
     dt = dt or date.today()
-    wkday, ndays = calendar.monthrange(dt.year, dt.month)
+    _wkday, ndays = calendar.monthrange(dt.year, dt.month)
     start = datetime(dt.year, dt.month, 1)
     return (start, start + timedelta(ndays - 1))
 

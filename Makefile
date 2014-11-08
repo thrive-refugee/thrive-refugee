@@ -69,9 +69,7 @@ ALL := $(ENV)/.all
 .PHONY: all
 all: depends $(ALL)
 $(ALL): $(SOURCES)
-	$(MAKE) pep8
-	# TODO: gradually add these steps back in as they start passing
-	# ci: pep257 pylint
+	$(MAKE) pep8 pylint
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci

@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-from pprint import pprint, pformat
+
+from pprint import pformat
 from cStringIO import StringIO
-from datetime import datetime, timedelta, date, time
+from datetime import datetime, time
 from unittest import skip
 
 from django.test import TestCase
-from django.contrib.auth.models import User
-from django.core.management import call_command
 
 from swingtime import utils
 from swingtime.models import *
@@ -70,7 +69,7 @@ class TableTest(TestCase):
     fixtures = ['event', 'eventtype', 'case']
 
     def setUp(self):
-        self._dt = dt = datetime(2008, 12, 11)
+        self._dt = datetime(2008, 12, 11)
 
     def table_as_string(self, table):
         timefmt = '| %-5s'
@@ -88,7 +87,6 @@ class TableTest(TestCase):
         return out.getvalue()
 
     def _do_test(self, start, end, expect):
-        import pdb
         start = time(*start)
         dtstart = datetime.combine(self._dt, start)
         etd = datetime.combine(self._dt, time(*end)) - dtstart

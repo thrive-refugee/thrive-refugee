@@ -1,9 +1,5 @@
 from django.db import models
 
-import datetime
-
-# Create your models here.
-
 
 class ESLStudent(models.Model):
     FirstName = models.CharField("First Name", max_length=50)

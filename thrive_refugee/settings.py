@@ -164,4 +164,4 @@ LOGGING = {
 
 SENDFILE_BACKEND = 'sendfile.backends.simple'
 
-from local_settings import *
+from thrive_refugee.local_settings import *
