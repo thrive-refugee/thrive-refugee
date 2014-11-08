@@ -10,8 +10,6 @@ class Donor(models.Model):
     email = models.EmailField(blank=True)
     phone = localflavor.us.models.PhoneNumberField(null=True, blank=True)
     address = models.TextField(blank=True)
-    last_amount = models.DecimalField(max_digits=9+2, decimal_places=2)
-    last_donation = models.DateField(default=datetime.date.today)
     notes = models.TextField(blank=True)
 
     def __unicode__(self):
@@ -19,3 +17,8 @@ class Donor(models.Model):
             return "{} ({})".format(self.name, self.business)
         else:
             return self.name
+
+class Donations(models.Model):
+    when = models.DateField(default=datetime.date.today)
+    amount = models.DecimalField(max_digits=9+2, decimal_places=2)
+    memo = models.CharField(max_length=256, blank=True)
