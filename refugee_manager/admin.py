@@ -1,3 +1,4 @@
+import datetime
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth.admin import UserAdmin
@@ -165,12 +166,28 @@ class CaseAdmin(CaseOrClientAdmin):
     form = CaseAdminForm
 
     # list view stuff
-    list_display = ('active', 'name', 'start', 'end', 'arrival', 'volunteers_list', 'phone', 'family_members')
+    list_display = ('active', 'name', 'start', 'end', 'arrival', 
+        'volunteers_list', 'phone', 'family_members', 'next_assessment')
 
     def family_members(self, obj):
         individuals = obj.individuals.all()
         return '%s: %s' % (len(individuals),
                            truncatechars(', '.join(i.name for i in individuals), 50))
+
+    def next_assessment(self, obj):
+        ONEMONTH = datetime.timedelta(days=30)
+        SIXMONTHS = datetime.timedelta(days=183)
+        oas = obj.assessment
+        count = oas.count()
+        if count == 0:
+            # Schedule 1mo from start
+            return obj.start + ONEMONTH
+        else:
+            # Every six months from start
+            last = oas.latest()
+            timepassed = last.date - obj.start
+            chunks = timepassed.days / SIXMONTHS.days  # GRR timedelta doesn't support division
+            return obj.start + (int(chunks) + 1) * SIXMONTHS
 
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
