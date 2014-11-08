@@ -3,20 +3,7 @@
 {% load static %}
 
 {% block extrastyle %}
-<style>
-	#user-tools {
-		right: 36px;
-	}
-
-	#nav-global {
-		top: 0;
-		right: 0;
-		padding: 0.2em 10px;
-	}
-	#nav-global img {
-		vertical-align: top;
-	}
-</style>
+    <link rel='stylesheet' type='text/css' href='{% static "css/admin.css" %}' />
 {% endblock %}
 
 {% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
