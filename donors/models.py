@@ -25,3 +25,8 @@ class Donation(models.Model):
     when = models.DateField(default=datetime.date.today)
     amount = models.DecimalField(max_digits=9+2, decimal_places=2, validators=[MinValueValidator(0)])
     memo = models.CharField(max_length=256, blank=True)
+
+    class Meta:
+        get_latest_by = "when"
+        order_with_respect_to = "donor"
+        ordering = ['-when']
