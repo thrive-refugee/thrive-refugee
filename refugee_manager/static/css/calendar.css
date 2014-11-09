@@ -1,120 +1,7 @@
-body {
-    font-size: 12px;
-    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-    margin: 0px;
-}
-
-#nav-global {
-    padding: 0.2em 10px;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.container {
-    min-width: 50em;
-    max-width: 100%;
-    margin: auto;
-}
-
-#header {
-    background: #417690;
-    color: #ffc;
-    overflow: hidden;
-    width: 100%;
-    display: block;
-}
-
-h1 {
-    padding: 0 10px;
-    font-size: 18px;
-    margin: 8px 0;
-    font-weight: normal;
-    color: #f4f379;
-}
-
-#content {
-    margin: 10px 15px;
-}
-
-.errorlist {
-    color: red;
-}
-
-.messages {
-    background-color: #DDD;
-    border: 1px solid;
-    display: inline-block;
-    float: right;
-    font-weight: bold;
-    list-style: none;
-    margin: 0;
-    padding: 1em;
-}
-.messages .info {
-    color: green;
-}
-
-h3 {
-    font-size: 18px;
-    color: #666;
-    padding: 0 6px 0 0;
-    margin: 0 0 .2em 0;
-    font-weight: bold;
-    display: block;
-    -webkit-margin-before: 0.67em;
-    -webkit-margin-after: 0.67em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    font-weight: bold;
-}
-
-input[name=_delete] {
-    color: red;
-    margin-left: 5em;
-}
-
-h4 {
-    font-size: 150%;
-    margin: 1em;
-}
-
-dl {
-    font-weight: normal;
-}
-
-form {
-    width: 50em;
-}
-
-form table {
-    width: 100%;
-    border-collapse: collapse;
-}
-form table ul {
-    margin: 0;
-    padding: 0;
-}
 form table li {
     list-style-type: none;
 }
-form table th {
-    text-align: right;
-    width: 6em;
-    padding: 2px;
-    border: 1px solid #ccc;
-    background-color: #bba;
-}
-form table tfoot {
-    background-color: #888;
-}
-form table tfoot td {
-    padding: 1em;
-    text-align: center;
-}
-form input[type=submit] {
-    font-size: 110%;
-}
+
 .form-indent { margin-left: 2.5em; }
 .horizontal { width: 30em; }
     .horizontal li { float: left; margin: 0; }
@@ -123,19 +10,6 @@ form input[type=submit] {
     #recurrence-options li { margin-bottom: 4px; }
 
 #add_occurrences { cursor: pointer; }
-
-.ui-datepicker {
-    font-size: 80%;
-}
-
-a:link, a:visited {
-    font-weight: bold;
-    color: #5b80b2;
-}
-
-a.fc-event {
-    color: #fff;
-}
 
 @media (max-device-width: 600px) {
     #subscribe-instructions {
