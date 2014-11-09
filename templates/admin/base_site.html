@@ -4,7 +4,15 @@
 
 {% block extrastyle %}
     <link rel='stylesheet' type='text/css' href='{% static "css/admin.css" %}' />
+{% endblock %}
+
+{% block extrahead %}
     <meta name=viewport content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{% block js_footer_commons %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "js/admin.js" %}"></script>
 {% endblock %}
 
 {% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
