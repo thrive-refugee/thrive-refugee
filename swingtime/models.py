@@ -1,5 +1,6 @@
 import string
 import random
+import logging
 
 from datetime import datetime
 
@@ -53,7 +54,7 @@ class EventQuerySet(models.query.QuerySet):
                     | Q(employment_case__volunteers=user.volunteer)
                     | Q(refugee_case=None, employment_case=None)
                 )
-            except Volunteer.DoesNotExist:
+            except refugee_models.Volunteer.DoesNotExist:
                 rv = self.filter(refugee_case=None, employment_case=None)
         return rv
 
@@ -70,12 +71,12 @@ class EventManager(models.Manager):
 
 class AutoCase(object):
 
-    def __get__(self, obj, type=None):
+    def __get__(self, obj, type=None):  # pylint: disable=W0622
         rv = None
         try:
             rv = obj.refugee_case
-        except Exception:
-            pass
+        except AttributeError as exc:
+            logging.exception(exc)
         if rv is None:
             rv = obj.employment_case
         return rv
@@ -214,7 +215,7 @@ class OccurrenceQuerySet(models.query.QuerySet):
                     | Q(event__employment_case__volunteers=user.volunteer)
                     | Q(event__refugee_case=None, event__employment_case=None)
                 )
-            except Volunteer.DoesNotExist:
+            except refugee_models.Volunteer.DoesNotExist:
                 rv = self.filter(
                     event__refugee_case=None, employment_case=None)
         return rv
