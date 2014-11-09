@@ -17,11 +17,14 @@ class DonorAdmin(admin.ModelAdmin):
     ]
     # date_hierarchy = 'last_donation'
     actions_on_bottom = True
-    list_display = 'name', 'business', 'last_donation'
+    list_display = 'name', 'business', 'last_donation', 'last_amount'
     search_fields = 'name', 'business', 'email', 'address'
-
+    
     def last_donation(self, obj):
         return obj.donation_set.latest().when
+
+    def last_amount(self, obj):
+        return obj.donation_set.latest().amount
 
     actions = []
 
