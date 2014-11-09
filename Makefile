@@ -73,9 +73,9 @@ $(ALL): $(SOURCES)
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: env db pep8 test
+ci: env db pep8 pylint test
 # TODO: gradually add these steps back in as they start passing
-# ci: pep257 pylint
+# ci: pep257
 
 # Development Installation ###################################################
 
@@ -135,7 +135,7 @@ fix: .depends-dev
 test: .depends-ci
 	$(COVERAGE) erase
 	$(COVERAGE) run --source='.' manage.py test
-	$(COVERAGE) report --fail-under=49
+	$(COVERAGE) report --fail-under=48
 
 # Cleanup ####################################################################
 

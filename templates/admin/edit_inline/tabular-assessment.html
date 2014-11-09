@@ -1,0 +1,30 @@
+{% include 'admin/edit_inline/tabular.html' %}
+
+<script>
+(function($) {
+//  $('#assessment-group .original').remove();
+
+  $('#assessment-group .original p').empty().each(function (_, ele) {
+    var id = $(ele).closest('tr').attr('id');
+    var n = $('#id_'+id+"-id").val();
+    $(ele).append(
+      $('<a>').attr('href', '/admin/refugee_manager/assessment/'+n+'/').text('Assessment')
+    );
+  });
+  $('#assessment-group tfoot').empty().append(
+    $('<tr>').append(
+      $('<td>'),
+      $('<td colspan="0">').append(
+        // FIXME: Generate from django routing
+        $('<span class="move-add-row-after-me dynamic-assessment">'),
+        $('<div class="add-row">').append(
+          $('<a>').attr('href', '/admin/refugee_manager/assessment/add/?case='+$('#id_assessment-__prefix__-case').val()).append(
+            $('<i class="icon-plus-sign"></i>'),
+            ' Add another Assessment'
+          )
+        )
+      )
+    )
+  );
+})(django.jQuery);
+</script>

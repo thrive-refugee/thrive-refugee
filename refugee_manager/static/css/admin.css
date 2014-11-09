@@ -14,3 +14,19 @@
 input.vDateField, input.vIntegerField, input[type=number] {
     width: 100px;
 }
+
+/*
+Avoid crazy UI problems with big lists of filter choices
+https://github.com/douglasmiranda/django-admin-bootstrap/issues/44
+*/
+.dropdown-submenu:hover>.dropdown-menu {
+    max-height: 20em;
+    overflow-y: scroll;
+}
+
+/*
+https://github.com/thrive-refugee/thrive-refugee/issues/65
+*/
+.breadcrumb {
+    display: none;
+}
