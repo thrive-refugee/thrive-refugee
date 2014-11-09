@@ -1,1 +1,10 @@
-[{"fields": {"employment_client": 1, "Description": "Wiring"}, "model": "employment_manager.skill", "pk": 1}]
+[
+{
+  "fields": {
+    "employment_client": 1,
+    "Description": "Wiring"
+  },
+  "model": "employment_manager.skill",
+  "pk": 1
+}
+]
