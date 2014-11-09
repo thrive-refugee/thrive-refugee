@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.db import models, migrations
 import datetime
 from django.conf import settings
-import refugee_manager.models
 
 
 class Migration(migrations.Migration):
