@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base_site_common.html" %}
 {% load i18n %}
 {% load admin_static %}
 
@@ -19,19 +19,6 @@
 
 {% block nav-global %}
 
-{% endblock %}
-
-{% block branding %}
-<div id="site-name" style="width:120px; float: left;">
-    <a href="/admin"><img src='{% static "admin/img/thrive-admin-logo-WHITE.png"%}'>
-    </a>
-</div>
-<div id="nav-global" class="pull-left btn-group">
-    <a href="{% url 'admin:index' %}" class="btn btn-primary">Home</a>
-</div>
-<div id="nav-global" class="pull-left btn-group">
-    <a href="{% url 'swingtime-calendar' %}" class="btn btn-info">Calendar</a>
-</div>
 {% endblock %}
 
 {% comment %} not sure if there's anything to put in the breadcrumbs... {% endcomment %}
