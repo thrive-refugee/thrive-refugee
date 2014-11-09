@@ -1,4 +1,4 @@
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
 
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
@@ -118,7 +118,7 @@ class CaseFilter(admin.SimpleListFilter):
 
 
 def previous_months(curr_month, count):
-    for i in range(0, count):
+    for _ in range(0, count):
         yield curr_month
         if curr_month.month > 1:
             curr_month = date(curr_month.year, curr_month.month - 1, 1)
@@ -223,11 +223,11 @@ def filter_key_to_name(filters, key):
     :param key: a string from a URL
     :return: the nice name for the filter
     """
-    for filter in filters:
-        if getattr(filter, 'parameter_name', None) == key:
+    for f in filters:
+        if getattr(f, 'parameter_name', None) == key:
             # a SimpleListFilter class
-            return filter.title
-    return key.replace('__', ' ').replace('exact','')
+            return f.title
+    return key.replace('__', ' ').replace('exact', '')
 
 
 class CaseTotallingChangeList(ChangeList):
