@@ -1,1 +1,11 @@
-[{"fields": {"employment_client": 1, "Scale": 4, "Name": "English"}, "model": "employment_manager.language", "pk": 1}]
+[
+{
+  "fields": {
+    "employment_client": 1,
+    "Scale": 4,
+    "Name": "English"
+  },
+  "model": "employment_manager.language",
+  "pk": 1
+}
+]
