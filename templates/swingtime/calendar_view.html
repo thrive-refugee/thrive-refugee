@@ -4,7 +4,7 @@
 {% load ical %}
 {% block title %}Thrive Calendar{% endblock %}
 {% block main_content %}
-    <div id="subscribe-instructions">
+    <div id="subscribe-instructions" class="pull-left">
         <p>
             Add this calendar to your:
             <a class=expando data-target="#howto-android" href="#">Android</a> |
@@ -49,6 +49,10 @@
             </ol>
         </div>
     </div>
+        <div style="font-weight: bold;">
+            <a href="{% url "swingtime-add-event" %}" class="btn btn-info pull-right">Add Event</a>
+        </div>
+    <!--/div-->
     <div id="calendar"></div>
     <script>
 $(function() {
