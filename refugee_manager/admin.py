@@ -217,6 +217,19 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
         return super(CaseOrClientAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
+def filter_key_to_name(filters, key):
+    """
+    :param filters: a ModelAdmin's list_filter
+    :param key: a string from a URL
+    :return: the nice name for the filter
+    """
+    for filter in filters:
+        if getattr(filter, 'parameter_name', None) == key:
+            # a SimpleListFilter class
+            return filter.title
+    return key.replace('__', ' ').replace('exact','')
+
+
 class CaseTotallingChangeList(ChangeList):
     def get_results(self, *args, **kwargs):
         super(CaseTotallingChangeList, self).get_results(*args, **kwargs)
@@ -226,6 +239,11 @@ class CaseTotallingChangeList(ChangeList):
 
         q = self.result_list.aggregate(total_individuals=Count('individuals'))
         self.total_individuals = q['total_individuals']
+
+        request = args[0]
+        self.active_filters = {filter_key_to_name(CaseAdmin.list_filter, filter_key): value
+                               for filter_key, value
+                               in request.GET.iteritems()}
 
 
 class CaseAdmin(CaseOrClientAdmin):
