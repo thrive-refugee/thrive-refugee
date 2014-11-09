@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base_site_common.html" %}
 {% load i18n %}
 {% load admin_static %}
 
@@ -7,18 +7,8 @@
     <meta name=viewport content="width=device-width, initial-scale=1">
 {% endblock %}
 
-{% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
-
-{% block branding %}
-<h1 id="site-name" style="width:500px; float: left;">
-    <a href="/admin">
-    {% trans 'Thrive Admin' %}
-    </a>
-</h1>
-{% endblock %}
+{% block title %}{% trans 'Thrive Home' %}{% endblock %}
 
 {% block nav-global %}
-<div id="nav-global" class="pull-right btn-group">
-	<a href="{% url 'swingtime-calendar' %}" class="btn btn-info">Calendar</a>
-</div>
+
 {% endblock %}

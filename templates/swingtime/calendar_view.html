@@ -4,49 +4,54 @@
 {% load ical %}
 {% block title %}Thrive Calendar{% endblock %}
 {% block main_content %}
-    <div id="subscribe-instructions">
-        <p>
-            Add this calendar to your:
-            <a class=expando data-target="#howto-android" href="#">Android</a> |
-            <a class=expando data-target="#howto-ios7" href="#">iPhone or iPad</a> |
-            <a class=expando data-target="#howto-computer" href="#">Mac or PC</a>
-        </p>
-        <script>
-            $(function() {
-                $('.expando').click(function() {
-                    $('.howto').hide();
-                    $($(this).attr('data-target')).show();
+    <div>
+        <div id="subscribe-instructions" class="pull-left">
+            <p>
+                Add this calendar to your:
+                <a class=expando data-target="#howto-android" href="#">Android</a> |
+                <a class=expando data-target="#howto-ios7" href="#">iPhone or iPad</a> |
+                <a class=expando data-target="#howto-computer" href="#">Mac or PC</a>
+            </p>
+            <script>
+                $(function() {
+                    $('.expando').click(function() {
+                        $('.howto').hide();
+                        $($(this).attr('data-target')).show();
+                    });
                 });
-            });
-        </script>
-        <div id="howto-ios7" class="howto" style="display: none">
-            <h4>How to subscribe on an iPhone or iPad:</h4>
-            <ol>
-                <li>Touch <a href="{% ical %}">here</a></li>
-                <li>Follow the instructions to subscribe</li>
-            </ol>
+            </script>
+            <div id="howto-ios7" class="howto" style="display: none">
+                <h4>How to subscribe on an iPhone or iPad:</h4>
+                <ol>
+                    <li>Touch <a href="{% ical %}">here</a></li>
+                    <li>Follow the instructions to subscribe</li>
+                </ol>
+            </div>
+            <div id="howto-android" class="howto" style="display: none">
+                <h4>How to subscribe on an Android device:</h4>
+                <ol>
+                    <li>Long-press <a href="{% ical %}">here</a>.</li>
+                    <li>Select "Copy link address".</li>
+                    <li><a href="https://calendar.google.com/" target="_blank">Touch here to open your Google Calendar</a>.</li>
+                    <li>If necessary, login to your Google account.</li>
+                    <li>Touch the little triangle next to "Other calendars".</li>
+                    <li>Select "Add by URL".</li>
+                    <li>Long-press in the "URL:" input box.</li>
+                    <li>Select "Paste".</li>
+                    <li>Press the "Add Calendar" button.</li>
+                </ol>
+            </div>
+            <div id="howto-computer" class="howto" style="display: none">
+                <h4>How to subscribe on a computer:</h4>
+                <ol>
+                    <li>Click <a href="{% ical %}">here</a></li>
+                    <li>The link should open with your default calendar program</li>
+                    <li>Follow the instructions to subscribe</li>
+                </ol>
+            </div>
         </div>
-        <div id="howto-android" class="howto" style="display: none">
-            <h4>How to subscribe on an Android device:</h4>
-            <ol>
-                <li>Long-press <a href="{% ical %}">here</a>.</li>
-                <li>Select "Copy link address".</li>
-                <li><a href="https://calendar.google.com/" target="_blank">Touch here to open your Google Calendar</a>.</li>
-                <li>If necessary, login to your Google account.</li>
-                <li>Touch the little triangle next to "Other calendars".</li>
-                <li>Select "Add by URL".</li>
-                <li>Long-press in the "URL:" input box.</li>
-                <li>Select "Paste".</li>
-                <li>Press the "Add Calendar" button.</li>
-            </ol>
-        </div>
-        <div id="howto-computer" class="howto" style="display: none">
-            <h4>How to subscribe on a computer:</h4>
-            <ol>
-                <li>Click <a href="{% ical %}">here</a></li>
-                <li>The link should open with your default calendar program</li>
-                <li>Follow the instructions to subscribe</li>
-            </ol>
+        <div class="pull-right btn-group" style="margin-bottom:20px;">
+            <a href="{% url "swingtime-add-event" %}" class="btn btn-info">Add Event</a>
         </div>
     </div>
     <div id="calendar"></div>
