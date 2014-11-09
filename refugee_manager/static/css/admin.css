@@ -23,3 +23,10 @@ https://github.com/douglasmiranda/django-admin-bootstrap/issues/44
     max-height: 20em;
     overflow-y: scroll;
 }
+
+/*
+https://github.com/thrive-refugee/thrive-refugee/issues/65
+*/
+.breadcrumb {
+    display: none;
+}
