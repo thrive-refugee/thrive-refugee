@@ -277,7 +277,11 @@ class CaseAdmin(CaseOrClientAdmin):
         SIXMONTHS = timedelta(days=183)
         oas = obj.assessment
         count = oas.count()
-        if count == 0:
+        if not obj.active:
+            last = oas.latest()
+            if last.date < obj.end:
+                return obj.end
+        elif count == 0:
             # Schedule 1mo from start
             return obj.start + ONEMONTH
         else:
