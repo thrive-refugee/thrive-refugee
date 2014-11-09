@@ -1,8 +1,9 @@
-{% extends "admin/base.html" %}
+{% extends "admin/base_site_common.html" %}
 {% load i18n %}
 {% load admin_static %}
 
 {% block extrahead %}
+    {{block.super}}
     <link rel='stylesheet' type='text/css' href='//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css'/>
     <link rel='stylesheet' type='text/css' href='{% static "css/calendar.css" %}' />
     <link rel='stylesheet' type='text/css' href='{% static "cal/fullcalendar.css" %}' />
@@ -18,17 +19,7 @@
 {% endblock %}
 
 {% block nav-global %}
-    <div id="nav-global" class="pull-right btn-group">
-        <a href="{% url 'admin:index' %}" class="btn btn-info">Apps</a>
-    </div>
-{% endblock %}
 
-{% block branding %}
-<h1 id="site-name" style="width:500px; float: left;">
-    <a href="/admin">
-    {% trans 'Thrive Admin' %}
-    </a>
-</h1>
 {% endblock %}
 
 {% comment %} not sure if there's anything to put in the breadcrumbs... {% endcomment %}
@@ -47,11 +38,7 @@
                 {% endfor %}
             </ul>
             {% endif %}
-            <p style="font-weight: bold; margin-top: 1em;">
-                <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary">View Calendar</a>
-                <a href="{% url "swingtime-add-event" %}" class="btn btn-info">Add Event</a>
-            </p>
-            <hr />
+
             {% endblock navigation %}
             {% block main_content %}{% endblock main_content %}
         </div>
