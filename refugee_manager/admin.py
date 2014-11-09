@@ -73,6 +73,7 @@ class AssessmentInlineAdmin(admin.TabularInline):
     extra = 0
     fields = ('date', 'calc_score')
     readonly_fields = fields
+    ordering = ['-date']
     template = 'admin/edit_inline/tabular-assessment.html'
 
     def calc_score(self, obj):
