@@ -1,0 +1,23 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_static admin_list %}
+{% load url from future %}
+{% load admin_urls %}
+
+{% block result_list %}
+    {% if action_form and actions_on_top and cl.full_result_count %}{% admin_actions %}{% endif %}
+    {% result_list cl %}
+    {% if action_form and actions_on_bottom and cl.full_result_count %}{% admin_actions %}{% endif %}
+    <div style="margin: 5px">
+        <strong>Total:
+        {{ cl.total_cases }} cases,
+        {{ cl.total_individuals }} family members
+        {% if cl.active_filters %}
+            <br>
+            Active Filters:
+            {% for filter, value in cl.active_filters.iteritems %}
+                <div style="margin-left:1em">{{ filter }}: {{ value }}</div>
+            {% endfor %}
+        {% endif %}
+        </strong>
+    </div>
+{% endblock %}

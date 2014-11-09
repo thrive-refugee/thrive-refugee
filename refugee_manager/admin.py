@@ -1,10 +1,11 @@
-import datetime
+from datetime import datetime, date, timedelta
+
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.template.defaultfilters import truncatechars
-from django.db.models import Sum
+from django.db.models import Sum, Q, Count
 from django.db.models.fields import CharField, TextField
 from django.core.exceptions import FieldError
 from django import forms
@@ -116,6 +117,60 @@ class CaseFilter(admin.SimpleListFilter):
             return queryset
 
 
+def previous_months(curr_month, count):
+    for i in range(0, count):
+        yield curr_month
+        if curr_month.month > 1:
+            curr_month = date(curr_month.year, curr_month.month - 1, 1)
+        else:
+            curr_month = date(curr_month.year - 1, 12, 1)
+
+
+class CaseOpenDuringRangeStartFilter(admin.SimpleListFilter):
+    title = 'Open Cases - From Month'
+    parameter_name = 'open_during_start'
+
+    def lookups(self, request, model_admin):
+        choices = []
+        curr_month = date(date.today().year, date.today().month, 1)
+        for month in previous_months(curr_month, 24):
+            choices.append((month.isoformat(), month.strftime('%b %Y')))
+
+        return choices
+
+    def queryset(self, request, queryset):
+        # case ended after the specified start-date (or no end)
+        if self.value():
+            return queryset.filter(Q(end__gte=self.value()) | Q(end__isnull=True))
+        else:
+            return queryset
+
+
+class CaseOpenDuringRangeEndFilter(admin.SimpleListFilter):
+    title = 'Open Cases - Through Month'
+    parameter_name = 'open_during_end'
+
+    def lookups(self, request, model_admin):
+        choices = []
+        curr_month = date(date.today().year, date.today().month, 1)
+        for month in previous_months(curr_month, 24):
+            if month.month < 12:
+                next_month = date(month.year, month.month + 1, 1)
+            else:
+                next_month = date(month.year + 1, 1, 1)
+            end_of_month = next_month - timedelta(days=1)
+            choices.append((end_of_month.isoformat(), month.strftime('%b %Y')))
+
+        return choices
+
+    def queryset(self, request, queryset):
+        # case started before the specified end-date
+        if self.value():
+            return queryset.filter(start__lte=self.value())
+        else:
+            return queryset
+
+
 class CaseAdminForm(forms.ModelForm):
     class Meta:
         model = Case
@@ -162,6 +217,35 @@ class CaseOrClientAdmin(DeleteNotAllowedModelAdmin):
         return super(CaseOrClientAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
+def filter_key_to_name(filters, key):
+    """
+    :param filters: a ModelAdmin's list_filter
+    :param key: a string from a URL
+    :return: the nice name for the filter
+    """
+    for filter in filters:
+        if getattr(filter, 'parameter_name', None) == key:
+            # a SimpleListFilter class
+            return filter.title
+    return key.replace('__', ' ').replace('exact','')
+
+
+class CaseTotallingChangeList(ChangeList):
+    def get_results(self, *args, **kwargs):
+        super(CaseTotallingChangeList, self).get_results(*args, **kwargs)
+
+        q = self.result_list.aggregate(total_cases=Count('id'))
+        self.total_cases = q['total_cases']
+
+        q = self.result_list.aggregate(total_individuals=Count('individuals'))
+        self.total_individuals = q['total_individuals']
+
+        request = args[0]
+        self.active_filters = {filter_key_to_name(CaseAdmin.list_filter, filter_key): value
+                               for filter_key, value
+                               in request.GET.iteritems()}
+
+
 class CaseAdmin(CaseOrClientAdmin):
     form = CaseAdminForm
 
@@ -176,8 +260,8 @@ class CaseAdmin(CaseOrClientAdmin):
                            truncatechars(', '.join(i.name for i in individuals), 50))
 
     def next_assessment(self, obj):
-        ONEMONTH = datetime.timedelta(days=30)
-        SIXMONTHS = datetime.timedelta(days=183)
+        ONEMONTH = timedelta(days=30)
+        SIXMONTHS = timedelta(days=183)
         oas = obj.assessment
         count = oas.count()
         if count == 0:
@@ -191,7 +275,8 @@ class CaseAdmin(CaseOrClientAdmin):
             return obj.start + (int(chunks) + 1) * SIXMONTHS
 
     list_display_links = list_display
-    list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',)
+    list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',
+                   CaseOpenDuringRangeStartFilter, CaseOpenDuringRangeEndFilter,)
     search_fields = [f.name for f in Case._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('-active', 'name',)
 
@@ -200,6 +285,11 @@ class CaseAdmin(CaseOrClientAdmin):
 
     def order_qs(self, qs):
         return qs.order_by('name')
+
+    change_list_template = 'refugee_manager/case_admin_list.html'
+
+    def get_changelist(self, request):
+        return CaseTotallingChangeList
 
 admin.site.register(Case, CaseAdmin)
 
