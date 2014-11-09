@@ -82,6 +82,8 @@ ci: env db pep8 pylint test
 .PHONY: env
 env: .virtualenv $(INSTALLED) thrive_refugee/local_settings.py
 $(INSTALLED): requirements.txt
+	# TODO: the following line is required to install patched bootstrap-admin
+	- $(PIP) uninstall bootstrap-admin --yes
 	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt $(PIP_CACHE)
 	touch $(INSTALLED)  # flag to indicate project is installed
 
