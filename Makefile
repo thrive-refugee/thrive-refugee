@@ -182,6 +182,8 @@ clean-all: clean clean-env .clean-workspace .clean-cache
 # Server ####################################################################
 
 MANAGE := $(PYTHON) manage.py
+LOADDATA := $(MANAGE) loaddata
+DUMPDATA := $(MANAGE) dumpdata --indent=2
 DB := thrive.db
 
 .PHONY: db
@@ -200,49 +202,49 @@ syncdb: env
 
 .PHONY: loaddata
 loaddata: env */fixtures/*.json
-	$(MANAGE) loaddata thrive_refugee/fixtures/auth.json
-	$(MANAGE) loaddata esl_manager/fixtures/eslstudent.json
-	$(MANAGE) loaddata esl_manager/fixtures/attended.json
-	$(MANAGE) loaddata esl_manager/fixtures/assesment.json
-	$(MANAGE) loaddata refugee_manager/fixtures/volunteer.json
-	$(MANAGE) loaddata refugee_manager/fixtures/case.json
-	$(MANAGE) loaddata refugee_manager/fixtures/casefile.json
-	$(MANAGE) loaddata refugee_manager/fixtures/individual.json
-	$(MANAGE) loaddata refugee_manager/fixtures/casedetail.json
-	$(MANAGE) loaddata refugee_manager/fixtures/activitynote.json
-	$(MANAGE) loaddata refugee_manager/fixtures/assessment.json
-	$(MANAGE) loaddata swingtime/fixtures/eventtype.json
-	$(MANAGE) loaddata swingtime/fixtures/event.json
-	$(MANAGE) loaddata employment_manager/fixtures/employmentclient.json
-	$(MANAGE) loaddata employment_manager/fixtures/job.json
-	$(MANAGE) loaddata employment_manager/fixtures/skill.json
-	$(MANAGE) loaddata employment_manager/fixtures/assesment.json
-	$(MANAGE) loaddata employment_manager/fixtures/language.json
-	$(MANAGE) loaddata donors/fixtures/donors.json
-	$(MANAGE) loaddata donors/fixtures/donations.json
+	$(LOADDATA) thrive_refugee/fixtures/auth.json
+	$(LOADDATA) esl_manager/fixtures/eslstudent.json
+	$(LOADDATA) esl_manager/fixtures/attended.json
+	$(LOADDATA) esl_manager/fixtures/assesment.json
+	$(LOADDATA) refugee_manager/fixtures/volunteer.json
+	$(LOADDATA) refugee_manager/fixtures/case.json
+	$(LOADDATA) refugee_manager/fixtures/casefile.json
+	$(LOADDATA) refugee_manager/fixtures/individual.json
+	$(LOADDATA) refugee_manager/fixtures/casedetail.json
+	$(LOADDATA) refugee_manager/fixtures/activitynote.json
+	$(LOADDATA) refugee_manager/fixtures/assessment.json
+	$(LOADDATA) swingtime/fixtures/eventtype.json
+	$(LOADDATA) swingtime/fixtures/event.json
+	$(LOADDATA) employment_manager/fixtures/employmentclient.json
+	$(LOADDATA) employment_manager/fixtures/job.json
+	$(LOADDATA) employment_manager/fixtures/skill.json
+	$(LOADDATA) employment_manager/fixtures/assesment.json
+	$(LOADDATA) employment_manager/fixtures/language.json
+	$(LOADDATA) donors/fixtures/donors.json
+	$(LOADDATA) donors/fixtures/donations.json
 
 .PHONY: dumpdata
 dumpdata: env
-	$(MANAGE) dumpdata auth > thrive_refugee/fixtures/auth.json
-	$(MANAGE) dumpdata esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
-	$(MANAGE) dumpdata esl_manager.Attended > esl_manager/fixtures/attended.json
-	$(MANAGE) dumpdata esl_manager.Assesment > esl_manager/fixtures/assesment.json
-	$(MANAGE) dumpdata refugee_manager.Volunteer > refugee_manager/fixtures/volunteer.json
-	$(MANAGE) dumpdata refugee_manager.Case > refugee_manager/fixtures/case.json
-	$(MANAGE) dumpdata refugee_manager.CaseFile > refugee_manager/fixtures/casefile.json
-	$(MANAGE) dumpdata refugee_manager.Individual > refugee_manager/fixtures/individual.json
-	$(MANAGE) dumpdata refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
-	$(MANAGE) dumpdata refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
-	$(MANAGE) dumpdata refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
-	$(MANAGE) dumpdata swingtime.EventType > swingtime/fixtures/eventtype.json
-	$(MANAGE) dumpdata swingtime.Event > swingtime/fixtures/event.json
-	$(MANAGE) dumpdata employment_manager.EmploymentClient > employment_manager/fixtures/employmentclient.json
-	$(MANAGE) dumpdata employment_manager.Job > employment_manager/fixtures/job.json
-	$(MANAGE) dumpdata employment_manager.Skill > employment_manager/fixtures/skill.json
-	$(MANAGE) dumpdata employment_manager.Assesment > employment_manager/fixtures/assesment.json
-	$(MANAGE) dumpdata employment_manager.Language > employment_manager/fixtures/language.json
-	$(MANAGE) dumpdata donors.Donor > donors/fixtures/donors.json
-	$(MANAGE) dumpdata donors.Donation > donors/fixtures/donations.json
+	$(DUMPDATA) auth > thrive_refugee/fixtures/auth.json
+	$(DUMPDATA) esl_manager.ESLStudent > esl_manager/fixtures/eslstudent.json
+	$(DUMPDATA) esl_manager.Attended > esl_manager/fixtures/attended.json
+	$(DUMPDATA) esl_manager.Assesment > esl_manager/fixtures/assesment.json
+	$(DUMPDATA) refugee_manager.Volunteer > refugee_manager/fixtures/volunteer.json
+	$(DUMPDATA) refugee_manager.Case > refugee_manager/fixtures/case.json
+	$(DUMPDATA) refugee_manager.CaseFile > refugee_manager/fixtures/casefile.json
+	$(DUMPDATA) refugee_manager.Individual > refugee_manager/fixtures/individual.json
+	$(DUMPDATA) refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
+	$(DUMPDATA) refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
+	$(DUMPDATA) refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
+	$(DUMPDATA) swingtime.EventType > swingtime/fixtures/eventtype.json
+	$(DUMPDATA) swingtime.Event > swingtime/fixtures/event.json
+	$(DUMPDATA) employment_manager.EmploymentClient > employment_manager/fixtures/employmentclient.json
+	$(DUMPDATA) employment_manager.Job > employment_manager/fixtures/job.json
+	$(DUMPDATA) employment_manager.Skill > employment_manager/fixtures/skill.json
+	$(DUMPDATA) employment_manager.Assesment > employment_manager/fixtures/assesment.json
+	$(DUMPDATA) employment_manager.Language > employment_manager/fixtures/language.json
+	$(DUMPDATA) donors.Donor > donors/fixtures/donors.json
+	$(DUMPDATA) donors.Donation > donors/fixtures/donations.json
 
 .PHONY: run
 run: env $(DB) syncdb
