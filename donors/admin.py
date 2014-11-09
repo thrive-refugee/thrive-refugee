@@ -48,3 +48,28 @@ class DonorAdmin(admin.ModelAdmin):
         return response
     make_csv.short_description = "Create CSV"
     actions.append(make_csv)
+
+@admin.register(Donation)
+class DonorAdmin(admin.ModelAdmin):
+    date_hierarchy = 'when'
+    actions_on_bottom = True
+    list_display = 'donor', 'when', 'amount', 'memo'
+    search_fields = 'donor', 'memo'
+
+    actions = []
+    def make_csv(self, request, queryset):
+        fields = ('name', 'business', 'when', 'amount', 'memo')
+        response = HttpResponse(content_type="text/csv")
+        response['Content-Disposition'] = 'attachment; filename=donations.csv'
+        writer = csv.DictWriter(response, fields, extrasaction='ignore')
+        writer.writeheader()
+        for donation in queryset:
+            row = {
+                "name": donation.donor.name,
+                "business": donation.donor.business,
+            }
+            row.update(vars(donation))
+            writer.writerow(row)
+        return response
+    make_csv.short_description = "Create CSV"
+    actions.append(make_csv)
