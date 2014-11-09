@@ -135,7 +135,7 @@ fix: .depends-dev
 test: .depends-ci
 	$(COVERAGE) erase
 	$(COVERAGE) run --source='.' manage.py test
-	$(COVERAGE) report --fail-under=49
+	$(COVERAGE) report --fail-under=48
 
 # Cleanup ####################################################################
 
