@@ -54,14 +54,16 @@ class DonorAdmin(admin.ModelAdmin):
     make_csv.short_description = "Create CSV"
     actions.append(make_csv)
 
+
 @admin.register(Donation)
-class DonorAdmin(admin.ModelAdmin):
+class DonationAdmin(admin.ModelAdmin):
     date_hierarchy = 'when'
     actions_on_bottom = True
     list_display = 'donor', 'when', 'amount', 'memo'
     search_fields = 'donor', 'memo'
 
     actions = []
+    
     def make_csv(self, request, queryset):
         fields = ('name', 'business', 'when', 'amount', 'memo')
         response = HttpResponse(content_type="text/csv")
