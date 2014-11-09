@@ -55,8 +55,18 @@ class IndividualInlineAdmin(admin.TabularInline):
     can_delete = False
 
 
+class CaseDetailInlineForm(forms.ModelForm):
+    class Meta:
+        model = CaseDetail
+        fields = '__all__'
+        widgets = {
+            'text': forms.Textarea(attrs={'style': 'width: 600px'}),
+        }
+
+
 class CaseDetailInlineAdmin(admin.TabularInline):
     model = CaseDetail
+    form = CaseDetailInlineForm
     can_delete = False
     extra = 0
 
