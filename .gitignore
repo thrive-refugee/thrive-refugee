@@ -38,6 +38,8 @@ pyunit.xml
 build
 dist
 
+static/
+
 # Sublime Text
 *.sublime-workspace
 
