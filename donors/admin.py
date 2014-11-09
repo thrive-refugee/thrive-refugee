@@ -63,7 +63,7 @@ class DonationAdmin(admin.ModelAdmin):
     search_fields = 'donor', 'memo'
 
     actions = []
-    
+
     def make_csv(self, request, queryset):
         fields = ('name', 'business', 'when', 'amount', 'memo')
         response = HttpResponse(content_type="text/csv")
