@@ -136,7 +136,7 @@ fix: .depends-dev
 .PHONY: test
 test: .depends-ci
 	$(COVERAGE) erase
-	$(COVERAGE) run --source='.' manage.py test
+	$(COVERAGE) run --source='.' manage.py test --verbosity=2
 	$(COVERAGE) report --fail-under=52
 
 # Cleanup ####################################################################
