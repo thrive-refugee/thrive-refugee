@@ -19,11 +19,13 @@ class DonorAdmin(admin.ModelAdmin):
     actions_on_bottom = True
     list_display = 'name', 'business', 'last_donation', 'last_amount'
     search_fields = 'name', 'business', 'email', 'address'
-    
-    def last_donation(self, obj):
+
+    @staticmethod
+    def last_donation(obj):
         return obj.donation_set.latest().when
 
-    def last_amount(self, obj):
+    @staticmethod
+    def last_amount(obj):
         return obj.donation_set.latest().amount
 
     actions = []
