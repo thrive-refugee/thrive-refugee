@@ -71,6 +71,8 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '722&amp;c&amp;%o5jb20^a(*uw6t^lforr3k6spqqyc@(z77@ff69!y&amp;f'
 
+ALLOWED_HOSTS = ('thriveapp.info', 'www.thriveapp.info')
+
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.media',
