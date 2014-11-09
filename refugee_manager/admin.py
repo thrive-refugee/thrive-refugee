@@ -282,24 +282,20 @@ class CaseAdmin(CaseOrClientAdmin):
         return '%s: %s' % (len(individuals),
                            truncatechars(', '.join(i.name for i in individuals), 50))
 
-    def next_assessment(self, obj):
+    @staticmethod
+    def next_assessment(obj):
         ONEMONTH = timedelta(days=30)
         SIXMONTHS = timedelta(days=183)
         oas = obj.assessment
         count = oas.count()
         if not obj.active:
-            last = oas.latest()
-            if last.date < obj.end:
-                return obj.end
+            return None
         elif count == 0:
-            # Schedule 1mo from start
+            # 1 month from the case start
             return obj.start + ONEMONTH
         else:
-            # Every six months from start
-            last = oas.latest()
-            timepassed = last.date - obj.start
-            chunks = timepassed.days / SIXMONTHS.days  # GRR timedelta doesn't support division
-            return obj.start + (int(chunks) + 1) * SIXMONTHS
+            # Every six months from case start
+            return obj.start + (SIXMONTHS * count)
 
     list_display_links = list_display
     list_filter = ('active', VolunteerFilter, 'start', 'arrival', 'origin', 'language',
