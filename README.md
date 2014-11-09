@@ -25,17 +25,19 @@ Environment
 
 Create a virtualenv:
 
-    make env
+    $ make env
 
 Run the server and open a web browser:
 
-    make launch  # Ctrl+C to stop the server
+    $ make launch  # Ctrl+C to stop the server
 
 Restart a stopped server:
 
-    make run  # Ctrl+C to stop the server
+    $ make run  # Ctrl+C to stop the server
 
 Run static analysis and tests:
 
-    make pep8
-    make test
+    $ make pep8
+    $ make pylint
+    $ make test
+    $ make ci  # all targets invoked during continous integration 
