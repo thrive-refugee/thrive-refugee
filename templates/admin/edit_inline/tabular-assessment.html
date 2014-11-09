@@ -3,6 +3,14 @@
 <script>
 (function($) {
 //  $('#assessment-group .original').remove();
+
+  $('#assessment-group .original p').empty().each(function (_, ele) {
+    var id = $(ele).closest('tr').attr('id');
+    var n = $('#id_'+id+"-id").val();
+    $(ele).append(
+      $('<a>').attr('href', '/admin/refugee_manager/assessment/'+n+'/').text('Assessment')
+    );
+  });
   $('#assessment-group tfoot').empty().append(
     $('<tr>').append(
       $('<td>'),
