@@ -37,9 +37,6 @@
 {% block content %}
     <div class="row-fluid dashboard-tools">
         <div id="content">
-            {% block page_title %}
-                <h3>Thrive: A Refugee Support Program</h3>
-            {% endblock page_title %}
             {% block navigation %}
 
 
@@ -50,7 +47,7 @@
                 {% endfor %}
             </ul>
             {% endif %}
-            <p style="font-weight: bold; ">
+            <p style="font-weight: bold; margin-top: 1em;">
                 <a href="{% url 'swingtime-calendar' %}" class="btn btn-primary">View Calendar</a>
                 <a href="{% url "swingtime-add-event" %}" class="btn btn-info">Add Event</a>
             </p>
