@@ -150,6 +150,11 @@ class Assessment(models.Model):
 
     case = models.ForeignKey(Case, related_name='assessment')
     date = models.DateField(default=date.today)
+
+    def __unicode__(self):
+        # Hide "Assessment object"
+        return ""
+
     LANGUAGE_CHOICES = (
         (0, "0 - Please Select"),
         (1, "1 - No English"),
@@ -317,3 +322,25 @@ class Assessment(models.Model):
 
     def get_fields(self):
         return [(field, field.value_to_string(self)) for field in Assessment._meta.fields]
+
+    def calc_score(self):
+        total = 0.0
+        denom = 0.0
+        q = self.get_fields()[3:]
+        # return unicode(q)
+        for value in q:
+            try:
+                value = int(value[1])
+            except (ValueError, TypeError):
+                continue
+
+            total += value
+            denom += 10 if value != 0 else 0
+
+        return total, denom
+
+    def format_score(self):
+        total, denom = self.calc_score()
+        if denom == 0:
+            return u"0/0 , 0%"
+        return "{:.0f}/{:.0f}  <strong><span style=font-size:130%;>{:.0f}%</span></strong>".format(total, denom, (total / denom) * 100)
