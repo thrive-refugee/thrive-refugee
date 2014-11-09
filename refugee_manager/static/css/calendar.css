@@ -14,6 +14,7 @@ form table li {
 @media (max-device-width: 600px) {
     #subscribe-instructions {
         font-size: 450%;
+        line-height: 1em;
     }
     #subscribe-instructions h4 {
         font-size: 100%;
