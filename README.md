@@ -29,11 +29,11 @@ Create a virtualenv:
 
 Run the server and open a web browser:
 
-    $ make launch  # Ctrl+C to stop the server
+    $ make launch  # login: admin:password, ctrl+c to stop the server
 
 Restart a stopped server:
 
-    $ make run  # Ctrl+C to stop the server
+    $ make run  # ctrl+c to stop the server
 
 Run static analysis and tests:
 
