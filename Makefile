@@ -117,7 +117,7 @@ check: pep8 pep257 pylint
 
 .PHONY: pep8
 pep8: .depends-ci
-	$(PEP8) $(PACKAGE) --ignore=E501
+	$(PEP8) $(PACKAGE) --ignore=E402,E501
 
 .PHONY: pep257
 pep257: .depends-ci
