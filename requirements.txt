@@ -5,5 +5,3 @@ python-dateutil==2.2
 django-sendfile==0.3.6
 django-localflavor==1.0
 https://github.com/thrive-refugee/django-admin-bootstrap/archive/2d61edb0a1613818da95475d45998f3aacf3b623.zip
-
-
