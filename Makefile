@@ -54,10 +54,6 @@ NOSE := $(BIN)/nosetests
 PYTEST := $(BIN)/py.test
 COVERAGE := $(BIN)/coverage
 
-# Remove if you don't want pip to cache downloads
-PIP_CACHE_DIR := .cache
-PIP_CACHE := --download-cache $(PIP_CACHE_DIR)
-
 # Flags for PHONY targets
 INSTALLED :=$(ENV)/.installed
 DEPENDS_CI := $(ENV)/.depends-ci
@@ -84,7 +80,7 @@ env: .virtualenv $(INSTALLED) thrive_refugee/local_settings.py
 $(INSTALLED): requirements.txt
 	# TODO: the following line is required to install patched bootstrap-admin
 	- $(PIP) uninstall bootstrap-admin --yes
-	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt $(PIP_CACHE)
+	VIRTUAL_ENV=$(ENV) $(PIP) install -r requirements.txt
 	touch $(INSTALLED)  # flag to indicate project is installed
 
 .PHONY: .virtualenv
@@ -101,13 +97,13 @@ depends: .depends-ci .depends-dev
 .PHONY: .depends-ci
 .depends-ci: env Makefile $(DEPENDS_CI)
 $(DEPENDS_CI): Makefile
-	$(PIP) install $(PIP_CACHE) --upgrade pep8 pep257 coverage
+	$(PIP) install --upgrade pep8 pep257 coverage
 	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
 .PHONY: .depends-dev
 .depends-dev: env Makefile $(DEPENDS_DEV)
 $(DEPENDS_DEV): Makefile
-	$(PIP) install $(PIP_CACHE) --upgrade pep8radius pylint
+	$(PIP) install --upgrade pep8radius pylint
 	touch $(DEPENDS_DEV)  # flag to indicate dependencies are installed
 
 # Static Analysis ############################################################
@@ -117,7 +113,7 @@ check: pep8 pep257 pylint
 
 .PHONY: pep8
 pep8: .depends-ci
-	$(PEP8) $(PACKAGE) --ignore=E501
+	$(PEP8) $(PACKAGE) --ignore=E402,E501
 
 .PHONY: pep257
 pep257: .depends-ci
@@ -150,7 +146,7 @@ clean-env: clean
 	rm -rf $(ENV)
 
 .PHONY: clean-all
-clean-all: clean clean-env .clean-workspace .clean-cache
+clean-all: clean clean-env .clean-workspace
 
 .PHONY: .clean-build
 .clean-build:
@@ -169,10 +165,6 @@ clean-all: clean clean-env .clean-workspace .clean-cache
 .PHONY: .clean-dist
 .clean-dist:
 	rm -rf dist build
-
-.PHONY: .clean-cache
-.clean-cache:
-	rm -rf $(PIP_CACHE_DIR)
 
 .PHONY: .clean-workspace
 .clean-workspace:
