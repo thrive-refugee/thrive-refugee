@@ -53,13 +53,13 @@ def css_class_cycler():
     '''
     from swingtime.models import EventType
     return defaultdict(
-        lambda: itertools.cycle(('evt-even', 'evt-odd')).next,
+        lambda: itertools.cycle(('evt-even', 'evt-odd')).__next__,
         (
             (
                 e.abbr, itertools.cycle((
                     'evt-%s-even' % e.abbr,
                     'evt-%s-odd' % e.abbr
-                )).next) for e in EventType.objects.all()
+                )).__next__) for e in EventType.objects.all()
         )
     )
 
@@ -95,7 +95,7 @@ class DefaultOccurrenceProxy(BaseOccurrenceProxy):
         self._str = itertools.chain(
             (link,),
             itertools.repeat(self.CONTINUATION_STRING)
-        ).next
+        ).__next__
 
     @html_mark_safe
     def __unicode__(self):
@@ -197,9 +197,9 @@ def create_timeslot_table(
             colkey += 1
 
     # determine the number of timeslot columns we should show
-    column_lens = [len(x) for x in timeslots.itervalues()]
+    column_lens = [len(x) for x in timeslots.values()]
     column_count = max((min_columns, max(column_lens) if column_lens else 0))
-    column_range = range(column_count)
+    column_range = list(range(column_count))
     empty_columns = ['' for x in column_range]
 
     if css_class_cycles:

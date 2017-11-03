@@ -3,6 +3,7 @@ import random
 import logging
 
 from datetime import datetime
+from functools import total_ordering
 
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
@@ -31,7 +32,7 @@ __all__ = (
 class EventType(models.Model):
 
     """Simple ``Event`` classifcation."""
-    abbr = models.CharField(_(u'abbreviation'), max_length=4, unique=True)
+    abbr = models.CharField(_('abbreviation'), max_length=4, unique=True)
     label = models.CharField(_('label'), max_length=50)
 
     class Meta:
@@ -234,6 +235,7 @@ class OccurrenceManager(models.Manager):
         return self.get_queryset().for_user(user)
 
 
+@total_ordering
 class Occurrence(models.Model):
 
     """Represents the start end time for a specific occurrence of a master
@@ -251,14 +253,17 @@ class Occurrence(models.Model):
         ordering = ('start_time', 'end_time')
 
     def __unicode__(self):
-        return u'%s: %s' % (self.title, self.start_time.isoformat())
+        return '%s: %s' % (self.title, self.start_time.isoformat())
 
     @models.permalink
     def get_absolute_url(self):
         return ('swingtime-occurrence', [str(self.event.id), str(self.id)])
 
-    def __cmp__(self, other):
-        return cmp(self.start_time, other.start_time)
+    def __eq__(self, other):
+        return self.start_time == other.start_time
+
+    def __lt__(self, other):
+        return self.start_time < other.start_time
 
     @property
     def title(self):
@@ -367,6 +372,6 @@ class ICal_Calendar(models.Model):
 
 @receiver(post_save, sender=User)
 def remove_ical(sender, instance, created, raw, using, **kw):
-    print sender, instance, created, raw, using, kw
+    print(sender, instance, created, raw, using, kw)
     if not instance.is_active:
         ICal_Calendar.objects.filter(volunteer=instance.volunteer).delete()

@@ -1,7 +1,7 @@
 # Python settings
 ifndef TRAVIS
-	PYTHON_MAJOR := 2
-	PYTHON_MINOR := 7
+	PYTHON_MAJOR := 3
+	PYTHON_MINOR := 6
 endif
 
 # Project settings

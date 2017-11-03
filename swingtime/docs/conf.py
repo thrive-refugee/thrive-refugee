@@ -39,8 +39,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Swingtime'
-copyright = u'2013, David Krauth'
+project = 'Swingtime'
+copyright = '2013, David Krauth'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -168,8 +168,8 @@ htmlhelp_basename = 'Swingtimedoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-    ('index', 'Swingtime.tex', ur'Swingtime Documentation',
-     ur'David Krauth', 'manual'),
+    ('index', 'Swingtime.tex', r'Swingtime Documentation',
+     r'David Krauth', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

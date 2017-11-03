@@ -1,4 +1,4 @@
-Django==1.7.1
+Django~=1.8.0
 django-simple-rest==1.4.1
 django-ical==1.2
 python-dateutil==2.2

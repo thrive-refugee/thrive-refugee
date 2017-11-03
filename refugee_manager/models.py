@@ -15,7 +15,7 @@ class Volunteer(models.Model):
         verbose_name = 'Volunteer Info'
         verbose_name_plural = 'Volunteer Info'
 
-    def __unicode__(self):
+    def __str__(self):
         if self.user.is_active:
             inactive = ''
         else:
@@ -76,7 +76,7 @@ class Case(models.Model):
 
     objects = CaseManager()
 
-    def __unicode__(self):
+    def __str__(self):
         if self.active:
             return self.name
         else:
@@ -96,7 +96,7 @@ class CaseFile(models.Model):
     file = models.FileField(upload_to=case_file_upload_path)
     date_uploaded = models.DateField(default=date.today)
 
-    def __unicode__(self):
+    def __str__(self):
         # this shows up in the inline admin form as a label that we don't want,
         # so blank it out
         return ''
@@ -114,7 +114,7 @@ class Individual(models.Model):
     medicaid = models.CharField(max_length=2000, blank=True)
     ssn = models.CharField('SSN', max_length=2000, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s %s' % (self.name, self.relation, self.date_of_birth)
 
 
@@ -122,7 +122,7 @@ class CaseDetail(models.Model):
     case = models.ForeignKey(Case, related_name='notes')
     text = models.TextField(max_length=10000)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Additional Detail'
 
     class Meta:
@@ -138,7 +138,7 @@ class ActivityNote(models.Model):
     description = models.TextField(max_length=10000)
     minutes = models.IntegerField("Time spent in minutes", null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s' % (self.case.name, self.date)
 
 
@@ -151,7 +151,7 @@ class Assessment(models.Model):
     case = models.ForeignKey(Case, related_name='assessment')
     date = models.DateField(default=date.today)
 
-    def __unicode__(self):
+    def __str__(self):
         # Hide "Assessment object"
         return ""
 

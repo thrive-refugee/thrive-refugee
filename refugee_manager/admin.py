@@ -324,7 +324,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     def case_link(self, obj):
         case = obj.case
         return '<a href="../../%s/%s/%d">%s</a>' % (
-            case._meta.app_label, case._meta.module_name, case.id, unicode(case))
+            case._meta.app_label, case._meta.module_name, case.id, str(case))
     case_link.allow_tags = True
     case_link.short_description = 'Case'
 
@@ -356,7 +356,7 @@ class AssesmentAdmin(admin.ModelAdmin):
     def case_link(self, obj):
         case = obj.case
         return '<a href="../../%s/%s/%d">%s</a>' % (
-            obj._meta.app_label, obj._meta.module_name, obj.id, unicode(case))
+            obj._meta.app_label, obj._meta.module_name, obj.id, str(case))
     case_link.allow_tags = True
     case_link.short_description = 'Assessment'
 

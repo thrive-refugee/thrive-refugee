@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from pprint import pformat
-from cStringIO import StringIO
+from io import StringIO
 from datetime import datetime, time
 from unittest import skip
 
@@ -76,13 +76,13 @@ class TableTest(TestCase):
         cellfmt = '| %-8s'
         out = StringIO()
         for tm, cells in table:
-            print >> out, timefmt % tm.strftime('%H:%M'),
+            print(timefmt % tm.strftime('%H:%M'), end=' ', file=out)
             for cell in cells:
                 if cell:
-                    print >> out, cellfmt % cell.event.title,
+                    print(cellfmt % cell.event.title, end=' ', file=out)
                 else:
-                    print >> out, cellfmt % '',
-            print >> out, '|'
+                    print(cellfmt % '', end=' ', file=out)
+            print('|', file=out)
 
         return out.getvalue()
 
@@ -96,7 +96,7 @@ class TableTest(TestCase):
 
         actual = self.table_as_string(table)
         out = 'Expecting:\n%s\nActual:\n%s' % (expect, actual)
-        print out
+        print(out)
         self.assertEqual(actual, expect, out)
 
     def test_slot_table_1(self):
