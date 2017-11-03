@@ -1,7 +1,7 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from swingtime import views
 
-urlpatterns = patterns(
+urlpatterns = [
 
     '',
 
@@ -33,4 +33,4 @@ urlpatterns = patterns(
 
     url(r'^json$', views.json_feed, name='swingtime-json'),
 
-)
+]
