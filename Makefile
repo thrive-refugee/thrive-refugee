@@ -45,7 +45,7 @@ PIP := $(BIN)/pip
 EASY_INSTALL := $(BIN)/easy_install
 RST2HTML := $(PYTHON) $(BIN)/rst2html.py
 PDOC := $(PYTHON) $(BIN)/pdoc
-PEP8 := $(BIN)/pep8
+PEP8 := $(BIN)/pycodestyle
 PEP8RADIUS := $(BIN)/pep8radius
 PEP257 := $(BIN)/pep257
 PYLINT := $(BIN)/pylint
@@ -65,11 +65,11 @@ ALL := $(ENV)/.all
 .PHONY: all
 all: depends $(ALL)
 $(ALL): $(SOURCES)
-	$(MAKE) pep8 pylint
+	$(MAKE) pycodestyle pylint
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: env db pep8 pylint test
+ci: env db pycodestyle pylint test
 # TODO: gradually add these steps back in as they start passing
 # ci: pep257
 
@@ -97,7 +97,7 @@ depends: .depends-ci .depends-dev
 .PHONY: .depends-ci
 .depends-ci: env Makefile $(DEPENDS_CI)
 $(DEPENDS_CI): Makefile
-	$(PIP) install --upgrade pep8 pep257 coverage
+	$(PIP) install --upgrade pycodestyle pep257 coverage
 	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
 .PHONY: .depends-dev
@@ -109,10 +109,13 @@ $(DEPENDS_DEV): Makefile
 # Static Analysis ############################################################
 
 .PHONY: check
-check: pep8 pep257 pylint
+check: pycodestyle pep257 pylint
 
-.PHONY: pep8
-pep8: .depends-ci
+.PHONY: pycodestyle
+pep8: pycodestyle
+
+.PHONY: pycodestyle
+pycodestyle: .depends-ci
 	$(PEP8) $(PACKAGE) --ignore=E402,E501
 
 .PHONY: pep257

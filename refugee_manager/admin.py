@@ -314,6 +314,7 @@ class CaseAdmin(CaseOrClientAdmin):
     def get_changelist(self, request):
         return CaseTotallingChangeList
 
+
 admin.site.register(Case, CaseAdmin)
 
 
@@ -346,6 +347,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     list_filter = ('case', 'date_of_birth', 'case__active')
     search_fields = [f.name for f in Individual._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('name',)
+
 
 admin.site.register(Individual, IndividualAdmin)
 
@@ -380,6 +382,7 @@ class AssesmentAdmin(admin.ModelAdmin):
     calc_score.allow_tags = True
     calc_score.description = "Score"
     list_filter = ('date', 'case')
+
 
 admin.site.register(Assessment, AssesmentAdmin)
 
@@ -431,6 +434,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
+
 
 admin.site.register(ActivityNote, ActivityNoteAdmin)
 

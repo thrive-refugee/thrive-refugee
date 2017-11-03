@@ -49,6 +49,7 @@ class EmploymentClientAdmin(CaseOrClientAdmin):
     def order_qs(self, qs):
         return qs.order_by('LastName').order_by('FirstName')
 
+
 admin.site.register(EmploymentClient, EmploymentClientAdmin)
 
 
@@ -113,5 +114,6 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
+
 
 admin.site.register(ActivityNote, ActivityNoteAdmin)

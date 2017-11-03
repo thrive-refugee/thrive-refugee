@@ -29,4 +29,5 @@ class AppSettings(object):
     def get_all_members(self):
         return dir(self)
 
+
 settings = AppSettings(swingtime_settings, 'SWINGTIME_SETTINGS_MODULE')
