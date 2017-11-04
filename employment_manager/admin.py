@@ -105,7 +105,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 
     change_list_template = 'refugee_manager/activitynote_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return MinuteTotallingChangeList
 
     description_trunc.short_description = 'Description'

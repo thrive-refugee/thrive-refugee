@@ -254,8 +254,8 @@ def filter_key_to_name(filters, key):
 
 
 class CaseTotallingChangeList(ChangeList):
-    def get_results(self, *args, **kwargs):
-        super(CaseTotallingChangeList, self).get_results(*args, **kwargs)
+    def get_results(self, request):
+        super().get_results(request)
 
         q = self.result_list.aggregate(total_cases=Count('id'))
         self.total_cases = q['total_cases']
@@ -263,7 +263,6 @@ class CaseTotallingChangeList(ChangeList):
         q = self.result_list.aggregate(total_individuals=Count('individuals'))
         self.total_individuals = q['total_individuals']
 
-        request = args[0]
         self.active_filters = {filter_key_to_name(CaseAdmin.list_filter, filter_key): value
                                for filter_key, value
                                in request.GET.iteritems()}
@@ -311,7 +310,7 @@ class CaseAdmin(CaseOrClientAdmin):
 
     change_list_template = 'refugee_manager/case_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return CaseTotallingChangeList
 
 
@@ -388,8 +387,8 @@ admin.site.register(Assessment, AssesmentAdmin)
 
 
 class MinuteTotallingChangeList(ChangeList):
-    def get_results(self, *args, **kwargs):
-        super(MinuteTotallingChangeList, self).get_results(*args, **kwargs)
+    def get_results(self, request):
+        super().get_results(request)
         q = self.result_list.aggregate(minutes_total=Sum('minutes'))
         total = q['minutes_total'] or 0
         self.total_hours = total / 60
@@ -425,7 +424,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 
     change_list_template = 'refugee_manager/activitynote_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return MinuteTotallingChangeList
 
     description_trunc.short_description = 'Description'
