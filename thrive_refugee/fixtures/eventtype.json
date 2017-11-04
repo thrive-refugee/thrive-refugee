@@ -1,0 +1,26 @@
+[
+{
+  "fields": {
+    "abbr": "DOC",
+    "label": "Doctor's Appointment"
+  },
+  "model": "swingtime.eventtype",
+  "pk": 1
+},
+{
+  "fields": {
+    "abbr": "IMM",
+    "label": "Immigration Appointment"
+  },
+  "model": "swingtime.eventtype",
+  "pk": 2
+},
+{
+  "fields": {
+    "abbr": "SCH",
+    "label": "School Appointment"
+  },
+  "model": "swingtime.eventtype",
+  "pk": 3
+}
+]

@@ -208,8 +208,8 @@ loaddata: env */fixtures/*.json
 	$(LOADDATA) refugee_manager/fixtures/casedetail.json
 	$(LOADDATA) refugee_manager/fixtures/activitynote.json
 	$(LOADDATA) refugee_manager/fixtures/assessment.json
-	$(LOADDATA) swingtime/fixtures/eventtype.json
-	$(LOADDATA) swingtime/fixtures/event.json
+	$(LOADDATA) thrive_refugee/fixtures/eventtype.json
+	$(LOADDATA) thrive_refugee/fixtures/event.json
 	$(LOADDATA) employment_manager/fixtures/employmentclient.json
 	$(LOADDATA) employment_manager/fixtures/job.json
 	$(LOADDATA) employment_manager/fixtures/skill.json
@@ -231,8 +231,8 @@ dumpdata: env
 	$(DUMPDATA) refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
 	$(DUMPDATA) refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
 	$(DUMPDATA) refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
-	$(DUMPDATA) swingtime.EventType > swingtime/fixtures/eventtype.json
-	$(DUMPDATA) swingtime.Event > swingtime/fixtures/event.json
+	$(DUMPDATA) swingtime.EventType > thrive_refugee/fixtures/eventtype.json
+	$(DUMPDATA) swingtime.Event > thrive_refugee/fixtures/event.json
 	$(DUMPDATA) employment_manager.EmploymentClient > employment_manager/fixtures/employmentclient.json
 	$(DUMPDATA) employment_manager.Job > employment_manager/fixtures/job.json
 	$(DUMPDATA) employment_manager.Skill > employment_manager/fixtures/skill.json

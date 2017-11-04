@@ -1,0 +1,35 @@
+[
+{
+  "fields": {
+    "event_type": 1,
+    "refugee_case": 1,
+    "description": "Monthly medical exam",
+    "employment_case": null,
+    "title": "Monthly Checkup"
+  },
+  "model": "swingtime.event",
+  "pk": 1
+},
+{
+  "fields": {
+    "event_type": 3,
+    "refugee_case": 2,
+    "description": "School testing",
+    "employment_case": null,
+    "title": "Standardized Testing"
+  },
+  "model": "swingtime.event",
+  "pk": 2
+},
+{
+  "fields": {
+    "event_type": 2,
+    "refugee_case": 3,
+    "description": "Check with the gestapo",
+    "employment_case": null,
+    "title": "Your Papers Please"
+  },
+  "model": "swingtime.event",
+  "pk": 3
+}
+]
