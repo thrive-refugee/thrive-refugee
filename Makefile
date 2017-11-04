@@ -55,8 +55,8 @@ PYTEST := $(BIN)/py.test
 COVERAGE := $(BIN)/coverage
 
 # Remove if you don't want pip to cache downloads
-PIP_CACHE_DIR := .cache
-PIP_CACHE := --download-cache $(PIP_CACHE_DIR)
+# PIP_CACHE_DIR := .cache
+# PIP_CACHE := --download-cache $(PIP_CACHE_DIR)
 
 # Flags for PHONY targets
 INSTALLED :=$(ENV)/.installed
