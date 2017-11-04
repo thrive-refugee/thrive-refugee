@@ -6,7 +6,7 @@ endif
 
 # Project settings
 PROJECT := thrive-refugee
-PACKAGE := thrive_refugee refugee_manager employment_manager swingtime esl_manager donors
+PACKAGE := thrive_refugee refugee_manager employment_manager esl_manager donors
 SOURCES := Makefile requirements.txt
 
 # System paths

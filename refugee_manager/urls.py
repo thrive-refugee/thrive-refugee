@@ -1,5 +1,4 @@
 urlpatterns = [
-    '',
     # Allow access to the events resource collection
     # url(r'^events/?$', Events.as_view()),
 
