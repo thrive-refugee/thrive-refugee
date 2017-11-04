@@ -184,16 +184,16 @@ DB := thrive.db
 .PHONY: db
 db: env $(DB)
 $(DB): */fixtures/*.json
-	$(MAKE) syncdb loaddata
+	$(MAKE) migrate loaddata
 
 .PHONY: clean-db
 clean-db: env
 	rm -f $(DB)
 	rm -f thrive_refugee/local_settings.py
 
-.PHONY: syncdb
-syncdb: env
-	$(MANAGE) syncdb --noinput
+.PHONY: migrate
+migrate: env
+	$(MANAGE) migrate --noinput
 
 .PHONY: loaddata
 loaddata: env */fixtures/*.json
