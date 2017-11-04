@@ -1,7 +1,6 @@
 # Django settings for thrive_refugee project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -96,8 +95,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-                "templates",
-                "/srv/django/templates",
+            "templates",
+            "/srv/django/templates",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -124,7 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    #    'django.contrib.sites',
+    # 'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
@@ -135,7 +134,7 @@ INSTALLED_APPS = (
     'donors',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'localflavor'
+    'localflavor',
 )
 
 AUTH_PROFILE_MODULE = 'refugee_manager.VolunteerInfo'
