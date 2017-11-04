@@ -21,9 +21,9 @@ class Attendee(models.Model):
 
 
 class Session(models.Model):
-    StartDateTime = models.DateTimeField()
+    Start_Date_Time = models.DateTimeField()
     StopDateTime = models.DateTimeField()
-    Teacher = models.ForeignKey('refugee_manager.VolunteerInfo', models.SET_NULL, blank=True, null=True,)
+    Teacher = models.ForeignKey('refugee_manager.Volunteer', on_delete=models.SET_NULL, blank=True, null=True,)
     members = models.ManyToManyField(
         Attendee,
         through='Attendance',
