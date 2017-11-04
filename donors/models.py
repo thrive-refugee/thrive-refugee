@@ -34,4 +34,3 @@ class Donation(models.Model):
     class Meta:
         get_latest_by = "when"
         order_with_respect_to = "donor"
-        ordering = ['-when']
