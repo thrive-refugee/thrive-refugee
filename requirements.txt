@@ -9,3 +9,4 @@ https://github.com/thrive-refugee/django-admin-bootstrap/archive/2d61edb0a161381
 # Heroku
 whitenoise==3.3.1
 dj-database-url==0.4.2
+psycopg2==2.7.3.2
