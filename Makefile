@@ -1,12 +1,12 @@
 # Python settings
 ifndef TRAVIS
-	PYTHON_MAJOR := 2
-	PYTHON_MINOR := 7
+	PYTHON_MAJOR := 3
+	PYTHON_MINOR := 6
 endif
 
 # Project settings
 PROJECT := thrive-refugee
-PACKAGE := thrive_refugee refugee_manager employment_manager swingtime esl_manager donors
+PACKAGE := thrive_refugee refugee_manager employment_manager esl_manager donors
 SOURCES := Makefile requirements.txt
 
 # System paths
@@ -45,7 +45,7 @@ PIP := $(BIN)/pip
 EASY_INSTALL := $(BIN)/easy_install
 RST2HTML := $(PYTHON) $(BIN)/rst2html.py
 PDOC := $(PYTHON) $(BIN)/pdoc
-PEP8 := $(BIN)/pep8
+PEP8 := $(BIN)/pycodestyle
 PEP8RADIUS := $(BIN)/pep8radius
 PEP257 := $(BIN)/pep257
 PYLINT := $(BIN)/pylint
@@ -65,11 +65,11 @@ ALL := $(ENV)/.all
 .PHONY: all
 all: depends $(ALL)
 $(ALL): $(SOURCES)
-	$(MAKE) pep8 pylint
+	$(MAKE) pycodestyle pylint
 	touch $(ALL)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: env db pep8 pylint test
+ci: env db pycodestyle pylint test
 # TODO: gradually add these steps back in as they start passing
 # ci: pep257
 
@@ -97,7 +97,7 @@ depends: .depends-ci .depends-dev
 .PHONY: .depends-ci
 .depends-ci: env Makefile $(DEPENDS_CI)
 $(DEPENDS_CI): Makefile
-	$(PIP) install --upgrade pep8 pep257 coverage
+	$(PIP) install --upgrade pycodestyle pep257 coverage
 	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
 .PHONY: .depends-dev
@@ -109,10 +109,13 @@ $(DEPENDS_DEV): Makefile
 # Static Analysis ############################################################
 
 .PHONY: check
-check: pep8 pep257 pylint
+check: pycodestyle pep257 pylint
 
-.PHONY: pep8
-pep8: .depends-ci
+.PHONY: pycodestyle
+pep8: pycodestyle
+
+.PHONY: pycodestyle
+pycodestyle: .depends-ci
 	$(PEP8) $(PACKAGE) --ignore=E402,E501
 
 .PHONY: pep257
@@ -181,16 +184,16 @@ DB := thrive.db
 .PHONY: db
 db: env $(DB)
 $(DB): */fixtures/*.json
-	$(MAKE) syncdb loaddata
+	$(MAKE) migrate loaddata
 
 .PHONY: clean-db
 clean-db: env
 	rm -f $(DB)
 	rm -f thrive_refugee/local_settings.py
 
-.PHONY: syncdb
-syncdb: env
-	$(MANAGE) syncdb --noinput
+.PHONY: migrate
+migrate: env
+	$(MANAGE) migrate --noinput
 
 .PHONY: loaddata
 loaddata: env */fixtures/*.json
@@ -205,8 +208,8 @@ loaddata: env */fixtures/*.json
 	$(LOADDATA) refugee_manager/fixtures/casedetail.json
 	$(LOADDATA) refugee_manager/fixtures/activitynote.json
 	$(LOADDATA) refugee_manager/fixtures/assessment.json
-	$(LOADDATA) swingtime/fixtures/eventtype.json
-	$(LOADDATA) swingtime/fixtures/event.json
+	$(LOADDATA) thrive_refugee/fixtures/eventtype.json
+	$(LOADDATA) thrive_refugee/fixtures/event.json
 	$(LOADDATA) employment_manager/fixtures/employmentclient.json
 	$(LOADDATA) employment_manager/fixtures/job.json
 	$(LOADDATA) employment_manager/fixtures/skill.json
@@ -228,8 +231,8 @@ dumpdata: env
 	$(DUMPDATA) refugee_manager.CaseDetail > refugee_manager/fixtures/casedetail.json
 	$(DUMPDATA) refugee_manager.ActivityNote > refugee_manager/fixtures/activitynote.json
 	$(DUMPDATA) refugee_manager.Assessment > refugee_manager/fixtures/assessment.json
-	$(DUMPDATA) swingtime.EventType > swingtime/fixtures/eventtype.json
-	$(DUMPDATA) swingtime.Event > swingtime/fixtures/event.json
+	$(DUMPDATA) swingtime.EventType > thrive_refugee/fixtures/eventtype.json
+	$(DUMPDATA) swingtime.Event > thrive_refugee/fixtures/event.json
 	$(DUMPDATA) employment_manager.EmploymentClient > employment_manager/fixtures/employmentclient.json
 	$(DUMPDATA) employment_manager.Job > employment_manager/fixtures/job.json
 	$(DUMPDATA) employment_manager.Skill > employment_manager/fixtures/skill.json

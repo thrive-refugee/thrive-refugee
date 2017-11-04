@@ -49,6 +49,7 @@ class EmploymentClientAdmin(CaseOrClientAdmin):
     def order_qs(self, qs):
         return qs.order_by('LastName').order_by('FirstName')
 
+
 admin.site.register(EmploymentClient, EmploymentClientAdmin)
 
 
@@ -104,7 +105,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 
     change_list_template = 'refugee_manager/activitynote_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return MinuteTotallingChangeList
 
     description_trunc.short_description = 'Description'
@@ -113,5 +114,6 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
+
 
 admin.site.register(ActivityNote, ActivityNoteAdmin)

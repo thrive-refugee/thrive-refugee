@@ -254,8 +254,8 @@ def filter_key_to_name(filters, key):
 
 
 class CaseTotallingChangeList(ChangeList):
-    def get_results(self, *args, **kwargs):
-        super(CaseTotallingChangeList, self).get_results(*args, **kwargs)
+    def get_results(self, request):
+        super().get_results(request)
 
         q = self.result_list.aggregate(total_cases=Count('id'))
         self.total_cases = q['total_cases']
@@ -263,7 +263,6 @@ class CaseTotallingChangeList(ChangeList):
         q = self.result_list.aggregate(total_individuals=Count('individuals'))
         self.total_individuals = q['total_individuals']
 
-        request = args[0]
         self.active_filters = {filter_key_to_name(CaseAdmin.list_filter, filter_key): value
                                for filter_key, value
                                in request.GET.iteritems()}
@@ -311,8 +310,9 @@ class CaseAdmin(CaseOrClientAdmin):
 
     change_list_template = 'refugee_manager/case_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return CaseTotallingChangeList
+
 
 admin.site.register(Case, CaseAdmin)
 
@@ -324,7 +324,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     def case_link(self, obj):
         case = obj.case
         return '<a href="../../%s/%s/%d">%s</a>' % (
-            case._meta.app_label, case._meta.module_name, case.id, unicode(case))
+            case._meta.app_label, case._meta.module_name, case.id, str(case))
     case_link.allow_tags = True
     case_link.short_description = 'Case'
 
@@ -347,6 +347,7 @@ class IndividualAdmin(DeleteNotAllowedModelAdmin):
     search_fields = [f.name for f in Individual._meta.local_fields if isinstance(f, (CharField, TextField))]
     ordering = ('name',)
 
+
 admin.site.register(Individual, IndividualAdmin)
 
 
@@ -356,7 +357,7 @@ class AssesmentAdmin(admin.ModelAdmin):
     def case_link(self, obj):
         case = obj.case
         return '<a href="../../%s/%s/%d">%s</a>' % (
-            obj._meta.app_label, obj._meta.module_name, obj.id, unicode(case))
+            obj._meta.app_label, obj._meta.module_name, obj.id, str(case))
     case_link.allow_tags = True
     case_link.short_description = 'Assessment'
 
@@ -381,12 +382,13 @@ class AssesmentAdmin(admin.ModelAdmin):
     calc_score.description = "Score"
     list_filter = ('date', 'case')
 
+
 admin.site.register(Assessment, AssesmentAdmin)
 
 
 class MinuteTotallingChangeList(ChangeList):
-    def get_results(self, *args, **kwargs):
-        super(MinuteTotallingChangeList, self).get_results(*args, **kwargs)
+    def get_results(self, request):
+        super().get_results(request)
         q = self.result_list.aggregate(minutes_total=Sum('minutes'))
         total = q['minutes_total'] or 0
         self.total_hours = total / 60
@@ -422,7 +424,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 
     change_list_template = 'refugee_manager/activitynote_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return MinuteTotallingChangeList
 
     description_trunc.short_description = 'Description'
@@ -431,6 +433,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
     date_hierarchy = 'date'
     search_fields = ('description',)
     ordering = ('-date',)
+
 
 admin.site.register(ActivityNote, ActivityNoteAdmin)
 
