@@ -241,11 +241,11 @@ dumpdata: env
 	$(DUMPDATA) donors.Donation > donors/fixtures/donations.json
 
 .PHONY: run
-run: env $(DB) syncdb
+run: env $(DB) migrate
 	$(MANAGE) runserver
 
 .PHONY: launch
-launch: env $(DB) syncdb
+launch: env $(DB) migrate
 	eval "sleep 1; $(OPEN) http://127.0.0.1:8000" &
 	$(MAKE) run
 
@@ -256,10 +256,10 @@ run-private: run
 launch-private: launch
 
 .PHONY: run-public
-run-public: env $(DB) syncdb
+run-public: env $(DB) migrate
 	$(MANAGE) runserver 0.0.0.0:8000
 
 .PHONY: launch-public
-launch-public: env $(DB) syncdb
+launch-public: env $(DB) migrate
 	eval "sleep 1; $(OPEN) http://localhost:8000" &
 	$(MAKE) run-public
