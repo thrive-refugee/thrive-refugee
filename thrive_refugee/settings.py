@@ -172,14 +172,7 @@ try:
     # For most environments
     from thrive_refugee.local_settings import *
 except ImportError:
-    # local_settings.py doesn't exist, assume heroku
-    MIDDLEWARE_CLASSES += (
-        # Simplified static file serving.
-        # https://warehouse.python.org/project/whitenoise/
-        'whitenoise.middleware.WhiteNoiseMiddleware',
-    )
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+    DEBUG = True
 
     import dj_database_url
     db_from_env = dj_database_url.config(conn_max_age=500)
