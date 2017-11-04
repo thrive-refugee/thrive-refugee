@@ -5,4 +5,4 @@ python-dateutil==2.6.1
 django-sendfile==0.3.11
 django-localflavor==1.5.2
 https://github.com/thrive-refugee/django-admin-bootstrap/archive/2d61edb0a1613818da95475d45998f3aacf3b623.zip
--e git+https://github.com/thrive-refugee/django-swingtime.git#egg=django-swingtime
+https://github.com/thrive-refugee/thrive-refugee/archive/master.zip
