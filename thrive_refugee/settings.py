@@ -75,22 +75,6 @@ SECRET_KEY = '722&amp;c&amp;%o5jb20^a(*uw6t^lforr3k6spqqyc@(z77@ff69!y&amp;f'
 
 ALLOWED_HOSTS = ('thriveapp.info', 'www.thriveapp.info')
 
-# TEMPLATE_CONTEXT_PROCESSORS = (
-#     'django.core.context_processors.debug',
-#     'django.core.context_processors.media',
-#     'django.contrib.auth.context_processors.auth',
-#     'django.contrib.messages.context_processors.messages',
-#     'swingtime.context_processors.current_datetime',
-#     'django.core.context_processors.request',
-# )
-
-# List of callables that know how to import templates from various sources.
-# TEMPLATE_LOADERS = (
-#     'django.template.loaders.filesystem.Loader',
-#     'django.template.loaders.app_directories.Loader',
-# 'django.template.loaders.eggs.Loader',
-# )
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -107,14 +91,6 @@ LOGIN_URL = '/admin/'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'thrive_refugee.wsgi.application'
-
-# TEMPLATE_DIRS = (
-#     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-#     # Always use forward slashes, even on Windows.
-#     # Don't forget to use absolute paths, not relative paths.
-#     "templates",
-#     "/srv/django/templates",
-# )
 
 TEMPLATES = [
     {
