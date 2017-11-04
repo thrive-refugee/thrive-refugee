@@ -75,14 +75,14 @@ SECRET_KEY = '722&amp;c&amp;%o5jb20^a(*uw6t^lforr3k6spqqyc@(z77@ff69!y&amp;f'
 
 ALLOWED_HOSTS = ('thriveapp.info', 'www.thriveapp.info')
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.debug',
-    'django.core.context_processors.media',
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-    'swingtime.context_processors.current_datetime',
-    'django.core.context_processors.request',
-)
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#     'django.core.context_processors.debug',
+#     'django.core.context_processors.media',
+#     'django.contrib.auth.context_processors.auth',
+#     'django.contrib.messages.context_processors.messages',
+#     'swingtime.context_processors.current_datetime',
+#     'django.core.context_processors.request',
+# )
 
 # List of callables that know how to import templates from various sources.
 # TEMPLATE_LOADERS = (
@@ -108,13 +108,40 @@ LOGIN_URL = '/admin/'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'thrive_refugee.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    "templates",
-    "/srv/django/templates",
-)
+# TEMPLATE_DIRS = (
+#     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+#     # Always use forward slashes, even on Windows.
+#     # Don't forget to use absolute paths, not relative paths.
+#     "templates",
+#     "/srv/django/templates",
+# )
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+                "templates",
+                "/srv/django/templates",
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'swingtime.context_processors.current_datetime',
+            ],
+        },
+    },
+]
+
 
 INSTALLED_APPS = (
     'bootstrap_admin',
