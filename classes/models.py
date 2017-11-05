@@ -40,7 +40,7 @@ class Session(models.Model):
 
 
 class Attendance(models.Model):
-    notes = models.TextField("Notes")
+    notes = models.TextField("Notes", blank=True)
 
     start_date_time = models.DateTimeField()
     stop_date_time = models.DateTimeField(blank=True, null=True)
