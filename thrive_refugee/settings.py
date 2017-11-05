@@ -1,3 +1,4 @@
+import os
 # Django settings for thrive_refugee project.
 
 DEBUG = True
@@ -30,7 +31,6 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = False
 
-import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.

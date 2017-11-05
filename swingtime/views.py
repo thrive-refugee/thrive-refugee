@@ -17,6 +17,8 @@ from swingtime.conf import settings as swingtime_settings
 
 from dateutil import parser
 
+from django_ical.views import ICalFeed
+
 if swingtime_settings.CALENDAR_FIRST_WEEKDAY is not None:
     calendar.setfirstweekday(swingtime_settings.CALENDAR_FIRST_WEEKDAY)
 
@@ -220,9 +222,6 @@ def calendar_view(
     data = {
     }
     return render(request, template, data)
-
-
-from django_ical.views import ICalFeed
 
 
 class SwingtimeICalFeed(ICalFeed):
