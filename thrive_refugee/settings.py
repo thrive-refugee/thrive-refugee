@@ -132,7 +132,8 @@ INSTALLED_APPS = (
     'donors',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'localflavor'
+    'localflavor',
+    'classes',
 )
 
 AUTH_PROFILE_MODULE = 'refugee_manager.VolunteerInfo'
