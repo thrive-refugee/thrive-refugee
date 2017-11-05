@@ -12,12 +12,13 @@ class AttendanceInline(admin.TabularInline):
     verbose_name = 'Attendee'
     verbose_name_plural = 'Attendees'
     fields = ('attendee', 'start_date_time', "stop_date_time", 'notes')
-    # fieldsets = (
-    #     ("Attendee", {'fields': ('name'),}),
-    #     ("Start Date Time", {"fields": ('start_date_time'),}),
-    #     ("Stop Date Time", {"fields": ('stop_date_time'),}),
-    #     ('Notes', {'fields': ('notes'),}),
-    # )
+    search_fields = 'name', 'phone'
+
+
+class SessionInline(admin.TabularInline):
+    model = Session
+    extra = 1
+    fields = ('start_date_time', 'stop_date_time', 'teacher')
 
 
 class AttendeeAdmin(admin.ModelAdmin):
@@ -30,9 +31,14 @@ class SessionAdmin(admin.ModelAdmin):
     ]
     fields = ('walk_in_class','teacher', 'start_date_time', "stop_date_time", )
     list_display= ('walk_in_class', 'start_date_time',)
+    date_hierarchy = 'start_date_time'
+    list_filter = ['walk_in_class', 'start_date_time', 'teacher']
+    ordering = ['-start_date_time']
 
 class WalkinClassAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        SessionInline,
+    ]
 
 admin.site.register(Attendee, AttendeeAdmin)
 admin.site.register(Session, SessionAdmin)
