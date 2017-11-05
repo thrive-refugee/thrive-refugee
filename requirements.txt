@@ -6,4 +6,7 @@ django-sendfile==0.3.6
 django-localflavor==1.0
 https://github.com/thrive-refugee/django-admin-bootstrap/archive/2d61edb0a1613818da95475d45998f3aacf3b623.zip
 
-
+# Heroku
+dj-database-url==0.4.2
+psycopg2==2.7.3.2
+gunicorn==19.7.1
