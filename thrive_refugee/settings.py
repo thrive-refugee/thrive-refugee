@@ -1,3 +1,4 @@
+import os
 # Django settings for thrive_refugee project.
 
 DEBUG = True
@@ -30,7 +31,6 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = False
 
-import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
@@ -169,4 +169,19 @@ LOGGING = {
 
 SENDFILE_BACKEND = 'sendfile.backends.simple'
 
-from thrive_refugee.local_settings import *
+try:
+    # For most environments
+    from thrive_refugee.local_settings import *
+except ImportError:
+    DEBUG = True
+
+    import dj_database_url
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES = {
+        'default': db_from_env,
+    }
+
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+    STATIC_URL = '/static/'

@@ -50,9 +50,9 @@ class EventQuerySet(models.query.QuerySet):
         else:
             try:
                 rv = self.filter(
-                    Q(refugee_case__volunteers=user.volunteer)
-                    | Q(employment_case__volunteers=user.volunteer)
-                    | Q(refugee_case=None, employment_case=None)
+                    Q(refugee_case__volunteers=user.volunteer) |
+                    Q(employment_case__volunteers=user.volunteer) |
+                    Q(refugee_case=None, employment_case=None)
                 )
             except refugee_models.Volunteer.DoesNotExist:
                 rv = self.filter(refugee_case=None, employment_case=None)
@@ -211,9 +211,9 @@ class OccurrenceQuerySet(models.query.QuerySet):
         else:
             try:
                 rv = self.filter(
-                    Q(event__refugee_case__volunteers=user.volunteer)
-                    | Q(event__employment_case__volunteers=user.volunteer)
-                    | Q(event__refugee_case=None, event__employment_case=None)
+                    Q(event__refugee_case__volunteers=user.volunteer) |
+                    Q(event__employment_case__volunteers=user.volunteer) |
+                    Q(event__refugee_case=None, event__employment_case=None)
                 )
             except refugee_models.Volunteer.DoesNotExist:
                 rv = self.filter(

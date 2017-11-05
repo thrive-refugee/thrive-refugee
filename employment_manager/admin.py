@@ -88,7 +88,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
             return qs.order_by('employment_client')
         return qs.order_by('employment_client').filter(volunteer__user__exact=request.user)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
         if db_field.name == 'employment_client':
             if request.user.is_superuser:
                 kwargs['queryset'] = EmploymentClient.objects.order_by('LastName', 'FirstName')
@@ -104,7 +104,7 @@ class ActivityNoteAdmin(DeleteNotAllowedModelAdmin):
 
     change_list_template = 'refugee_manager/activitynote_admin_list.html'
 
-    def get_changelist(self, request):
+    def get_changelist(self, request, **kwargs):
         return MinuteTotallingChangeList
 
     description_trunc.short_description = 'Description'
