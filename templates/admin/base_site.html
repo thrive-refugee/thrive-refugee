@@ -4,10 +4,26 @@
 
 {% block extrastyle %}
     <link rel='stylesheet' type='text/css' href='{% static "css/admin.css" %}' />
+{% endblock %}
+
+{% block extrahead %}
     <meta name=viewport content="width=device-width, initial-scale=1">
 {% endblock %}
 
-{% block title %}{% trans 'Thrive Home' %}{% endblock %}
+{% block js_footer_commons %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "js/admin.js" %}"></script>
+{% endblock %}
+
+{% block title %}{{ title }} | {% trans 'Thrive admin' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" style="width:500px; float: left;">
+    <a href="/admin">
+    {% trans 'Thrive Admin' %}
+    </a>
+</h1>
+{% endblock %}
 
 {% block nav-global %}
 
